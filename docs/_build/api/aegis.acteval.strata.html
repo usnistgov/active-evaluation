@@ -1,0 +1,1213 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>aegis.acteval.strata module &mdash; aegis v2020.03.03 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="aegis.acteval.stratum module" href="aegis.acteval.stratum.html" />
+    <link rel="prev" title="aegis.acteval.samplers module" href="aegis.acteval.samplers.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> aegis
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2020.03.03
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Aegis Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#running-experiments-with-aegis-when-ground-truth-is-known">Running Experiments with Aegis when Ground Truth is Known</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#code-approach">Code Approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#running-continuous-integration-components-locally">Running Continuous Integration Components Locally</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#license">LICENSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">CHANGELOG</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../API_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="aegis.html">aegis package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="aegis.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="aegis.acteval.html">aegis.acteval package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.datagenerator.html">aegis.datagenerator package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.oracle.html">aegis.oracle package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="aegis.acteval.html">aegis.acteval package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="aegis.acteval.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.controller.html">aegis.acteval.controller module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.data_processor.html">aegis.acteval.data_processor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.experiment.html">aegis.acteval.experiment module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.metrics.html">aegis.acteval.metrics module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.samplers.html">aegis.acteval.samplers module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">aegis.acteval.strata module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.stratum.html">aegis.acteval.stratum module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.summary_reporter.html">aegis.acteval.summary_reporter module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.system.html">aegis.acteval.system module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.controller.html">aegis.acteval.controller module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.data_processor.html">aegis.acteval.data_processor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.experiment.html">aegis.acteval.experiment module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.metrics.html">aegis.acteval.metrics module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.samplers.html">aegis.acteval.samplers module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">aegis.acteval.strata module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.stratum.html">aegis.acteval.stratum module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.summary_reporter.html">aegis.acteval.summary_reporter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.system.html">aegis.acteval.system module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.datagenerator.html">aegis.datagenerator package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.datagenerator.data_generator.html">aegis.datagenerator.data_generator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.oracle.html">aegis.oracle package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.oracle.oracle.html">aegis.oracle.oracle module</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aegis</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API_reference.html">API Reference</a> &raquo;</li>
+        
+          <li><a href="aegis.html">aegis package</a> &raquo;</li>
+        
+          <li><a href="aegis.acteval.html">aegis.acteval package</a> &raquo;</li>
+        
+      <li>aegis.acteval.strata module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/aegis.acteval.strata.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-aegis.acteval.strata">
+<span id="aegis-acteval-strata-module"></span><h1>aegis.acteval.strata module<a class="headerlink" href="#module-aegis.acteval.strata" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="aegis.acteval.strata.Strata">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.strata.</code><code class="sig-name descname">Strata</code><span class="sig-paren">(</span><em class="sig-param">num_strata</em>, <em class="sig-param">system_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>The object representing the different strata.</p>
+<p>Implemented as a list of Stratum objects. Within this strata contains the logic of how to
+stratify. Subclasses specify stratification strategies and strategies to aggregate
+system confidence values into one confidence value.</p>
+<p>Give the number of strata as -1 to indicate that we wish to have random sampling without
+stratification. This code is then stored in the self.stratify_for_pure_random class variable.</p>
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.add_samples_to_strata">
+<code class="sig-name descname">add_samples_to_strata</code><span class="sig-paren">(</span><em class="sig-param">samples_df</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.add_samples_to_strata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.add_samples_to_strata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes in a set of scored samples and updates the strata to now have the keys for those
+samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>(</strong><strong>obj</strong> (<em>samples_df</em>) – <cite>pandas.core.frame.DataFrame</cite>): a dataframe with two columns
+(trial_id, key), and a key value for all
+of the trial_id values provided. This frame will not have all trial ids and
+will only have the trial_id values of the trials that are scored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The updated strata object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#aegis.acteval.strata.Strata" title="aegis.acteval.strata.Strata">aegis.acteval.strata.Strata</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.aggregate_system_confidence_values">
+<em class="property">abstract </em><code class="sig-name descname">aggregate_system_confidence_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.aggregate_system_confidence_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.aggregate_system_confidence_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produces an aggregated system confidence value according to the strategy of the Strata
+subclass.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An aggregated confidence value</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.aggregate_system_stats">
+<em class="property">abstract </em><code class="sig-name descname">aggregate_system_stats</code><span class="sig-paren">(</span><em class="sig-param">sys_stat_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.aggregate_system_stats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.aggregate_system_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a list of statistics with one per system, aggregates them to produce a single
+value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sys_stat_list</strong> (<em>list of float</em>) – The list of values, one value per system, to aggregate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An aggregated value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.dirty_strata_cache">
+<code class="sig-name descname">dirty_strata_cache</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.dirty_strata_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.dirty_strata_cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark all cached variables as dirty for future computations. Calls the stratum
+:meth:aegis.acteval.stratum.Stratum.dirty_strata_cache method to dirty the caches
+of each stratum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Nothing</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.estimate_pop">
+<code class="sig-name descname">estimate_pop</code><span class="sig-paren">(</span><em class="sig-param">metric</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.estimate_pop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.estimate_pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using the aggregation strategy defined by the strata class, aggregates the system’s
+populations to determine the population of the strata</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The metric that determines the
+value for each system</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>single population value. Can be an integer or float depending on the
+metric object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>A float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.estimate_pop_all_systems">
+<code class="sig-name descname">estimate_pop_all_systems</code><span class="sig-paren">(</span><em class="sig-param">metric</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.estimate_pop_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.estimate_pop_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the total number of samples that are included in the population for the metric.
+Updates System objects with the result for each system.</p>
+<p>Does so by incorporating the sums of the populations for each stratum, which then
+send their sets of trials to the metric provided</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – the metric object that determines
+how trials are scored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of population sizes, one list per system. The results
+may be integers or floats depending on the metric used.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.estimate_pop_frac_all_systems">
+<code class="sig-name descname">estimate_pop_frac_all_systems</code><span class="sig-paren">(</span><em class="sig-param">metric</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.estimate_pop_frac_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.estimate_pop_frac_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the fraction of stratum trials relevant for the population.
+Calls estimate_pop_all_systems</p>
+<p>Does so by incorporating the sums of the populations for each stratum, which then
+send their sets of trials to the metric provided</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – the metric object that determines how
+trials are scored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of population fraction sizes, one list per system</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.estimate_pop_frac_variance_all_systems">
+<code class="sig-name descname">estimate_pop_frac_variance_all_systems</code><span class="sig-paren">(</span><em class="sig-param">metric</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.estimate_pop_frac_variance_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.estimate_pop_frac_variance_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the variance of the fraction population relevant estimate for the metric.
+Updates System objects with the result for each system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – the metric object that determines how
+trials are scored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of population fraction variance sizes, one list per system</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.estimate_pop_variance_all_systems">
+<code class="sig-name descname">estimate_pop_variance_all_systems</code><span class="sig-paren">(</span><em class="sig-param">metric</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.estimate_pop_variance_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.estimate_pop_variance_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the population variance for each system based on the metric.
+Updates System objects with the result for each system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – the metric object that determines how
+trials are scored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of population variance sizes, one list per system</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.estimate_samples_all_systems">
+<code class="sig-name descname">estimate_samples_all_systems</code><span class="sig-paren">(</span><em class="sig-param">metric</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.estimate_samples_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.estimate_samples_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the total number of tried samples to include according to the metric. Updates
+System objects with the result for each system.</p>
+<p>Does so by incorporating the sums of the populations for each stratum, which then
+send their sets of trials to the metric provided.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – the metric object that determines
+how trials are scored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of number of sampled trials, one per system</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.estimate_score">
+<code class="sig-name descname">estimate_score</code><span class="sig-paren">(</span><em class="sig-param">metric</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.estimate_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.estimate_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using the aggregation strategy defined by the strata class, aggregates the system’s
+populations to determine the score of the strata</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The metric that determines the value
+for each system</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A single score value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.estimate_score_all_systems">
+<code class="sig-name descname">estimate_score_all_systems</code><span class="sig-paren">(</span><em class="sig-param">metric</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.estimate_score_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.estimate_score_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the score of the entire strata according to the metric.
+Updates System objects with the result for each system.</p>
+<p>This leverages the computation of the score for each stratum according to the metric,
+and then uses standard stratified sampling to estimate the score, or the <cite>population mean</cite>.
+The formula used is:</p>
+<div class="math">
+<p><img src="../_images/math/0cc6c96b514cafe4b9e9c396bdb8e1ccf0f2d6c9.png" alt="score\_hat =
+\frac{\sum_{l=1}^{self.num\_strata}(N_{L}*stratum.estimate\_metric\_score)}{N}"/></p>
+</div><p>where there are <img class="math" src="../_images/math/19eef1966f7c545af3ac8c0fa486974d873e3c65.png" alt="L"/> strata, and <img class="math" src="../_images/math/18da1af86e5014bdac4e62b3843e0abcc840cddf.png" alt="N_L"/> is the total number of trials in that
+strata and <img class="math" src="../_images/math/3bfb3a64189a14b2704f4610827762d5e3145114.png" alt="N"/> is the total number of samples in the population.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – the metric object that determines how
+trials are scored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of scores, one score per system.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.estimate_score_lower_all_systems">
+<code class="sig-name descname">estimate_score_lower_all_systems</code><span class="sig-paren">(</span><em class="sig-param">metric</em>, <em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.estimate_score_lower_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.estimate_score_lower_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the score of the entire strata according to the metric.
+Updates System objects with the result for each system. This score estimate gives
+the lower score based on combining the strata using the lower bound or the upper bound
+of the population estimate depending on which gives the lower score</p>
+<p>This leverages the computation of the score for each stratum according to the metric,
+and then uses standard stratified sampling to estimate the score, or the <cite>population mean</cite>.
+The formula used is:</p>
+<div class="math">
+<p><img src="../_images/math/0cc6c96b514cafe4b9e9c396bdb8e1ccf0f2d6c9.png" alt="score\_hat =
+\frac{\sum_{l=1}^{self.num\_strata}(N_{L}*stratum.estimate\_metric\_score)}{N}"/></p>
+</div><p>where there are <img class="math" src="../_images/math/19eef1966f7c545af3ac8c0fa486974d873e3c65.png" alt="L"/> strata, and <img class="math" src="../_images/math/18da1af86e5014bdac4e62b3843e0abcc840cddf.png" alt="N_L"/> is the total number of trials in that
+strata and <img class="math" src="../_images/math/3bfb3a64189a14b2704f4610827762d5e3145114.png" alt="N"/> is the total number of samples in the population.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – the metric object that determines how
+trials are scored</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – The specified alpha for confidence</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of score values based on different population upper and
+lower bounds, one per system</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.estimate_score_upper_all_systems">
+<code class="sig-name descname">estimate_score_upper_all_systems</code><span class="sig-paren">(</span><em class="sig-param">metric</em>, <em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.estimate_score_upper_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.estimate_score_upper_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the score of the entire strata according to the metric.
+Updates System objects with the result for each system. This score estimate gives
+the upper score based on combining the strata using the lower bound or the upper bound
+of the population estimate depending on which gives the higher score</p>
+<p>This leverages the computation of the score for each stratum according to the metric,
+and then uses standard stratified sampling to estimate the score, or the <cite>population mean</cite>.
+The formula used is:</p>
+<div class="math">
+<p><img src="../_images/math/0cc6c96b514cafe4b9e9c396bdb8e1ccf0f2d6c9.png" alt="score\_hat =
+\frac{\sum_{l=1}^{self.num\_strata}(N_{L}*stratum.estimate\_metric\_score)}{N}"/></p>
+</div><p>where there are <img class="math" src="../_images/math/19eef1966f7c545af3ac8c0fa486974d873e3c65.png" alt="L"/> strata, and <img class="math" src="../_images/math/18da1af86e5014bdac4e62b3843e0abcc840cddf.png" alt="N_L"/> is the total number of trials in that
+strata and <img class="math" src="../_images/math/3bfb3a64189a14b2704f4610827762d5e3145114.png" alt="N"/> is the total number of samples in the population.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – the metric object that determines how
+trials are scored</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – The specified alpha for confidence</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of score values based on different population upper and
+lower bounds, one per system</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.estimate_score_variance">
+<code class="sig-name descname">estimate_score_variance</code><span class="sig-paren">(</span><em class="sig-param">metric</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.estimate_score_variance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.estimate_score_variance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using the aggregation strategy defined by the strata class, aggregates the system’s
+populations to determine the score_variance (square of the standard error) of the strata</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The metric that determines the value
+for each system</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A single score_variance value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.estimate_score_variance_all_systems">
+<code class="sig-name descname">estimate_score_variance_all_systems</code><span class="sig-paren">(</span><em class="sig-param">metric</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.estimate_score_variance_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.estimate_score_variance_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses stratified sampling to estimate the metric variance.
+Updates System objects with the result for each system.</p>
+<p>The formula to take the different stratum variances and provide a combined variance is
+taken from pg 229–230 of “Mathematical Statistics and Data Analysis” by John Rice,
+3rd Edition. The formula is implemetned without the finite population correction.
+This formula is:</p>
+<div class="math">
+<p><img src="../_images/math/3ded8ed4c5e7fb6fa763e94129e632115b81ae33.png" alt="\widehat{score} =
+\sum_{i=1}^{self.num\_strata}\left(W_{l}^2*
+score\_var_l*(1 - \frac{n_l - 1}{N_l - 1})\right)"/></p>
+</div><p>with</p>
+<div class="math">
+<p><img src="../_images/math/4ca112c8830753136024a66f2abb698d15917eac.png" alt="fpc = 1 - \frac{n_l - 1}{N_l - 1}"/></p>
+</div><p>as a finite population correction.</p>
+<p>Where for stratum <img class="math" src="../_images/math/470aa65888a2971c9346e573f12b37ea406b8ec9.png" alt="l"/>, <img class="math" src="../_images/math/f4ee846cfc743723fa1db675445c2acc1bfa3c6e.png" alt="score\_var_l"/> is the score variance of that stratum.
+Rather than
+adding the finite population correction within the stratum, we add the finite population
+correction here. The finite population correction is essential for telling the sampler
+that exhausted strata mean that our measurement error has decreased because we have all
+of the samples and cannot sample further. Else we would be in an infinite loop trying
+to sample exhausted stratum. The name
+components score_variance and variance are used to distinguish when the method is
+computing the variance or the score variance (the square of the standard error of the
+score). We use the score variance so that advance score_variance and confidence interval
+corrections can be specified by the metric.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – the metric object that determines how
+trials are scored</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of variances of the score measurements,
+one score_variance per system</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.estimate_score_variance_upper_all_systems">
+<code class="sig-name descname">estimate_score_variance_upper_all_systems</code><span class="sig-paren">(</span><em class="sig-param">metric</em>, <em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.estimate_score_variance_upper_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.estimate_score_variance_upper_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses stratified sampling to estimate the metric variance assuming upper bounds on
+population estimates. This also gives a nonzero uncertainty when the population is 0
+but the upper estimate of the population is above 0.
+Updates System objects with the result for each system.</p>
+<p>This score variance estimate gives
+the upper score variance based on combining the strata using the lower bound or the
+upper bound of the population estimate depending on which gives the higher variance</p>
+<p>The formula to take the different stratum variances and provide a combined variance is
+taken from pg 229–230 of “Mathematical Statistics and Data Analysis” by John Rice,
+3rd Edition. The formula is implemetned without the finite population correction.
+This formula is:</p>
+<div class="math">
+<p><img src="../_images/math/3ded8ed4c5e7fb6fa763e94129e632115b81ae33.png" alt="\widehat{score} =
+\sum_{i=1}^{self.num\_strata}\left(W_{l}^2*
+score\_var_l*(1 - \frac{n_l - 1}{N_l - 1})\right)"/></p>
+</div><p>with</p>
+<div class="math">
+<p><img src="../_images/math/4ca112c8830753136024a66f2abb698d15917eac.png" alt="fpc = 1 - \frac{n_l - 1}{N_l - 1}"/></p>
+</div><p>as a finite population correction.</p>
+<p>Where for stratum <img class="math" src="../_images/math/470aa65888a2971c9346e573f12b37ea406b8ec9.png" alt="l"/>, <img class="math" src="../_images/math/f4ee846cfc743723fa1db675445c2acc1bfa3c6e.png" alt="score\_var_l"/> is the score variance of that stratum.
+Rather than
+adding the finite population correction within the stratum, we add the finite population
+correction here. The finite population correction is essential for telling the sampler
+that exhausted strata mean that our measurement error has decreased because we have all
+of the samples and cannot sample further. Else we would be in an infinite loop trying
+to sample exhausted stratum. The name
+components score_variance and variance are used to distinguish when the method is
+computing the variance or the score variance (the square of the standard error of the
+score). We use the score variance so that advance score_variance and confidence interval
+corrections can be specified by the metric.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – the metric object that determines how
+trials are scored</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – The confidence bound for upper population estimation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of variances of the score measurements,
+one score_variance per system</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.find_needed_initial_samples">
+<code class="sig-name descname">find_needed_initial_samples</code><span class="sig-paren">(</span><em class="sig-param">metric</em>, <em class="sig-param">initial_samples</em>, <em class="sig-param">rng</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.find_needed_initial_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.find_needed_initial_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>In order to cover the case where we don’t sample from each stratum necessary edge cases
+(Such as when the metric is a combination of two components) and to ensure samples
+from each stratum, this method will find such examples and will sample at random.</p>
+<p>This will work if initial samples have already been added. This will then find the gaps.
+This requires at least two samples per strata, and more depending on the metric</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The metric to score systems</p></li>
+<li><p><strong>initial_samples</strong> (<em>int</em>) – The number of initial samples per bin to request</p></li>
+<li><p><strong>rng</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code>) – random state object with stored random state</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial_id values to sample</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.get_combined_systems_df">
+<code class="sig-name descname">get_combined_systems_df</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.get_combined_systems_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.get_combined_systems_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes the system data frames with system scores and combines to get one data frame
+that also includes the stratum indices</p>
+<p>If the “stratum_index” field has already been added to the system data frames, then
+that field will be in the returned data frame. Otherwise, if the field “stratum_index”
+has not yet been added, then the “stratum_index” field will not appear in this combined
+data frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>output_df a copy of the combined data frame,
+where each system_id is a column whose value is the score.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.core.frame.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.get_combined_systems_score_df">
+<code class="sig-name descname">get_combined_systems_score_df</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.get_combined_systems_score_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.get_combined_systems_score_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes the system data frames with system scores and combines to get one data frame
+that also includes the stratum indices. Only returns subset where we have the key.</p>
+<p>If the “stratum_index” field has already been added to the system data frames, then
+that field will be in the returned data frame. Otherwise, if the field “stratum_index”
+has not yet been added, then the “stratum_index” field will not appear in this combined
+data frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>output_df a copy of the combined data frame, where each
+system_id is a column
+whose value is the score.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.core.frame.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.get_confidence_intervals_all_systems">
+<code class="sig-name descname">get_confidence_intervals_all_systems</code><span class="sig-paren">(</span><em class="sig-param">metric</em>, <em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.get_confidence_intervals_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.get_confidence_intervals_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a confidence interval for each system in this strata, represented as a list of lists
+per system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – the metric object</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – the desired probability level to get (1-alpha) confidence for</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of lists, where each entry of the list is a
+three-element list,
+[lower_value, upper_value, delta], where the delta is
+usually the higher of (score - lower_value) and (higher_value - score).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.get_confidence_intervals_true_pop_all_systems">
+<code class="sig-name descname">get_confidence_intervals_true_pop_all_systems</code><span class="sig-paren">(</span><em class="sig-param">metric</em>, <em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.get_confidence_intervals_true_pop_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.get_confidence_intervals_true_pop_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a confidence interval for each system in this strata, represented as a list of lists
+per system. This estimate assumes no uncertainty in the population estimates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – the metric object</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – the desired probability level to get (1-alpha) confidence for</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of lists, where each entry of the list is a
+three-element list,
+[lower_value, upper_value, delta], where the delta is
+usually the higher of (score - lower_value) and (higher_value - score).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.get_strata_alpha">
+<em class="property">abstract </em><code class="sig-name descname">get_strata_alpha</code><span class="sig-paren">(</span><em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.get_strata_alpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.get_strata_alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>To avoid too many type one errors, get an alpha that is adjusted accordingly for
+multiple systems</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alpha</strong> – (float) The original desired alpha</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>new_alpha, The new desired alpha</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.strata.Strata.num_trials">
+<code class="sig-name descname">num_trials</code><em class="property"> = 0</em><a class="headerlink" href="#aegis.acteval.strata.Strata.num_trials" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.strata.Strata.num_trials_sampled">
+<code class="sig-name descname">num_trials_sampled</code><em class="property"> = 0</em><a class="headerlink" href="#aegis.acteval.strata.Strata.num_trials_sampled" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.Strata.stratify">
+<em class="property">abstract </em><code class="sig-name descname">stratify</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#Strata.stratify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.Strata.stratify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce strata according to a stratification strategy, which is defined by the
+implementing class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>new_strata, the strata object after stratification</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#aegis.acteval.strata.Strata" title="aegis.acteval.strata.Strata">aegis.acteval.strata.Strata</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="aegis.acteval.strata.StrataFirstSystem">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.strata.</code><code class="sig-name descname">StrataFirstSystem</code><span class="sig-paren">(</span><em class="sig-param">num_strata</em>, <em class="sig-param">system_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataFirstSystem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataFirstSystem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#aegis.acteval.strata.Strata" title="aegis.acteval.strata.Strata"><code class="xref py py-class docutils literal notranslate"><span class="pre">aegis.acteval.strata.Strata</span></code></a></p>
+<p>Default Stratification Style that stratifies according to the first system. It is recommended
+to specify the system ordering in aegis.data_processor.extract_files_from_directory() method
+so that the desired system is used.</p>
+<p>This class is useful for single-system stratification as well as tests that stratify by one
+system only.</p>
+<p>The stratification stratifies only by the first system, and the system aggregator always
+takes the statistic of the first system. When sampling, we can customize whether the bin
+widths of the strata should be equal, or if the bin widths should be chosen so that an equal
+number of trials is in each bin (Each stratum has the same size).</p>
+<dl class="method">
+<dt id="aegis.acteval.strata.StrataFirstSystem.aggregate_system_confidence_values">
+<code class="sig-name descname">aggregate_system_confidence_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataFirstSystem.aggregate_system_confidence_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataFirstSystem.aggregate_system_confidence_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produces an aggregated system confidence value by taking the confidence value of the first
+system and ignoring all other systems’ values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An aggregated confidence value</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.StrataFirstSystem.aggregate_system_stats">
+<code class="sig-name descname">aggregate_system_stats</code><span class="sig-paren">(</span><em class="sig-param">sys_stat_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataFirstSystem.aggregate_system_stats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataFirstSystem.aggregate_system_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aggregates the system stats list by taking the first system’s value. Ignores values
+of all other systems.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sys_stat_list</strong> (<em>list of float</em>) – The list of values, one value per system, to aggregate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An aggregated value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.StrataFirstSystem.get_strata_alpha">
+<code class="sig-name descname">get_strata_alpha</code><span class="sig-paren">(</span><em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataFirstSystem.get_strata_alpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataFirstSystem.get_strata_alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>To avoid too many type one errors, get an alpha that is adjusted accordingly for
+multiple systems. This class ignores all but one system, so return just one system</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alpha</strong> – (float) The original desired alpha</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>new_alpha, The new desired alpha</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.StrataFirstSystem.stratify">
+<code class="sig-name descname">stratify</code><span class="sig-paren">(</span><em class="sig-param">bin_style='equal'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataFirstSystem.stratify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataFirstSystem.stratify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stratification method that stratifies purely by the first system and ignores
+other systems.</p>
+<p>Since this ignores the trial data, there is no trial_df argument.</p>
+<p>Start with the easiest strategy: stratify by score such that the bin widths (the score
+ranges, not the number of items in each bin, are the same), and stratify by the score of
+the first system.</p>
+<p>In this strata of stratum, the population size
+is the total number of trials in all of the stratum, not the total number of trials that
+have been sampled. For metrics such as recall where this cannot be computed directly,
+this will be estimated by by incorporating the estimates of each stratum in the
+stratified sampling manner.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bin_style</strong> (<em>str</em>) – The style to stratify the bins. Default is ‘equal’.
+‘equal’: Stratify the bins so that the range of values is equal, or the bins
+are of equal width
+‘perc’: Stratfiy by percentile, or so that an equal number of trials are in each bin</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>new_strata, the strata object after stratification</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#aegis.acteval.strata.Strata" title="aegis.acteval.strata.Strata">aegis.acteval.strata.Strata</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="aegis.acteval.strata.StrataFirstSystemDecision">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.strata.</code><code class="sig-name descname">StrataFirstSystemDecision</code><span class="sig-paren">(</span><em class="sig-param">num_strata</em>, <em class="sig-param">system_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataFirstSystemDecision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataFirstSystemDecision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#aegis.acteval.strata.Strata" title="aegis.acteval.strata.Strata"><code class="xref py py-class docutils literal notranslate"><span class="pre">aegis.acteval.strata.Strata</span></code></a></p>
+<p>Stratification Style that stratifies according to the first system but incorporates in the
+decisions as well as the system scores. Metrics with a threshold are required for this
+Strata class. It is recommended
+to specify the system ordering in aegis.data_processor.extract_files_from_directory() method
+so that the desired system is used.</p>
+<p>The stratification first stratifies all points by the system decision. Then, it gives
+num_strata/num_decisions bins for each decision, having a total of num_strata stratum.</p>
+<p>This provides both for better stratification as well as better statistical modeling, since if
+we were to model a metric as a sum of two binomials, stratifying by decision makes it so that
+in each strata one binomial is always 0, allowing for using one binomial to be a better
+approximation.</p>
+<dl class="method">
+<dt id="aegis.acteval.strata.StrataFirstSystemDecision.aggregate_system_confidence_values">
+<code class="sig-name descname">aggregate_system_confidence_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataFirstSystemDecision.aggregate_system_confidence_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataFirstSystemDecision.aggregate_system_confidence_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produces an aggregated system confidence value by taking the confidence value of the first
+system and ignoring all other systems’ values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An aggregated confidence value</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.StrataFirstSystemDecision.aggregate_system_stats">
+<code class="sig-name descname">aggregate_system_stats</code><span class="sig-paren">(</span><em class="sig-param">sys_stat_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataFirstSystemDecision.aggregate_system_stats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataFirstSystemDecision.aggregate_system_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aggregates the system stats list by taking the first system’s value. Ignores values
+of all other systems.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sys_stat_list</strong> (<em>list of float</em>) – The list of values, one value per system, to aggregate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An aggregated value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.StrataFirstSystemDecision.get_strata_alpha">
+<code class="sig-name descname">get_strata_alpha</code><span class="sig-paren">(</span><em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataFirstSystemDecision.get_strata_alpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataFirstSystemDecision.get_strata_alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>To avoid too many type one errors, get an alpha that is adjusted accordingly for
+multiple systems. This class ignores all but one system, so return just one system</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alpha</strong> – (float) The original desired alpha</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>new_alpha, The new desired alpha</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.StrataFirstSystemDecision.stratify">
+<code class="sig-name descname">stratify</code><span class="sig-paren">(</span><em class="sig-param">bin_style='equal'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataFirstSystemDecision.stratify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataFirstSystemDecision.stratify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stratification method that stratifies purely by the first system and ignores
+other systems.</p>
+<p>Since this ignores the trial data, there is no trial_df argument.</p>
+<p>Start with the easiest strategy: stratify by score such that the bin widths (the score
+ranges, not the number of items in each bin, are the same), and stratify by the score of
+the first system.</p>
+<p>In this strata of stratum, the population size
+is the total number of trials in all of the stratum, not the total number of trials that
+have been sampled. For metrics such as recall where this cannot be computed directly,
+this will be estimated by by incorporating the estimates of each stratum in the
+stratified sampling manner.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bin_style</strong> (<em>str</em>) – The style to stratify the bins. Default is ‘equal’.
+‘equal’: Stratify the bins so that the range of values is equal, or the bins
+are of equal width
+‘perc’: Stratfiy by percentile, or so that an equal number of trials are in each bin</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>new_strata, the strata object after stratification</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#aegis.acteval.strata.Strata" title="aegis.acteval.strata.Strata">aegis.acteval.strata.Strata</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="aegis.acteval.strata.StrataMultiSystemIntersect">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.strata.</code><code class="sig-name descname">StrataMultiSystemIntersect</code><span class="sig-paren">(</span><em class="sig-param">num_strata</em>, <em class="sig-param">system_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataMultiSystemIntersect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataMultiSystemIntersect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#aegis.acteval.strata.Strata" title="aegis.acteval.strata.Strata"><code class="xref py py-class docutils literal notranslate"><span class="pre">aegis.acteval.strata.Strata</span></code></a></p>
+<p>Default Stratification Style that stratifies according to all of the systems. It creates
+<img class="math" src="../_images/math/6ff766629e73239a29bde1161608fa79b9a86da2.png" alt="\sqrt[num\_systems]{num\_strata}"/> per system to get as close as possible to
+handle floating point errors</p>
+<p>The system aggregates such that all systems have to be within their confidence for
+a successful round. Other stats are averaged.</p>
+<dl class="method">
+<dt id="aegis.acteval.strata.StrataMultiSystemIntersect.aggregate_system_confidence_values">
+<code class="sig-name descname">aggregate_system_confidence_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataMultiSystemIntersect.aggregate_system_confidence_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataMultiSystemIntersect.aggregate_system_confidence_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produces an aggregated system confidence value by taking the max of all of the confidence
+values, ensuring that if we stop that all systems are within the delta.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An aggregated confidence value</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.StrataMultiSystemIntersect.aggregate_system_stats">
+<code class="sig-name descname">aggregate_system_stats</code><span class="sig-paren">(</span><em class="sig-param">sys_stat_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataMultiSystemIntersect.aggregate_system_stats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataMultiSystemIntersect.aggregate_system_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aggregates the system stats list by taking the maximum of all system stats to get an
+aggregated value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sys_stat_list</strong> (<em>list of float</em>) – The list of values, one value per system, to aggregate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An aggregated value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.StrataMultiSystemIntersect.get_strata_alpha">
+<code class="sig-name descname">get_strata_alpha</code><span class="sig-paren">(</span><em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataMultiSystemIntersect.get_strata_alpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataMultiSystemIntersect.get_strata_alpha" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>To avoid too many type one errors, get an alpha that is adjusted accordingly for
+multiple systems. This class uses all systems, so find an alpha whose union bound
+gives us the desired alpha.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alpha</strong> – <p>(float) The original desired alpha</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>float: new_alpha, The new desired alpha</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.StrataMultiSystemIntersect.stratify">
+<code class="sig-name descname">stratify</code><span class="sig-paren">(</span><em class="sig-param">bin_style='equal'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataMultiSystemIntersect.stratify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataMultiSystemIntersect.stratify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stratification method that stratifies purely by all of the systems. It creates
+<img class="math" src="../_images/math/6ff766629e73239a29bde1161608fa79b9a86da2.png" alt="\sqrt[num\_systems]{num\_strata}"/> strata for each system that are binned according
+to the specified bin style. Then it intersects the strata across each system to produce
+disjoint strata for sampling.</p>
+<p>Since this ignores the trial data, there is no trial_df argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bin_style</strong> (<em>str</em>) – The style to stratify the bins. Default is ‘equal’.
+‘equal’: Stratify the bins so that the range of values is equal, or the bins
+are of equal width
+‘perc’: Stratfiy by percentile, or so that an equal number of trials are in each bin</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>new_strata, the strata object after stratification</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#aegis.acteval.strata.Strata" title="aegis.acteval.strata.Strata">aegis.acteval.strata.Strata</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="aegis.acteval.strata.StrataMultiSystemIntersectDecision">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.strata.</code><code class="sig-name descname">StrataMultiSystemIntersectDecision</code><span class="sig-paren">(</span><em class="sig-param">num_strata</em>, <em class="sig-param">system_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataMultiSystemIntersectDecision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataMultiSystemIntersectDecision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#aegis.acteval.strata.Strata" title="aegis.acteval.strata.Strata"><code class="xref py py-class docutils literal notranslate"><span class="pre">aegis.acteval.strata.Strata</span></code></a></p>
+<p>Default Stratification Style that stratifies according to all of the systems and
+the decisions of each system. It creates
+<img class="math" src="../_images/math/fd9ff6644a6d2d994e4c0588977cc86b3f098380.png" alt="\sqrt[num\_systems]{num\_strata}/2"/> per system per system decision
+to get as close as possible to handle floating point errors</p>
+<p>The system aggregates such that all systems have to be within their confidence for
+a successful round. Other stats are averaged.</p>
+<dl class="method">
+<dt id="aegis.acteval.strata.StrataMultiSystemIntersectDecision.aggregate_system_confidence_values">
+<code class="sig-name descname">aggregate_system_confidence_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataMultiSystemIntersectDecision.aggregate_system_confidence_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataMultiSystemIntersectDecision.aggregate_system_confidence_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produces an aggregated system confidence value by taking the max of all of the confidence
+values, ensuring that if we stop that all systems are within the delta.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An aggregated confidence value</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.StrataMultiSystemIntersectDecision.aggregate_system_stats">
+<code class="sig-name descname">aggregate_system_stats</code><span class="sig-paren">(</span><em class="sig-param">sys_stat_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataMultiSystemIntersectDecision.aggregate_system_stats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataMultiSystemIntersectDecision.aggregate_system_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aggregates the system stats list by taking the maximum of all system stats to get an
+aggregated value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sys_stat_list</strong> (<em>list of float</em>) – The list of values, one value per system, to aggregate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An aggregated value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.StrataMultiSystemIntersectDecision.get_strata_alpha">
+<code class="sig-name descname">get_strata_alpha</code><span class="sig-paren">(</span><em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataMultiSystemIntersectDecision.get_strata_alpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataMultiSystemIntersectDecision.get_strata_alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>To avoid too many type one errors, get an alpha that is adjusted accordingly for
+multiple systems. This class uses all systems, so find an alpha whose union bound
+gives us the desired alpha.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alpha</strong> – (float) The original desired alpha</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>new_alpha, The new desired alpha</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.strata.StrataMultiSystemIntersectDecision.stratify">
+<code class="sig-name descname">stratify</code><span class="sig-paren">(</span><em class="sig-param">bin_style='equal'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/strata.html#StrataMultiSystemIntersectDecision.stratify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.strata.StrataMultiSystemIntersectDecision.stratify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stratification method that stratifies purely by all of the systems. It creates
+<img class="math" src="../_images/math/6ff766629e73239a29bde1161608fa79b9a86da2.png" alt="\sqrt[num\_systems]{num\_strata}"/> strata for each system that are binned according
+to the specified bin style. Then it intersects the strata across each system to produce
+disjoint strata for sampling.</p>
+<p>Since this ignores the trial data, there is no trial_df argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bin_style</strong> (<em>str</em>) – The style to stratify the bins. Default is ‘equal’.
+‘equal’: Stratify the bins so that the range of values is equal, or the bins
+are of equal width
+‘perc’: Stratfiy by percentile, or so that an equal number of trials are in each bin</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>new_strata, the strata object after stratification</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#aegis.acteval.strata.Strata" title="aegis.acteval.strata.Strata">aegis.acteval.strata.Strata</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="aegis.acteval.stratum.html" class="btn btn-neutral float-right" title="aegis.acteval.stratum module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="aegis.acteval.samplers.html" class="btn btn-neutral float-left" title="aegis.acteval.samplers module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, NIST MIG
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,765 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>aegis.acteval.samplers module &mdash; aegis v2020.03.03 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="aegis.acteval.strata module" href="aegis.acteval.strata.html" />
+    <link rel="prev" title="aegis.acteval.metrics module" href="aegis.acteval.metrics.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> aegis
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2020.03.03
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Aegis Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#running-experiments-with-aegis-when-ground-truth-is-known">Running Experiments with Aegis when Ground Truth is Known</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#code-approach">Code Approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#running-continuous-integration-components-locally">Running Continuous Integration Components Locally</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#license">LICENSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">CHANGELOG</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../API_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="aegis.html">aegis package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="aegis.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="aegis.acteval.html">aegis.acteval package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.datagenerator.html">aegis.datagenerator package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.oracle.html">aegis.oracle package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="aegis.acteval.html">aegis.acteval package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="aegis.acteval.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.controller.html">aegis.acteval.controller module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.data_processor.html">aegis.acteval.data_processor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.experiment.html">aegis.acteval.experiment module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.metrics.html">aegis.acteval.metrics module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">aegis.acteval.samplers module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.strata.html">aegis.acteval.strata module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.stratum.html">aegis.acteval.stratum module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.summary_reporter.html">aegis.acteval.summary_reporter module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.system.html">aegis.acteval.system module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.controller.html">aegis.acteval.controller module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.data_processor.html">aegis.acteval.data_processor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.experiment.html">aegis.acteval.experiment module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.metrics.html">aegis.acteval.metrics module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">aegis.acteval.samplers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.strata.html">aegis.acteval.strata module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.stratum.html">aegis.acteval.stratum module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.summary_reporter.html">aegis.acteval.summary_reporter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.system.html">aegis.acteval.system module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.datagenerator.html">aegis.datagenerator package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.datagenerator.data_generator.html">aegis.datagenerator.data_generator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.oracle.html">aegis.oracle package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.oracle.oracle.html">aegis.oracle.oracle module</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aegis</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API_reference.html">API Reference</a> &raquo;</li>
+        
+          <li><a href="aegis.html">aegis package</a> &raquo;</li>
+        
+          <li><a href="aegis.acteval.html">aegis.acteval package</a> &raquo;</li>
+        
+      <li>aegis.acteval.samplers module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/aegis.acteval.samplers.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-aegis.acteval.samplers">
+<span id="aegis-acteval-samplers-module"></span><h1>aegis.acteval.samplers module<a class="headerlink" href="#module-aegis.acteval.samplers" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="aegis.acteval.samplers.AdaptiveFixedTrialSampler">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.samplers.</code><code class="sig-name descname">AdaptiveFixedTrialSampler</code><span class="sig-paren">(</span><em class="sig-param">strata</em>, <em class="sig-param">num_success_rounds_required</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#AdaptiveFixedTrialSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.AdaptiveFixedTrialSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#aegis.acteval.samplers.TrialSampler" title="aegis.acteval.samplers.TrialSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">aegis.acteval.samplers.TrialSampler</span></code></a></p>
+<p>Draws samples from the strata, corresponding to the opt sampler that samples
+proportionally according to the variance of each stratum. Draws proportional exactly
+instead of using a multinomial.</p>
+<dl class="method">
+<dt id="aegis.acteval.samplers.AdaptiveFixedTrialSampler.draw_samples">
+<code class="sig-name descname">draw_samples</code><span class="sig-paren">(</span><em class="sig-param">num_samples</em>, <em class="sig-param">metric</em>, <em class="sig-param">rng=None</em>, <em class="sig-param">alpha=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#AdaptiveFixedTrialSampler.draw_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.AdaptiveFixedTrialSampler.draw_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample adaptively according to an “optimal” sampling scheme, which is sampling
+proportional to the score_variances of each stratum. This enables taking more samples
+for a stratum with a higher variance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_samples</strong> (<em>int</em>) – The number of samples to draw at each step</p></li>
+<li><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The metric object used for scoring</p></li>
+<li><p><strong>rng</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code>, optional) – The Random_number generator provided
+from the controller. If set to None, it is
+not provided and will be unique to this sampler. None is provided by default</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – The desired confidence level. Used for sampling when
+population estimates have variances</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial_id values to sample.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.samplers.AdaptiveFixedTrialSampler.name">
+<code class="sig-name descname">name</code><em class="property"> = 'AdaptiveFixedTrialSampler'</em><a class="headerlink" href="#aegis.acteval.samplers.AdaptiveFixedTrialSampler.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="aegis.acteval.samplers.AdaptiveTrialSampler">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.samplers.</code><code class="sig-name descname">AdaptiveTrialSampler</code><span class="sig-paren">(</span><em class="sig-param">strata</em>, <em class="sig-param">num_success_rounds_required</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#AdaptiveTrialSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.AdaptiveTrialSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#aegis.acteval.samplers.TrialSampler" title="aegis.acteval.samplers.TrialSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">aegis.acteval.samplers.TrialSampler</span></code></a></p>
+<p>Draws samples from the strata, corresponding to the opt sampler that samples
+proportionally according to the variance of each stratum.</p>
+<dl class="method">
+<dt id="aegis.acteval.samplers.AdaptiveTrialSampler.draw_samples">
+<code class="sig-name descname">draw_samples</code><span class="sig-paren">(</span><em class="sig-param">num_samples</em>, <em class="sig-param">metric</em>, <em class="sig-param">rng=None</em>, <em class="sig-param">alpha=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#AdaptiveTrialSampler.draw_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.AdaptiveTrialSampler.draw_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample adaptively according to an “optimal” sampling scheme, which is sampling
+proportional to the score_variances of each stratum. This enables taking more samples
+for a stratum with a higher variance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_samples</strong> (<em>int</em>) – The number of samples to draw at each step</p></li>
+<li><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The metric object used for scoring</p></li>
+<li><p><strong>rng</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code>, optional) – The Random_number generator provided
+from the controller. If set to None, it is
+not provided and will be unique to this sampler. None is provided by default</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – The desired confidence level. Used for sampling when
+population estimates have variances</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial_id values to sample.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.samplers.AdaptiveTrialSampler.name">
+<code class="sig-name descname">name</code><em class="property"> = 'AdaptiveTrialSampler'</em><a class="headerlink" href="#aegis.acteval.samplers.AdaptiveTrialSampler.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="aegis.acteval.samplers.ProportionalFixedTrialSampler">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.samplers.</code><code class="sig-name descname">ProportionalFixedTrialSampler</code><span class="sig-paren">(</span><em class="sig-param">strata</em>, <em class="sig-param">num_success_rounds_required</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#ProportionalFixedTrialSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.ProportionalFixedTrialSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#aegis.acteval.samplers.TrialSampler" title="aegis.acteval.samplers.TrialSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">aegis.acteval.samplers.TrialSampler</span></code></a></p>
+<p>Draws samples from the strata, sampling proportionally to the population size of each stratum.
+This uses the population estimates or the populations according to the metrics, which for
+some metrics may not be the number of trials. This proportional sampler draws a deterministic
+number of samples rather than using a multinomial distribution with the proportional
+probabilities.</p>
+<dl class="method">
+<dt id="aegis.acteval.samplers.ProportionalFixedTrialSampler.draw_samples">
+<code class="sig-name descname">draw_samples</code><span class="sig-paren">(</span><em class="sig-param">num_samples</em>, <em class="sig-param">metric</em>, <em class="sig-param">rng=None</em>, <em class="sig-param">alpha=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#ProportionalFixedTrialSampler.draw_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.ProportionalFixedTrialSampler.draw_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample proportional to the stratum population size. Population will be estimated for
+metrics like precision where the population is not merely the number of trials in
+the stratum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_samples</strong> (<em>int</em>) – The number of samples to draw at each step</p></li>
+<li><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The metric object used for scoring</p></li>
+<li><p><strong>rng</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code>, optional) – The Random_number generator provided
+from the controller. If set to None, it is
+not provided and will be unique to this sampler. None is provided by default</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – The desired confidence level. Used for sampling when
+population estimates have variances</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial_id values to sample.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.samplers.ProportionalFixedTrialSampler.name">
+<code class="sig-name descname">name</code><em class="property"> = 'ProportionalFixedTrialSampler'</em><a class="headerlink" href="#aegis.acteval.samplers.ProportionalFixedTrialSampler.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="aegis.acteval.samplers.ProportionalTrialSampler">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.samplers.</code><code class="sig-name descname">ProportionalTrialSampler</code><span class="sig-paren">(</span><em class="sig-param">strata</em>, <em class="sig-param">num_success_rounds_required</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#ProportionalTrialSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.ProportionalTrialSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#aegis.acteval.samplers.TrialSampler" title="aegis.acteval.samplers.TrialSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">aegis.acteval.samplers.TrialSampler</span></code></a></p>
+<p>Draws samples from the strata, sampling proportionally to the population size of each stratum.
+This uses the population estimates or the populations according to the metrics, which for
+some metrics may not be the number of trials.</p>
+<dl class="method">
+<dt id="aegis.acteval.samplers.ProportionalTrialSampler.draw_samples">
+<code class="sig-name descname">draw_samples</code><span class="sig-paren">(</span><em class="sig-param">num_samples</em>, <em class="sig-param">metric</em>, <em class="sig-param">rng=None</em>, <em class="sig-param">alpha=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#ProportionalTrialSampler.draw_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.ProportionalTrialSampler.draw_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample proportional to the stratum population size. Population will be estimated for
+metrics like precision where the population is not merely the number of trials in
+the stratum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_samples</strong> (<em>int</em>) – The number of samples to draw at each step</p></li>
+<li><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The metric object used for scoring</p></li>
+<li><p><strong>rng</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code>, optional) – The Random_number generator provided
+from the controller. If set to None, it is
+not provided and will be unique to this sampler. None is provided by default</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – The desired confidence level. Used for sampling when
+population estimates have variances</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial_id values to sample.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.samplers.ProportionalTrialSampler.name">
+<code class="sig-name descname">name</code><em class="property"> = 'ProportionalTrialSampler'</em><a class="headerlink" href="#aegis.acteval.samplers.ProportionalTrialSampler.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="aegis.acteval.samplers.RandomFixedTrialSampler">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.samplers.</code><code class="sig-name descname">RandomFixedTrialSampler</code><span class="sig-paren">(</span><em class="sig-param">strata</em>, <em class="sig-param">num_success_rounds_required</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#RandomFixedTrialSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.RandomFixedTrialSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#aegis.acteval.samplers.TrialSampler" title="aegis.acteval.samplers.TrialSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">aegis.acteval.samplers.TrialSampler</span></code></a></p>
+<p>Draws samples randomly regardless of stratification. Calls
+the metric get_trials_to_sample_from() in order to only sample relevant trials.</p>
+<dl class="method">
+<dt id="aegis.acteval.samplers.RandomFixedTrialSampler.draw_samples">
+<code class="sig-name descname">draw_samples</code><span class="sig-paren">(</span><em class="sig-param">num_samples</em>, <em class="sig-param">metric</em>, <em class="sig-param">rng=None</em>, <em class="sig-param">alpha=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#RandomFixedTrialSampler.draw_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.RandomFixedTrialSampler.draw_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples randomly regardless of stratification. However, it does call the metric
+<cite>get_trials_to_sample_from</cite> for each stratum so that all sampled trials are relevant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_samples</strong> (<em>int</em>) – The number of samples to draw at each step</p></li>
+<li><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The metric object used for scoring</p></li>
+<li><p><strong>rng</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code>, optional) – The Random_number generator provided
+from the controller. If set to None, it is
+not provided and will be unique to this sampler. None is provided by default</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – The desired confidence level. Used for sampling when
+population estimates have variances</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial_id values to sample.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.samplers.RandomFixedTrialSampler.name">
+<code class="sig-name descname">name</code><em class="property"> = 'RandomFixedTrialSampler'</em><a class="headerlink" href="#aegis.acteval.samplers.RandomFixedTrialSampler.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="aegis.acteval.samplers.RandomTrialSampler">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.samplers.</code><code class="sig-name descname">RandomTrialSampler</code><span class="sig-paren">(</span><em class="sig-param">strata</em>, <em class="sig-param">num_success_rounds_required</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#RandomTrialSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.RandomTrialSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#aegis.acteval.samplers.TrialSampler" title="aegis.acteval.samplers.TrialSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">aegis.acteval.samplers.TrialSampler</span></code></a></p>
+<p>Draws samples randomly regardless of stratification. RandomTrialSampler calls
+the metric get_trials_to_sample_from() in order to only sample relevant trials.</p>
+<dl class="method">
+<dt id="aegis.acteval.samplers.RandomTrialSampler.draw_samples">
+<code class="sig-name descname">draw_samples</code><span class="sig-paren">(</span><em class="sig-param">num_samples</em>, <em class="sig-param">metric</em>, <em class="sig-param">rng=None</em>, <em class="sig-param">alpha=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#RandomTrialSampler.draw_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.RandomTrialSampler.draw_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples randomly regardless of stratification. However, it does call the metric
+<cite>get_trials_to_sample_from</cite> for each stratum so that all sampled trials are relevant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_samples</strong> (<em>int</em>) – The number of samples to draw at each step</p></li>
+<li><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The metric object used for scoring</p></li>
+<li><p><strong>rng</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code>, optional) – The Random_number generator provided
+from the controller. If set to None, it is
+not provided and will be unique to this sampler. None is provided by default</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – The desired confidence level. Used for sampling when
+population estimates have variances</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial_id values to sample.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.samplers.RandomTrialSampler.name">
+<code class="sig-name descname">name</code><em class="property"> = 'RandomTrialSampler'</em><a class="headerlink" href="#aegis.acteval.samplers.RandomTrialSampler.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="aegis.acteval.samplers.TrialSampler">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.samplers.</code><code class="sig-name descname">TrialSampler</code><span class="sig-paren">(</span><em class="sig-param">strata</em>, <em class="sig-param">num_success_rounds_required</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#TrialSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.TrialSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Abstract class to support different sampling methods.</p>
+<dl class="method">
+<dt id="aegis.acteval.samplers.TrialSampler.draw_samples">
+<em class="property">abstract </em><code class="sig-name descname">draw_samples</code><span class="sig-paren">(</span><em class="sig-param">num_samples</em>, <em class="sig-param">metric</em>, <em class="sig-param">rng=None</em>, <em class="sig-param">alpha=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#TrialSampler.draw_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.TrialSampler.draw_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that provides the strategy of drawing samples. Will vary when needed for
+comparative experiments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_samples</strong> (<em>int</em>) – The number of samples to draw at each step</p></li>
+<li><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The metric object used for scoring</p></li>
+<li><p><strong>rng</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code>, optional) – The Random_number generator provided
+from the controller. If set to None, it is
+not provided and will be unique to this sampler. None is provided by default</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – The desired confidence level. Used for sampling when
+population estimates have variances</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial_id values to sample.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.samplers.TrialSampler.meets_confidence_criteria">
+<code class="sig-name descname">meets_confidence_criteria</code><span class="sig-paren">(</span><em class="sig-param">strata</em>, <em class="sig-param">delta</em>, <em class="sig-param">alpha</em>, <em class="sig-param">metric</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#TrialSampler.meets_confidence_criteria"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.TrialSampler.meets_confidence_criteria" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a strata, with its strategy to aggregate the confidence intervals of the different
+systems in the strata, and a metric to compute confidence intervals, and returns if with
+probability &gt;= 1-alpha the confidence interval width is bounded by delta.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>strata</strong> (<a class="reference internal" href="aegis.acteval.strata.html#aegis.acteval.strata.Strata" title="aegis.acteval.strata.Strata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.strata.Strata</span></code></a>) – The strata object</p></li>
+<li><p><strong>delta</strong> (<em>float</em>) – The delta to be within</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – The alpha parameter of the confidence interval (or the probability
+level of the confidence interval)</p></li>
+<li><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The metric according to which to
+compute the confidence criteria</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>meets_criteria a boolean that determines if the sample meets the
+confidence criteria within the specified parameters.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.samplers.TrialSampler.meets_confidence_delta">
+<code class="sig-name descname">meets_confidence_delta</code><span class="sig-paren">(</span><em class="sig-param">conf_value</em>, <em class="sig-param">delta</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#TrialSampler.meets_confidence_delta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.TrialSampler.meets_confidence_delta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Submethod useful for testing if we meet the confidence criteria from the Sampler
+object rather than the Strata object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conf_value</strong> (<em>float</em>) – The previously computed confidence value</p></li>
+<li><p><strong>delta</strong> (<em>float</em>) – The delta of uncertainty to be within.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the confidence range is within the specified delta
+False, otherwise</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.samplers.TrialSampler.name">
+<code class="sig-name descname">name</code><em class="property"> = ''</em><a class="headerlink" href="#aegis.acteval.samplers.TrialSampler.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.samplers.TrialSampler.sample_next_round">
+<code class="sig-name descname">sample_next_round</code><span class="sig-paren">(</span><em class="sig-param">num_previous_successes</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#TrialSampler.sample_next_round"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.TrialSampler.sample_next_round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to determine if we should sample another round.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>num_previous_successes</strong> (<em>int</em>) – The number of previous consecutive successful rounds</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if another round should be sampled, and False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="aegis.acteval.samplers.TrueRandomFixedTrialSampler">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.samplers.</code><code class="sig-name descname">TrueRandomFixedTrialSampler</code><span class="sig-paren">(</span><em class="sig-param">strata</em>, <em class="sig-param">num_success_rounds_required</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#TrueRandomFixedTrialSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.TrueRandomFixedTrialSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#aegis.acteval.samplers.TrialSampler" title="aegis.acteval.samplers.TrialSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">aegis.acteval.samplers.TrialSampler</span></code></a></p>
+<p>Draws samples randomly regardless of stratification. Samples from
+all trials without consulting the metric. This means that in many iterations non-relevant
+trials may be sampled for metrics such as precision where not all trials are relevant.</p>
+<dl class="method">
+<dt id="aegis.acteval.samplers.TrueRandomFixedTrialSampler.draw_samples">
+<code class="sig-name descname">draw_samples</code><span class="sig-paren">(</span><em class="sig-param">num_samples</em>, <em class="sig-param">metric</em>, <em class="sig-param">rng=None</em>, <em class="sig-param">alpha=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#TrueRandomFixedTrialSampler.draw_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.TrueRandomFixedTrialSampler.draw_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples from all stratum from all possible unsampled trials. This includes trials that
+the metric may deem as not relevant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_samples</strong> (<em>int</em>) – The number of samples to draw at each step</p></li>
+<li><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The metric object used for scoring</p></li>
+<li><p><strong>rng</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code>, optional) – The Random_number generator provided
+from the controller. If set to None, it is
+not provided and will be unique to this sampler. None is provided by default</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – The desired confidence level. Used for sampling when
+population estimates have variances</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial_id values to sample.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.samplers.TrueRandomFixedTrialSampler.name">
+<code class="sig-name descname">name</code><em class="property"> = 'TrueRandomFixedTrialSampler'</em><a class="headerlink" href="#aegis.acteval.samplers.TrueRandomFixedTrialSampler.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="aegis.acteval.samplers.TrueRandomTrialSampler">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.samplers.</code><code class="sig-name descname">TrueRandomTrialSampler</code><span class="sig-paren">(</span><em class="sig-param">strata</em>, <em class="sig-param">num_success_rounds_required</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#TrueRandomTrialSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.TrueRandomTrialSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#aegis.acteval.samplers.TrialSampler" title="aegis.acteval.samplers.TrialSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">aegis.acteval.samplers.TrialSampler</span></code></a></p>
+<p>Draws samples randomly regardless of stratification. Samples from all trials,
+regardless of whether they are relevant or not.</p>
+<dl class="method">
+<dt id="aegis.acteval.samplers.TrueRandomTrialSampler.draw_samples">
+<code class="sig-name descname">draw_samples</code><span class="sig-paren">(</span><em class="sig-param">num_samples</em>, <em class="sig-param">metric</em>, <em class="sig-param">rng=None</em>, <em class="sig-param">alpha=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#TrueRandomTrialSampler.draw_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.TrueRandomTrialSampler.draw_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples randomly regardless of stratification. Draws from all samples, including
+some that may not be relevant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_samples</strong> (<em>int</em>) – The number of samples to draw at each step</p></li>
+<li><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The metric object used for scoring</p></li>
+<li><p><strong>rng</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code>, optional) – The Random_number generator provided
+from the controller. If set to None, it is
+not provided and will be unique to this sampler. None is provided by default</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – The desired confidence level. Used for sampling when
+population estimates have variances</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial_id values to sample.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.samplers.TrueRandomTrialSampler.name">
+<code class="sig-name descname">name</code><em class="property"> = 'TrueRandomTrialSampler'</em><a class="headerlink" href="#aegis.acteval.samplers.TrueRandomTrialSampler.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="aegis.acteval.samplers.UniformFixedTrialSampler">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.samplers.</code><code class="sig-name descname">UniformFixedTrialSampler</code><span class="sig-paren">(</span><em class="sig-param">strata</em>, <em class="sig-param">num_success_rounds_required</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#UniformFixedTrialSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.UniformFixedTrialSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#aegis.acteval.samplers.TrialSampler" title="aegis.acteval.samplers.TrialSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">aegis.acteval.samplers.TrialSampler</span></code></a></p>
+<p>Draws samples from the strata uniformly, drawing the same number of samples from each
+stratum. This does not use a multinomial distribution but a deterministic</p>
+<dl class="method">
+<dt id="aegis.acteval.samplers.UniformFixedTrialSampler.draw_samples">
+<code class="sig-name descname">draw_samples</code><span class="sig-paren">(</span><em class="sig-param">num_samples</em>, <em class="sig-param">metric</em>, <em class="sig-param">rng=None</em>, <em class="sig-param">alpha=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#UniformFixedTrialSampler.draw_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.UniformFixedTrialSampler.draw_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples uniformly from each strata, meaning that each strata will get
+num_samples/self.strata.num_strata samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_samples</strong> (<em>int</em>) – The number of samples to draw at each step</p></li>
+<li><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The metric object used for scoring</p></li>
+<li><p><strong>rng</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code>, optional) – The Random_number generator provided
+from the controller. If set to None, it is
+not provided and will be unique to this sampler. None is provided by default</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – The desired confidence level. Used for sampling when
+population estimates have variances</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial_id values to sample.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.samplers.UniformFixedTrialSampler.name">
+<code class="sig-name descname">name</code><em class="property"> = 'UniformFixedTrialSampler'</em><a class="headerlink" href="#aegis.acteval.samplers.UniformFixedTrialSampler.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="aegis.acteval.samplers.UniformTrialSampler">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.samplers.</code><code class="sig-name descname">UniformTrialSampler</code><span class="sig-paren">(</span><em class="sig-param">strata</em>, <em class="sig-param">num_success_rounds_required</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#UniformTrialSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.UniformTrialSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#aegis.acteval.samplers.TrialSampler" title="aegis.acteval.samplers.TrialSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">aegis.acteval.samplers.TrialSampler</span></code></a></p>
+<p>Draws samples from the strata uniformly, drawing from a uniform multinomial. This uniform
+sampler draws a deterministic number of samples rather than using a multinomial distribution
+with the uniform probabilities.</p>
+<dl class="method">
+<dt id="aegis.acteval.samplers.UniformTrialSampler.draw_samples">
+<code class="sig-name descname">draw_samples</code><span class="sig-paren">(</span><em class="sig-param">num_samples</em>, <em class="sig-param">metric</em>, <em class="sig-param">rng=None</em>, <em class="sig-param">alpha=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/samplers.html#UniformTrialSampler.draw_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.samplers.UniformTrialSampler.draw_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples uniformly from each strata, meaning that each strata will get
+num_samples/self.strata.num_strata samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_samples</strong> (<em>int</em>) – The number of samples to draw at each step</p></li>
+<li><p><strong>metric</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The metric object used for scoring</p></li>
+<li><p><strong>rng</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code>, optional) – The Random_number generator provided
+from the controller. If set to None, it is
+not provided and will be unique to this sampler. None is provided by default</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – The desired confidence level. Used for sampling when
+population estimates have variances</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial_id values to sample.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.samplers.UniformTrialSampler.name">
+<code class="sig-name descname">name</code><em class="property"> = 'UniformTrialSampler'</em><a class="headerlink" href="#aegis.acteval.samplers.UniformTrialSampler.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="aegis.acteval.strata.html" class="btn btn-neutral float-right" title="aegis.acteval.strata module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="aegis.acteval.metrics.html" class="btn btn-neutral float-left" title="aegis.acteval.metrics module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, NIST MIG
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,398 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>aegis.acteval.data_processor &mdash; aegis v2020.03.03 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> aegis
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2020.03.03
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Aegis Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#running-experiments-with-aegis-when-ground-truth-is-known">Running Experiments with Aegis when Ground Truth is Known</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#code-approach">Code Approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#running-continuous-integration-components-locally">Running Continuous Integration Components Locally</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#license">LICENSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API_reference.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">aegis</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>aegis.acteval.data_processor</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for aegis.acteval.data_processor</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Converts between data in various formats and the desired internal formats.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">aegis.acteval.system</span>
+
+
+<div class="viewcode-block" id="DataProcessor"><a class="viewcode-back" href="../../../api/aegis.acteval.data_processor.html#aegis.acteval.data_processor.DataProcessor">[docs]</a><span class="k">class</span> <span class="nc">DataProcessor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The data processing class of the Active Evaluator.</span>
+
+<span class="sd">    To ease logistics, all of the data processing functions required of the Active Evaluator are</span>
+<span class="sd">    placed in this one class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="DataProcessor.get_system_id_from_filename"><a class="viewcode-back" href="../../../api/aegis.acteval.data_processor.html#aegis.acteval.data_processor.DataProcessor.get_system_id_from_filename">[docs]</a>    <span class="k">def</span> <span class="nf">get_system_id_from_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fpath</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shortcut function for getting system ids from files. Useful for list comprehensions and</span>
+<span class="sd">        is used in other methods of the data processor.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            fpath: the filepath, which could be a filename or a directory</span>
+
+<span class="sd">        Returns: the string with the system_id from the filename.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
+        <span class="n">fname_tokens</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fname_tokens</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">sys_id</span> <span class="o">=</span> <span class="n">fname_tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sys_id</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fname_tokens</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">sys_id</span></div>
+
+<div class="viewcode-block" id="DataProcessor.extract_files_from_directory"><a class="viewcode-back" href="../../../api/aegis.acteval.data_processor.html#aegis.acteval.data_processor.DataProcessor.extract_files_from_directory">[docs]</a>    <span class="k">def</span> <span class="nf">extract_files_from_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dir</span><span class="p">,</span> <span class="n">system_ordering</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extracts files from submission directory.</span>
+
+<span class="sd">        This takes the directory, and finds the files it needs, ignoring other files in that</span>
+<span class="sd">        directory, using filenames as the identifiers.</span>
+
+<span class="sd">        Ignores additional files.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input_dir (str):</span>
+<span class="sd">                the full path to the input directory</span>
+<span class="sd">            system_ordering (list of str, optional):</span>
+<span class="sd">                An ordering of systems by system_id. If this list is empty, the</span>
+<span class="sd">                code reads all systems in any order. Else, it takes only the systems with the</span>
+<span class="sd">                specified system ids and reads them into a list. If a system id is provided that</span>
+<span class="sd">                is not in the file, it will make the file here anyway and the next method may</span>
+<span class="sd">                return an error. If no ordering is specified, the system_fpaths give the</span>
+<span class="sd">                order that the files are read. Defaults to None, which resolves to [].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (init_fpath, metadata_fpath, system_fpaths, thresholds_fpaths):</span>
+
+<span class="sd">            The tuple is,</span>
+<span class="sd">            (init_fpath, metadata_fpath, system_fpaths, thresholds_fpaths) with:</span>
+
+<span class="sd">            init_fpath</span>
+<span class="sd">                the path to the init.csv file with ground truths for initial samples</span>
+<span class="sd">            metadata_fpath</span>
+<span class="sd">                the path to the trial_metadata.csv, which is the data frame with the</span>
+<span class="sd">                trial features.</span>
+<span class="sd">            system_fpaths</span>
+<span class="sd">                the list of system output files, notated as &lt;system_id&gt;_outputs.csv.</span>
+<span class="sd">                Files can appear in any order and need not match the ordering of the</span>
+<span class="sd">                threshold fpaths.</span>
+<span class="sd">            thresholds_fpaths</span>
+<span class="sd">                the list of system threshold files, notated as</span>
+<span class="sd">                &lt;system_id&gt;_thresholds.csv. The files can appear in any order.</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">init_fpath</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">metadata_fpath</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">system_fpaths</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">thresholds_fpaths</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">system_ordering</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">system_ordering</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">system_ordering</span><span class="p">:</span>
+            <span class="n">file_names</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">input_dir</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">file_names</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">fname</span> <span class="o">==</span> <span class="s2">&quot;init.csv&quot;</span><span class="p">:</span>
+                    <span class="n">init_fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="k">elif</span> <span class="n">fname</span> <span class="o">==</span> <span class="s2">&quot;trial_metadata.csv&quot;</span><span class="p">:</span>
+                    <span class="n">metadata_fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="n">fname_tokens</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+                <span class="c1"># need system id and outputs, can ignore middle token</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fname_tokens</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">fname_tokens</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;outputs.csv&quot;</span><span class="p">:</span>
+                    <span class="n">system_fpaths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">))</span>
+                    <span class="n">sys_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_id_from_filename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+                    <span class="c1"># Check for corresponding threshold file</span>
+                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">sys_id</span> <span class="o">+</span> <span class="s2">&quot;_thresholds.csv&quot;</span><span class="p">)):</span>
+                        <span class="n">thresholds_fpaths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">sys_id</span> <span class="o">+</span> <span class="s2">&quot;_thresholds.csv&quot;</span><span class="p">)</span>
+                        <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># list is not empty and is assumed to have all ids. Ignores systems not</span>
+            <span class="n">file_names</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">input_dir</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">file_names</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">fname</span> <span class="o">==</span> <span class="s2">&quot;init.csv&quot;</span><span class="p">:</span>
+                    <span class="n">init_fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="k">elif</span> <span class="n">fname</span> <span class="o">==</span> <span class="s2">&quot;trial_metadata.csv&quot;</span><span class="p">:</span>
+                    <span class="n">metadata_fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+                    <span class="k">continue</span>
+            <span class="c1"># Now add paths by id ordering</span>
+            <span class="n">system_fpaths</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">sys_id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_outputs.csv&quot;</span><span class="p">)</span>
+                             <span class="k">for</span> <span class="n">sys_id</span> <span class="ow">in</span> <span class="n">system_ordering</span><span class="p">]</span>
+            <span class="n">thresholds_fpaths</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">sys_id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_thresholds.csv&quot;</span><span class="p">)</span>
+                                 <span class="k">for</span> <span class="n">sys_id</span> <span class="ow">in</span> <span class="n">system_ordering</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">init_fpath</span><span class="p">,</span> <span class="n">metadata_fpath</span><span class="p">,</span> <span class="n">system_fpaths</span><span class="p">,</span> <span class="n">thresholds_fpaths</span></div>
+
+<div class="viewcode-block" id="DataProcessor.process_init_data"><a class="viewcode-back" href="../../../api/aegis.acteval.data_processor.html#aegis.acteval.data_processor.DataProcessor.process_init_data">[docs]</a>    <span class="k">def</span> <span class="nf">process_init_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_fpath</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Processes in the data frame of initial samples.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            init_fpath (str): The path to the initial trials file of initially-scored samples.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.core.frame.DataFrame: init_df, the processed inital trials as a data frame.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">init_fpath</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">init_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">init_fpath</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">init_df</span></div>
+
+<div class="viewcode-block" id="DataProcessor.process_trial_data"><a class="viewcode-back" href="../../../api/aegis.acteval.data_processor.html#aegis.acteval.data_processor.DataProcessor.process_trial_data">[docs]</a>    <span class="k">def</span> <span class="nf">process_trial_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trial_data_fpath</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reads in and processes the trial data (features) into a data frame.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            trial_data_fpath (str): the path to the trials metadata file.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.core.frame.DataFrame: trial_df, the data frame of the trials features.</span>
+<span class="sd">            If trial_data_fpath is None, returns None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">trial_data_fpath</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">trial_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">trial_data_fpath</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">trial_df</span></div>
+
+<div class="viewcode-block" id="DataProcessor.process_systems_with_thresholds"><a class="viewcode-back" href="../../../api/aegis.acteval.data_processor.html#aegis.acteval.data_processor.DataProcessor.process_systems_with_thresholds">[docs]</a>    <span class="k">def</span> <span class="nf">process_systems_with_thresholds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system_filepaths</span><span class="p">,</span> <span class="n">threshold_filepaths</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes the system filepaths and the threshold filepahs, and produces system objects</span>
+<span class="sd">        with the necessary threshold information.</span>
+
+<span class="sd">        This method assumes that the system_filepaths and threshold_filepaths are in the same</span>
+<span class="sd">        order with matching system ids. The order can be customized with the</span>
+<span class="sd">        extract_files_from_directory method.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            system_filepaths (list of object):</span>
+<span class="sd">                A list of file paths, with each entry a file path to a system&#39;s</span>
+<span class="sd">                output data.</span>
+<span class="sd">            threshold_filepaths (list of object):</span>
+<span class="sd">                the list of paths to the system threshold files.</span>
+
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of aegis.acteval.system.System: sys_list,</span>
+<span class="sd">            a list of systems with their information as System objects.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">system_data_frames</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">system_path</span><span class="p">)</span> <span class="k">for</span> <span class="n">system_path</span> <span class="ow">in</span> <span class="n">system_filepaths</span>
+        <span class="p">]</span>
+        <span class="n">system_ids</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_system_id_from_filename</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">system_filepaths</span>
+        <span class="p">]</span>
+        <span class="n">threshold_data_frames</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">threshold_path</span><span class="p">)</span> <span class="k">for</span> <span class="n">threshold_path</span> <span class="ow">in</span> <span class="n">threshold_filepaths</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">system_ids</span><span class="p">)):</span>
+            <span class="n">threshold_data_frames</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;system_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">system_ids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">threshold_data_frames</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">threshold_data_frames</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">id_vars</span><span class="o">=</span><span class="s2">&quot;system_id&quot;</span><span class="p">)</span>
+        <span class="n">sys_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">sys_id</span><span class="p">,</span> <span class="n">sys_df</span><span class="p">,</span> <span class="n">thresh_df</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="n">sys_id</span><span class="p">,</span> <span class="n">sys_df</span><span class="p">,</span> <span class="n">thresh_df</span><span class="p">)</span>
+                    <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">system_ids</span><span class="p">,</span> <span class="n">system_data_frames</span><span class="p">,</span> <span class="n">threshold_data_frames</span><span class="p">)]</span>
+
+        <span class="k">return</span> <span class="n">sys_list</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, NIST MIG
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

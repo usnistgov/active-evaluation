@@ -1,0 +1,1342 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>aegis.acteval.metrics module &mdash; aegis v2020.03.03 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="aegis.acteval.samplers module" href="aegis.acteval.samplers.html" />
+    <link rel="prev" title="aegis.acteval.experiment module" href="aegis.acteval.experiment.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> aegis
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2020.03.03
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Aegis Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#running-experiments-with-aegis-when-ground-truth-is-known">Running Experiments with Aegis when Ground Truth is Known</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#code-approach">Code Approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#running-continuous-integration-components-locally">Running Continuous Integration Components Locally</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#license">LICENSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">CHANGELOG</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../API_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="aegis.html">aegis package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="aegis.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="aegis.acteval.html">aegis.acteval package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.datagenerator.html">aegis.datagenerator package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.oracle.html">aegis.oracle package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="aegis.acteval.html">aegis.acteval package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="aegis.acteval.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.controller.html">aegis.acteval.controller module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.data_processor.html">aegis.acteval.data_processor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.experiment.html">aegis.acteval.experiment module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">aegis.acteval.metrics module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.samplers.html">aegis.acteval.samplers module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.strata.html">aegis.acteval.strata module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.stratum.html">aegis.acteval.stratum module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.summary_reporter.html">aegis.acteval.summary_reporter module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.system.html">aegis.acteval.system module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.controller.html">aegis.acteval.controller module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.data_processor.html">aegis.acteval.data_processor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.experiment.html">aegis.acteval.experiment module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">aegis.acteval.metrics module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.samplers.html">aegis.acteval.samplers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.strata.html">aegis.acteval.strata module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.stratum.html">aegis.acteval.stratum module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.summary_reporter.html">aegis.acteval.summary_reporter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.system.html">aegis.acteval.system module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.datagenerator.html">aegis.datagenerator package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.datagenerator.data_generator.html">aegis.datagenerator.data_generator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.oracle.html">aegis.oracle package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.oracle.oracle.html">aegis.oracle.oracle module</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aegis</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API_reference.html">API Reference</a> &raquo;</li>
+        
+          <li><a href="aegis.html">aegis package</a> &raquo;</li>
+        
+          <li><a href="aegis.acteval.html">aegis.acteval package</a> &raquo;</li>
+        
+      <li>aegis.acteval.metrics module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/aegis.acteval.metrics.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-aegis.acteval.metrics">
+<span id="aegis-acteval-metrics-module"></span><h1>aegis.acteval.metrics module<a class="headerlink" href="#module-aegis.acteval.metrics" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="aegis.acteval.metrics.BinaryAccuracyMetric">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.metrics.</code><code class="sig-name descname">BinaryAccuracyMetric</code><span class="sig-paren">(</span><em class="sig-param">key_values=None</em>, <em class="sig-param">score_samples_correction=1</em>, <em class="sig-param">score_variance_samples_correction=9</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryAccuracyMetric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryAccuracyMetric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a></p>
+<p>Instantiation of a Metric corresponding to the simplest metric “accuracy”, or percentage
+correct. Only for binary classification but it handles thresholds and arbitrary key values.</p>
+<p>With a threshold, it considers all of the values greater than the threshold to be in the
+high_key_value class with the remainder of examples to be in the low_key_value_class</p>
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryAccuracyMetric.convert_thresholds_to_decisions">
+<code class="sig-name descname">convert_thresholds_to_decisions</code><span class="sig-paren">(</span><em class="sig-param">system</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryAccuracyMetric.convert_thresholds_to_decisions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryAccuracyMetric.convert_thresholds_to_decisions" title="Permalink to this definition">¶</a></dt>
+<dd><p>When computing Accuracy, we need to use the threshold specified to convert. This Accuracy
+assumes a binary classification problem. This converts to the high key value if the score
+is strictly higher than the threshold.</p>
+<p>The decision is added to the System data frame in the column “decision”. The score
+column is preserved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>system</strong> (<a class="reference internal" href="aegis.acteval.system.html#aegis.acteval.system.System" title="aegis.acteval.system.System"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.system.System</span></code></a>) – the system containing the scores</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The modified System object with a modified system_df with
+decisions in the “decision” column as well as preserving the score values.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="aegis.acteval.system.html#aegis.acteval.system.System" title="aegis.acteval.system.System">aegis.acteval.system.System</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryAccuracyMetric.estimate_pop_all_systems">
+<code class="sig-name descname">estimate_pop_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryAccuracyMetric.estimate_pop_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryAccuracyMetric.estimate_pop_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gives the total number of trials to be considered for the metric computation. For
+Binary classification of accuracy, it is simply the total number of trials in that stratum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – the stratum of which to determine the
+population.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of population sizes, with the ith element being the population
+size for system i.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryAccuracyMetric.estimate_pop_frac_variance_all_systems">
+<code class="sig-name descname">estimate_pop_frac_variance_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryAccuracyMetric.estimate_pop_frac_variance_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryAccuracyMetric.estimate_pop_frac_variance_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the uncertainty (variance) of our estimate of the population fraction. Returns
+0 when the population is known. For Accuracy, the population is known so this method
+Returns 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – the stratum of which to estimate
+the population fraction variance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of population fraction variances, with one estimate
+per system,
+ordered by the order of systems in the system id list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryAccuracyMetric.estimate_samples_all_systems">
+<code class="sig-name descname">estimate_samples_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryAccuracyMetric.estimate_samples_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryAccuracyMetric.estimate_samples_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the number of sampled trials relevant to the metric for each system. For Binary
+Classification Accuracy, each trial sampled counts, so this returns the number of sampled
+trials in the stratum.
+Neither Stratum nor System objects are not updated during this computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum to determine how
+many samples count towards the population</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of samples counted for the systems, in the order of the
+systems in the stratum object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryAccuracyMetric.estimate_score_all_systems">
+<code class="sig-name descname">estimate_score_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryAccuracyMetric.estimate_score_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryAccuracyMetric.estimate_score_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gives the scores for each system on the samples obtained so far. The score here
+uses the accuracy_score() method from sklearn to compute the score as if it were
+a binomial value and we are computing the proportion of matches.
+Neither Stratum nor System objects are updated during this computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum to score.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of scores, one score per system</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryAccuracyMetric.estimate_score_variance_all_systems">
+<code class="sig-name descname">estimate_score_variance_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryAccuracyMetric.estimate_score_variance_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryAccuracyMetric.estimate_score_variance_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gives the score_variances for each system on the samples obtained so far.
+Neither Stratum nor System objects are not updated during this computation. The score
+variance is also enabled at the stratum level to allow for metric corrections such as
+priors for a bayesian confidence interval.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum of which to estimate
+the score variance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of score variances, with one score variance per system
+ordered by the order of systems in the system id list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryAccuracyMetric.find_needed_initial_samples">
+<code class="sig-name descname">find_needed_initial_samples</code><span class="sig-paren">(</span><em class="sig-param">stratum</em>, <em class="sig-param">initial_samples_per_bin</em>, <em class="sig-param">rng</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryAccuracyMetric.find_needed_initial_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryAccuracyMetric.find_needed_initial_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>In order to cover the case where we don’t sample from each stratum necessary edge cases
+(Such as when the metric is a combination of two components) and to ensure samples
+from each stratum, this method will find such examples and will sample uniformly at random</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum object to find
+needed samples</p></li>
+<li><p><strong>initial_samples_per_bin</strong> (<em>int</em>) – The number of initial samples per bin</p></li>
+<li><p><strong>rng</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code>) – random state object with stored random state</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial_id values to sample</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryAccuracyMetric.get_actual_score">
+<code class="sig-name descname">get_actual_score</code><span class="sig-paren">(</span><em class="sig-param">system_df</em>, <em class="sig-param">key_df</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryAccuracyMetric.get_actual_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryAccuracyMetric.get_actual_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using a full system data frame and a key data frame, compute the score. This method is
+used when by the OracleScript that has a full key df. This computes the system Accuracy
+on the system. This assumes that the
+<a class="reference internal" href="#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-meth docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric()</span></code></a> method has been
+called to produce the system_df</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>system_df</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code>) – The data frame of a single system.
+For metrics that have thresholds,
+it is assumed that this system has ‘score’ or ‘decision’ columns as needed.</p></li>
+<li><p><strong>key_df</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code>) – The answer key data frame.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A score for that system according to that key.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryAccuracyMetric.get_metric_name">
+<code class="sig-name descname">get_metric_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryAccuracyMetric.get_metric_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryAccuracyMetric.get_metric_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name of the metric as a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the metric name</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryAccuracyMetric.get_trials_to_sample_from">
+<code class="sig-name descname">get_trials_to_sample_from</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryAccuracyMetric.get_trials_to_sample_from"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryAccuracyMetric.get_trials_to_sample_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a stratum, determine the subset of trials that the stratum should draw from.
+If all samples are relevant, return all of the trial ids. For accuracy, all trials are
+relevant so all trials are returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – the stratum to identify which samples</p></li>
+<li><p><strong>relevant for sampling</strong> (<em>are</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial ids to sample from</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.metrics.BinaryAccuracyMetric.high_key_value">
+<code class="sig-name descname">high_key_value</code><em class="property"> = 1</em><a class="headerlink" href="#aegis.acteval.metrics.BinaryAccuracyMetric.high_key_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.metrics.BinaryAccuracyMetric.low_key_value">
+<code class="sig-name descname">low_key_value</code><em class="property"> = 0</em><a class="headerlink" href="#aegis.acteval.metrics.BinaryAccuracyMetric.low_key_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="aegis.acteval.metrics.BinaryPrecisionMetric">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.metrics.</code><code class="sig-name descname">BinaryPrecisionMetric</code><span class="sig-paren">(</span><em class="sig-param">key_values=None</em>, <em class="sig-param">score_prior_samples_correction=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryPrecisionMetric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryPrecisionMetric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a></p>
+<p>Instantiation of a Metric corresponding to the simplest metric “precision”, or true prositives
+over total true positives and false positives.
+Only for binary classification but it handles thresholds and arbitrary key values.</p>
+<p>This metric approximates accuracy as a combination of two proportions. The first proportion
+is the proportion of scores that the system classifies as true. The second proportion is
+of scores that the system classifies as false. We use the system scores rather than the ground
+truth to split the proportions because we know all of teh system scores.</p>
+<p>With a threshold, it considers all of the values greater than the threshold to be in the
+high_key_value class with the remainder of examples to be in the low_key_value_class</p>
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryPrecisionMetric.convert_thresholds_to_decisions">
+<code class="sig-name descname">convert_thresholds_to_decisions</code><span class="sig-paren">(</span><em class="sig-param">system</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryPrecisionMetric.convert_thresholds_to_decisions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryPrecisionMetric.convert_thresholds_to_decisions" title="Permalink to this definition">¶</a></dt>
+<dd><p>When computing Precision, we need to use the threshold specified to convert. This
+assumes a binary classification problem. This converts to the high key value if the score
+is strictly higher than the threshold.</p>
+<p>The decision is added to the System data frame in the column “decision”. The score
+column is preserved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>system</strong> (<a class="reference internal" href="aegis.acteval.system.html#aegis.acteval.system.System" title="aegis.acteval.system.System"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.system.System</span></code></a>) – the system containing the scores</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The modified System object with a modified system_df with
+decisions in the “decision” column as well as preserving the score values.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="aegis.acteval.system.html#aegis.acteval.system.System" title="aegis.acteval.system.System">aegis.acteval.system.System</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryPrecisionMetric.estimate_pop_all_systems">
+<code class="sig-name descname">estimate_pop_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryPrecisionMetric.estimate_pop_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryPrecisionMetric.estimate_pop_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the number of sampled trials relevant to the metric for each system. For Binary
+Precision, the population is known and is the number of trials where each system has
+a decision of the high key value.
+Neither Stratum nor System objects are not updated during this computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – the stratum of which to determine the
+population.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of population sizes, with the ith element being the population
+size for system i.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryPrecisionMetric.estimate_pop_frac_variance_all_systems">
+<code class="sig-name descname">estimate_pop_frac_variance_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryPrecisionMetric.estimate_pop_frac_variance_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryPrecisionMetric.estimate_pop_frac_variance_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the uncertainty (variance) of our estimate of the population fraction. Returns
+0 when the population is known. The population is known for Precision so 0 is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – the stratum of which to estimate
+the population fraction variance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of population fraction variances, with one estimate
+per system,
+ordered by the order of systems in the system id list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryPrecisionMetric.estimate_samples_all_systems">
+<code class="sig-name descname">estimate_samples_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryPrecisionMetric.estimate_samples_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryPrecisionMetric.estimate_samples_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the number of sampled trials relevant to the metric for each system. For Binary
+Classification Precision, only trials where the system decides on the high key value count.
+Neither Stratum nor System objects are not updated during this computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum to determine how
+many samples count towards the population</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of samples counted for the systems, in the order of the
+systems in the stratum object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryPrecisionMetric.estimate_score_all_systems">
+<code class="sig-name descname">estimate_score_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryPrecisionMetric.estimate_score_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryPrecisionMetric.estimate_score_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gives the scores for each system on the samples obtained so far.
+Neither Stratum nor System objects are not updated during this computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum to score.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of scores, one score per system</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryPrecisionMetric.estimate_score_variance_all_systems">
+<code class="sig-name descname">estimate_score_variance_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryPrecisionMetric.estimate_score_variance_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryPrecisionMetric.estimate_score_variance_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gives the score_variances for each system on the samples obtained so far.
+Neither Stratum nor System objects are not updated during this computation. The score
+variance is also enabled at the stratum level to allow for metric corrections such as
+priors for a bayesian confidence interval.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum of which to estimate
+the score variance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of score variances, with one score variance per system
+ordered by the order of systems in the system id list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryPrecisionMetric.find_needed_initial_samples">
+<code class="sig-name descname">find_needed_initial_samples</code><span class="sig-paren">(</span><em class="sig-param">stratum</em>, <em class="sig-param">initial_samples_per_bin</em>, <em class="sig-param">rng</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryPrecisionMetric.find_needed_initial_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryPrecisionMetric.find_needed_initial_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>In order to cover the case where we don’t sample from each stratum necessary edge cases
+(Such as when the metric is a combination of two components) and to ensure samples
+from each stratum, this method will find such examples and will sample uniformly at random</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum object to find
+needed samples</p></li>
+<li><p><strong>initial_samples_per_bin</strong> (<em>int</em>) – The number of initial samples per bin</p></li>
+<li><p><strong>rng</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code>) – random state object with stored random state</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial_id values to sample</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryPrecisionMetric.get_actual_score">
+<code class="sig-name descname">get_actual_score</code><span class="sig-paren">(</span><em class="sig-param">system_df</em>, <em class="sig-param">key_df</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryPrecisionMetric.get_actual_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryPrecisionMetric.get_actual_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using a full system data frame and a key data frame, compute the score. This method is
+used when by the OracleScript that has a full key df. This computes the system precision
+on the system. This assumes that the
+<code class="xref py py-func docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric.convert_thresholds_to_decision()</span></code> method has been
+called to produce the system_df</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>system_df</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code>) – The data frame of a single system.
+For metrics that have thresholds,
+it is assumed that this system has ‘score’ or ‘decision’ columns as needed.</p></li>
+<li><p><strong>key_df</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code>) – The answer key data frame.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A score for that system according to that key.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryPrecisionMetric.get_metric_name">
+<code class="sig-name descname">get_metric_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryPrecisionMetric.get_metric_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryPrecisionMetric.get_metric_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name of the metric as a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the metric name</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryPrecisionMetric.get_trials_to_sample_from">
+<code class="sig-name descname">get_trials_to_sample_from</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryPrecisionMetric.get_trials_to_sample_from"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryPrecisionMetric.get_trials_to_sample_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a stratum, determine the subset of trials that the stratum should draw from.
+If all samples are relevant, return all of the trial ids. For Precision,
+this is all trials where some system has a decision of the high key value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – the stratum to identify which samples</p></li>
+<li><p><strong>relevant for sampling</strong> (<em>are</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial ids to sample from</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.metrics.BinaryPrecisionMetric.high_key_value">
+<code class="sig-name descname">high_key_value</code><em class="property"> = 1</em><a class="headerlink" href="#aegis.acteval.metrics.BinaryPrecisionMetric.high_key_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.metrics.BinaryPrecisionMetric.low_key_value">
+<code class="sig-name descname">low_key_value</code><em class="property"> = 0</em><a class="headerlink" href="#aegis.acteval.metrics.BinaryPrecisionMetric.low_key_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="aegis.acteval.metrics.BinaryRecallMetric">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.metrics.</code><code class="sig-name descname">BinaryRecallMetric</code><span class="sig-paren">(</span><em class="sig-param">key_values=None</em>, <em class="sig-param">score_prior_samples_correction=0.5</em>, <em class="sig-param">pop_samples_correction=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryRecallMetric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryRecallMetric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a></p>
+<p>Instantiation of a Metric corresponding to the simplest metric “Recall”, or true prositives
+over total true positives and false positives.
+Only for binary classification but it handles thresholds and arbitrary key values.</p>
+<p>This metric approximates accuracy as a combination of two proportions. The first proportion
+is the proportion of scores that the system classifies as true. The second proportion is
+of scores that the system classifies as false. We use the system scores rather than the ground
+truth to split the proportions because we know all of teh system scores.</p>
+<p>With a threshold, it considers all of the values greater than the threshold to be in the
+high_key_value class with the remainder of examples to be in the low_key_value_class</p>
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryRecallMetric.convert_thresholds_to_decisions">
+<code class="sig-name descname">convert_thresholds_to_decisions</code><span class="sig-paren">(</span><em class="sig-param">system</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryRecallMetric.convert_thresholds_to_decisions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryRecallMetric.convert_thresholds_to_decisions" title="Permalink to this definition">¶</a></dt>
+<dd><p>When computing Recall, we need to use the threshold specified to convert. This
+assumes a binary classification problem. This converts to the high key value if the score
+is strictly higher than the threshold.</p>
+<p>The decision is added to the System data frame in the column “decision”. The score
+column is preserved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>system</strong> (<a class="reference internal" href="aegis.acteval.system.html#aegis.acteval.system.System" title="aegis.acteval.system.System"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.system.System</span></code></a>) – the system containing the scores</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The modified System object with a modified system_df with
+decisions in the “decision” column as well as preserving the score values.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="aegis.acteval.system.html#aegis.acteval.system.System" title="aegis.acteval.system.System">aegis.acteval.system.System</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryRecallMetric.estimate_pop_all_systems">
+<code class="sig-name descname">estimate_pop_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryRecallMetric.estimate_pop_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryRecallMetric.estimate_pop_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the number of sampled trials relevant to the metric for each system. For Recall
+We are unable to calculate this so we can estimate it by looking at the proportion of
+keys that are high_key_value to the overall samples and extrapolate this to the population.
+Neither Stratum nor System objects are not updated during this computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – the stratum of which to determine the
+population.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of population size estimates, with the ith element being the
+population estimate for system i. Values are floats because these values are estimates.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryRecallMetric.estimate_pop_frac_variance_all_systems">
+<code class="sig-name descname">estimate_pop_frac_variance_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryRecallMetric.estimate_pop_frac_variance_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryRecallMetric.estimate_pop_frac_variance_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the uncertainty (variance) of our estimate of the population fraction. Returns
+0 when the population is known. For Recall, the true population is not known so this
+is almost always nonzero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – the stratum of which to estimate
+the population fraction variance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of population fraction variances, with one estimate
+per system,
+ordered by the order of systems in the system id list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryRecallMetric.estimate_samples_all_systems">
+<code class="sig-name descname">estimate_samples_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryRecallMetric.estimate_samples_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryRecallMetric.estimate_samples_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the number of sampled trials relevant to the metric for each system. For Recall,
+only trials with the key high key value will count, so this returns the number of
+sampled trials whose key is the high key value.
+Neither Stratum nor System objects are not updated during this computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum to determine how
+many samples count towards the population</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of samples counted for the systems, in the order of the
+systems in the stratum object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryRecallMetric.estimate_score_all_systems">
+<code class="sig-name descname">estimate_score_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryRecallMetric.estimate_score_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryRecallMetric.estimate_score_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gives the scores for each system on the samples obtained so far.
+Neither Stratum nor System objects are not updated during this computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum to score.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of scores, one score per system</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryRecallMetric.estimate_score_variance_all_systems">
+<code class="sig-name descname">estimate_score_variance_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryRecallMetric.estimate_score_variance_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryRecallMetric.estimate_score_variance_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gives the score_variances for each system on the samples obtained so far.
+Neither Stratum nor System objects are not updated during this computation. The score
+variance is also enabled at the stratum level to allow for metric corrections such as
+priors for a bayesian confidence interval.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum of which to estimate
+the score variance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of score variances, with one score variance per system
+ordered by the order of systems in the system id list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryRecallMetric.find_needed_initial_samples">
+<code class="sig-name descname">find_needed_initial_samples</code><span class="sig-paren">(</span><em class="sig-param">stratum</em>, <em class="sig-param">initial_samples_per_bin</em>, <em class="sig-param">rng</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryRecallMetric.find_needed_initial_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryRecallMetric.find_needed_initial_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>In order to cover the case where we don’t sample from each stratum necessary edge cases
+(Such as when the metric is a combination of two components) and to ensure samples
+from each stratum, this method will find such examples and will sample uniformly at random</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum object to find
+needed samples</p></li>
+<li><p><strong>initial_samples_per_bin</strong> (<em>int</em>) – The number of initial samples per bin</p></li>
+<li><p><strong>rng</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code>) – random state object with stored random state</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial_id values to sample</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryRecallMetric.get_actual_score">
+<code class="sig-name descname">get_actual_score</code><span class="sig-paren">(</span><em class="sig-param">system_df</em>, <em class="sig-param">key_df</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryRecallMetric.get_actual_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryRecallMetric.get_actual_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using a full system data frame and a key data frame, compute the score. This method is
+used when by the OracleScript that has a full key df. This computes the system Recall
+on the system. This assumes that the
+<code class="xref py py-func docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric.convert_thresholds_to_decision()</span></code> method has been
+called to produce the system_df</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>system_df</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code>) – The data frame of a single system.
+For metrics that have thresholds,
+it is assumed that this system has ‘score’ or ‘decision’ columns as needed.</p></li>
+<li><p><strong>key_df</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code>) – The answer key data frame.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A score for that system according to that key.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryRecallMetric.get_metric_name">
+<code class="sig-name descname">get_metric_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryRecallMetric.get_metric_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryRecallMetric.get_metric_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name of the metric as a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the metric name</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.BinaryRecallMetric.get_trials_to_sample_from">
+<code class="sig-name descname">get_trials_to_sample_from</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#BinaryRecallMetric.get_trials_to_sample_from"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.BinaryRecallMetric.get_trials_to_sample_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a stratum, determine the subset of trials that the stratum should draw from.
+If all samples are relevant, return all of the trial ids. For recall, this is any
+unsampled trial; even though we do not know which ones are relevant, we have no way
+of rejecting a specific trial before sampling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – the stratum to identify which samples</p></li>
+<li><p><strong>relevant for sampling</strong> (<em>are</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial ids to sample from</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.metrics.BinaryRecallMetric.high_key_value">
+<code class="sig-name descname">high_key_value</code><em class="property"> = 1</em><a class="headerlink" href="#aegis.acteval.metrics.BinaryRecallMetric.high_key_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.metrics.BinaryRecallMetric.low_key_value">
+<code class="sig-name descname">low_key_value</code><em class="property"> = 0</em><a class="headerlink" href="#aegis.acteval.metrics.BinaryRecallMetric.low_key_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="aegis.acteval.metrics.Metric">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.metrics.</code><code class="sig-name descname">Metric</code><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#Metric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.Metric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Abstract class representing a metric, which both scores trials as well as esimates the means,
+variances, and confidence intervals of a set of trials.</p>
+<p>Metric is an abstract class that must be implemented. Given a stratum, compute the mean,
+variance, and confidence intervals. Given strata, compute the
+overall mean, variance,  and confidence intervals. Method implementations common to all
+metrics are implemented here.</p>
+<dl class="method">
+<dt id="aegis.acteval.metrics.Metric.estimate_pop_all_systems">
+<em class="property">abstract </em><code class="sig-name descname">estimate_pop_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#Metric.estimate_pop_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.Metric.estimate_pop_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gives the total number of trials to be considered for the metric computation.</p>
+<p>Although it seems obvious for metrics like “accuracy” where the population is the
+number of trials, it can be more complex for other methods. For instance, when computing
+precision, the population is the number of trials where the output converts to a positive.
+This means that the population is far less than the number of trials.
+Neither Stratum nor System objects are not updated during this computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – the stratum of which to determine the
+population.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of population sizes, with the ith element being the population
+size for system i. Population sizes can differ for systems for metrics like precision,
+where the population size is the number of system positive trials. Although true
+populations are always integers, estimates could be either ints or floats.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.Metric.estimate_pop_frac_all_systems">
+<code class="sig-name descname">estimate_pop_frac_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#Metric.estimate_pop_frac_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.Metric.estimate_pop_frac_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the fraction of relevant trials for each stratum for each system. Calls
+estimate_pop_all_systems() method of metric class. Each fraction is a value from 0 to 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum object</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of population percentages, with the ith element being the
+population percentage estimate for system i. For some metrics this is known; for
+other metrics this is estimated.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.Metric.estimate_pop_frac_variance_all_systems">
+<em class="property">abstract </em><code class="sig-name descname">estimate_pop_frac_variance_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#Metric.estimate_pop_frac_variance_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.Metric.estimate_pop_frac_variance_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the uncertainty (variance) of our estimate of the population fraction. Returns
+0 when the population is known.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – the stratum of which to estimate
+the population fraction variance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of population fraction variances, with one estimate
+per system,
+ordered by the order of systems in the system id list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.Metric.estimate_pop_variance_all_systems">
+<code class="sig-name descname">estimate_pop_variance_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#Metric.estimate_pop_variance_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.Metric.estimate_pop_variance_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the uncertainty (variance) of our estimate of the population size. This is 0
+when the population is known.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – the stratum of which to estimate</p></li>
+<li><p><strong>population variance.</strong> (<em>the</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of population variances, with one population variance per system,
+ordered by the order of systems int he system id list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.Metric.estimate_population_intervals_all_systems">
+<code class="sig-name descname">estimate_population_intervals_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em>, <em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#Metric.estimate_population_intervals_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.Metric.estimate_population_intervals_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the confidence intervals for all systems’ populations,
+represented as a three-element list
+[lower, upper, delta] for each system on a given stratum</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum object</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – the level to return the 1 - alpha population confidence for</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of lists, where there is one list per system, and each
+system is a
+three-element list [lower, upper, delta], where delta is the higher of
+(population_est - lower) and (higher - population)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.Metric.estimate_population_intervals_all_systems_strata">
+<code class="sig-name descname">estimate_population_intervals_all_systems_strata</code><span class="sig-paren">(</span><em class="sig-param">strata</em>, <em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#Metric.estimate_population_intervals_all_systems_strata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.Metric.estimate_population_intervals_all_systems_strata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the confidence intervals for all systems’ populations,
+represented as a three-element list
+[lower, upper, delta] for each system</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>strata</strong> (<a class="reference internal" href="aegis.acteval.strata.html#aegis.acteval.strata.Strata" title="aegis.acteval.strata.Strata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.strata.Strata</span></code></a>) – The strata object</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – the level to return the 1 - alpha population confidence for</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of lists, where there is one list per system, and each
+system is a
+three-element list [lower, upper, delta], where delta is the higher of
+(population_est - lower) and (higher - population)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.Metric.estimate_samples_all_systems">
+<em class="property">abstract </em><code class="sig-name descname">estimate_samples_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#Metric.estimate_samples_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.Metric.estimate_samples_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the number of sampled trials relevant to the metric for each system.
+Neither Stratum nor System objects are not updated during this computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum to determine how
+many samples count towards the population</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of samples counted for the systems, in the order of the
+systems in the stratum object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.Metric.estimate_score_all_systems">
+<em class="property">abstract </em><code class="sig-name descname">estimate_score_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#Metric.estimate_score_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.Metric.estimate_score_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gives the scores for each system on the samples obtained so far.
+Neither Stratum nor System objects are not updated during this computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum to score.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of scores, one score per system</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.Metric.estimate_score_variance_all_systems">
+<em class="property">abstract </em><code class="sig-name descname">estimate_score_variance_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#Metric.estimate_score_variance_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.Metric.estimate_score_variance_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gives the score_variances for each system on the samples obtained so far.
+Neither Stratum nor System objects are not updated during this computation. The score
+variance is also enabled at the stratum level to allow for metric corrections such as
+priors for a bayesian confidence interval.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum of which to estimate
+the score variance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of score variances, with one score variance per system
+ordered by the order of systems in the system id list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.Metric.estimate_score_variance_upper_all_systems">
+<code class="sig-name descname">estimate_score_variance_upper_all_systems</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#Metric.estimate_score_variance_upper_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.Metric.estimate_score_variance_upper_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gives the score_variances for each system on the samples obtained so far with
+upper bound estimates on the population.
+Neither Stratum nor System objects are not updated during this computation. The score
+variance is also enabled at the stratum level to allow for metric corrections such as
+priors for a bayesian confidence interval.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum of which to estimate the</p></li>
+<li><p><strong>variance.</strong> (<em>score</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of score variances for upper populations,
+with one score variance per system ordered by the order of systems in the
+system id list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.Metric.find_needed_initial_samples">
+<em class="property">abstract </em><code class="sig-name descname">find_needed_initial_samples</code><span class="sig-paren">(</span><em class="sig-param">stratum</em>, <em class="sig-param">initial_samples_per_bin</em>, <em class="sig-param">rng</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#Metric.find_needed_initial_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.Metric.find_needed_initial_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>In order to cover the case where we don’t sample from each stratum necessary edge cases
+(Such as when the metric is a combination of two components) and to ensure samples
+from each stratum, this method will find such examples and will sample uniformly at random</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – The stratum object to find
+needed samples</p></li>
+<li><p><strong>initial_samples_per_bin</strong> (<em>int</em>) – The number of initial samples per bin</p></li>
+<li><p><strong>rng</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code>) – random state object with stored random state</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial_id values to sample</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.Metric.get_actual_score">
+<em class="property">abstract </em><code class="sig-name descname">get_actual_score</code><span class="sig-paren">(</span><em class="sig-param">system_df</em>, <em class="sig-param">key_df</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#Metric.get_actual_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.Metric.get_actual_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using a full system data frame and a key data frame, compute the score. This method is
+used when by the OracleScript that has a full key df.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>system_df</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code>) – The data frame of a single system.
+For metrics that have thresholds,
+it is assumed that this system has ‘score’ or ‘decision’ columns as needed.</p></li>
+<li><p><strong>key_df</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code>) – The answer key data frame.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A score for that system according to that key.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.Metric.get_confidence_intervals_all_systems">
+<code class="sig-name descname">get_confidence_intervals_all_systems</code><span class="sig-paren">(</span><em class="sig-param">strata</em>, <em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#Metric.get_confidence_intervals_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.Metric.get_confidence_intervals_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the confidence intervals for all systems, represented as a three-element list
+[lower, upper, delta] for each system. These confidence intervals include uncertainty
+for uncertainty in the population estimates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>strata</strong> (<a class="reference internal" href="aegis.acteval.strata.html#aegis.acteval.strata.Strata" title="aegis.acteval.strata.Strata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.strata.Strata</span></code></a>) – The strata object</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – the level to return the 1 - alpha confidence for</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of lists, where there is one list per system, and each
+system is a three-element list [lower, upper, delta], where delta is the
+higher of (score_est - lower) and (higher - score_est)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of list of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.Metric.get_confidence_intervals_true_pop_all_systems">
+<code class="sig-name descname">get_confidence_intervals_true_pop_all_systems</code><span class="sig-paren">(</span><em class="sig-param">strata</em>, <em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#Metric.get_confidence_intervals_true_pop_all_systems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.Metric.get_confidence_intervals_true_pop_all_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the confidence intervals for all system without uncertainties
+of population estimates, represented as a three-element list
+[lower, upper, delta] for each system</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>strata</strong> (<a class="reference internal" href="aegis.acteval.strata.html#aegis.acteval.strata.Strata" title="aegis.acteval.strata.Strata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.strata.Strata</span></code></a>) – The strata object</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – the level to return the 1 - alpha confidence for</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of lists, where there is one list per system,
+and each system is a
+three-element list [lower, upper, delta], where delta is the higher of
+(score_est - lower)
+and (higher - score_est)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of lsit of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.Metric.get_metric_name">
+<em class="property">abstract </em><code class="sig-name descname">get_metric_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#Metric.get_metric_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.Metric.get_metric_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name of the metric as a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the metric name</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.metrics.Metric.get_trials_to_sample_from">
+<em class="property">abstract </em><code class="sig-name descname">get_trials_to_sample_from</code><span class="sig-paren">(</span><em class="sig-param">stratum</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/metrics.html#Metric.get_trials_to_sample_from"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.metrics.Metric.get_trials_to_sample_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a stratum, determine the subset of trials that the stratum should draw from.
+If all samples are relevant, return all of the trial ids. This is useful for metrics like
+precision where we must subset the number of trials so that we only sample from trials
+where at least one system gives that trial a positive decision.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stratum</strong> (<a class="reference internal" href="aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum" title="aegis.acteval.stratum.Stratum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.stratum.Stratum</span></code></a>) – the stratum to identify which samples</p></li>
+<li><p><strong>relevant for sampling</strong> (<em>are</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of trial ids to sample from</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="aegis.acteval.samplers.html" class="btn btn-neutral float-right" title="aegis.acteval.samplers module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="aegis.acteval.experiment.html" class="btn btn-neutral float-left" title="aegis.acteval.experiment module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, NIST MIG
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

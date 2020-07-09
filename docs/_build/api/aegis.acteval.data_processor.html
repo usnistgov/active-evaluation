@@ -1,0 +1,384 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>aegis.acteval.data_processor module &mdash; aegis v2020.03.03 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="aegis.acteval.experiment module" href="aegis.acteval.experiment.html" />
+    <link rel="prev" title="aegis.acteval.controller module" href="aegis.acteval.controller.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> aegis
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2020.03.03
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Aegis Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#running-experiments-with-aegis-when-ground-truth-is-known">Running Experiments with Aegis when Ground Truth is Known</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#code-approach">Code Approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#running-continuous-integration-components-locally">Running Continuous Integration Components Locally</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#license">LICENSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">CHANGELOG</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../API_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="aegis.html">aegis package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="aegis.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="aegis.acteval.html">aegis.acteval package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.datagenerator.html">aegis.datagenerator package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.oracle.html">aegis.oracle package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="aegis.acteval.html">aegis.acteval package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="aegis.acteval.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.controller.html">aegis.acteval.controller module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">aegis.acteval.data_processor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.experiment.html">aegis.acteval.experiment module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.metrics.html">aegis.acteval.metrics module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.samplers.html">aegis.acteval.samplers module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.strata.html">aegis.acteval.strata module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.stratum.html">aegis.acteval.stratum module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.summary_reporter.html">aegis.acteval.summary_reporter module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.system.html">aegis.acteval.system module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.controller.html">aegis.acteval.controller module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">aegis.acteval.data_processor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.experiment.html">aegis.acteval.experiment module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.metrics.html">aegis.acteval.metrics module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.samplers.html">aegis.acteval.samplers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.strata.html">aegis.acteval.strata module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.stratum.html">aegis.acteval.stratum module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.summary_reporter.html">aegis.acteval.summary_reporter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.system.html">aegis.acteval.system module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.datagenerator.html">aegis.datagenerator package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.datagenerator.data_generator.html">aegis.datagenerator.data_generator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.oracle.html">aegis.oracle package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.oracle.oracle.html">aegis.oracle.oracle module</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aegis</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API_reference.html">API Reference</a> &raquo;</li>
+        
+          <li><a href="aegis.html">aegis package</a> &raquo;</li>
+        
+          <li><a href="aegis.acteval.html">aegis.acteval package</a> &raquo;</li>
+        
+      <li>aegis.acteval.data_processor module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/aegis.acteval.data_processor.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-aegis.acteval.data_processor">
+<span id="aegis-acteval-data-processor-module"></span><h1>aegis.acteval.data_processor module<a class="headerlink" href="#module-aegis.acteval.data_processor" title="Permalink to this headline">¶</a></h1>
+<p>Converts between data in various formats and the desired internal formats.</p>
+<dl class="class">
+<dt id="aegis.acteval.data_processor.DataProcessor">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.data_processor.</code><code class="sig-name descname">DataProcessor</code><a class="reference internal" href="../_modules/aegis/acteval/data_processor.html#DataProcessor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.data_processor.DataProcessor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The data processing class of the Active Evaluator.</p>
+<p>To ease logistics, all of the data processing functions required of the Active Evaluator are
+placed in this one class.</p>
+<dl class="method">
+<dt id="aegis.acteval.data_processor.DataProcessor.extract_files_from_directory">
+<code class="sig-name descname">extract_files_from_directory</code><span class="sig-paren">(</span><em class="sig-param">input_dir</em>, <em class="sig-param">system_ordering=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/data_processor.html#DataProcessor.extract_files_from_directory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.data_processor.DataProcessor.extract_files_from_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts files from submission directory.</p>
+<p>This takes the directory, and finds the files it needs, ignoring other files in that
+directory, using filenames as the identifiers.</p>
+<p>Ignores additional files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_dir</strong> (<em>str</em>) – the full path to the input directory</p></li>
+<li><p><strong>system_ordering</strong> (<em>list of str</em><em>, </em><em>optional</em>) – An ordering of systems by system_id. If this list is empty, the
+code reads all systems in any order. Else, it takes only the systems with the
+specified system ids and reads them into a list. If a system id is provided that
+is not in the file, it will make the file here anyway and the next method may
+return an error. If no ordering is specified, the system_fpaths give the
+order that the files are read. Defaults to None, which resolves to [].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>The tuple is,
+(init_fpath, metadata_fpath, system_fpaths, thresholds_fpaths) with:</p>
+<dl class="simple">
+<dt>init_fpath</dt><dd><p>the path to the init.csv file with ground truths for initial samples</p>
+</dd>
+<dt>metadata_fpath</dt><dd><p>the path to the trial_metadata.csv, which is the data frame with the
+trial features.</p>
+</dd>
+<dt>system_fpaths</dt><dd><p>the list of system output files, notated as &lt;system_id&gt;_outputs.csv.
+Files can appear in any order and need not match the ordering of the
+threshold fpaths.</p>
+</dd>
+<dt>thresholds_fpaths</dt><dd><p>the list of system threshold files, notated as
+&lt;system_id&gt;_thresholds.csv. The files can appear in any order.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(init_fpath, metadata_fpath, system_fpaths, thresholds_fpaths)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.data_processor.DataProcessor.get_system_id_from_filename">
+<code class="sig-name descname">get_system_id_from_filename</code><span class="sig-paren">(</span><em class="sig-param">fpath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/data_processor.html#DataProcessor.get_system_id_from_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.data_processor.DataProcessor.get_system_id_from_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shortcut function for getting system ids from files. Useful for list comprehensions and
+is used in other methods of the data processor.
+:param fpath: the filepath, which could be a filename or a directory</p>
+<p>Returns: the string with the system_id from the filename.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.data_processor.DataProcessor.process_init_data">
+<code class="sig-name descname">process_init_data</code><span class="sig-paren">(</span><em class="sig-param">init_fpath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/data_processor.html#DataProcessor.process_init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.data_processor.DataProcessor.process_init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes in the data frame of initial samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>init_fpath</strong> (<em>str</em>) – The path to the initial trials file of initially-scored samples.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>init_df, the processed inital trials as a data frame.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.core.frame.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.data_processor.DataProcessor.process_systems_with_thresholds">
+<code class="sig-name descname">process_systems_with_thresholds</code><span class="sig-paren">(</span><em class="sig-param">system_filepaths</em>, <em class="sig-param">threshold_filepaths</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/data_processor.html#DataProcessor.process_systems_with_thresholds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.data_processor.DataProcessor.process_systems_with_thresholds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes the system filepaths and the threshold filepahs, and produces system objects
+with the necessary threshold information.</p>
+<p>This method assumes that the system_filepaths and threshold_filepaths are in the same
+order with matching system ids. The order can be customized with the
+extract_files_from_directory method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>system_filepaths</strong> (<em>list of object</em>) – A list of file paths, with each entry a file path to a system’s
+output data.</p></li>
+<li><p><strong>threshold_filepaths</strong> (<em>list of object</em>) – the list of paths to the system threshold files.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>sys_list,
+a list of systems with their information as System objects.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of aegis.acteval.system.System</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.data_processor.DataProcessor.process_trial_data">
+<code class="sig-name descname">process_trial_data</code><span class="sig-paren">(</span><em class="sig-param">trial_data_fpath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/data_processor.html#DataProcessor.process_trial_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.data_processor.DataProcessor.process_trial_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads in and processes the trial data (features) into a data frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>trial_data_fpath</strong> (<em>str</em>) – the path to the trials metadata file.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>trial_df, the data frame of the trials features.
+If trial_data_fpath is None, returns None</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.core.frame.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="aegis.acteval.experiment.html" class="btn btn-neutral float-right" title="aegis.acteval.experiment module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="aegis.acteval.controller.html" class="btn btn-neutral float-left" title="aegis.acteval.controller module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, NIST MIG
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,363 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>aegis.acteval.system module &mdash; aegis v2020.03.03 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="aegis.datagenerator package" href="aegis.datagenerator.html" />
+    <link rel="prev" title="aegis.acteval.summary_reporter module" href="aegis.acteval.summary_reporter.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> aegis
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2020.03.03
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Aegis Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#running-experiments-with-aegis-when-ground-truth-is-known">Running Experiments with Aegis when Ground Truth is Known</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#code-approach">Code Approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#running-continuous-integration-components-locally">Running Continuous Integration Components Locally</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#license">LICENSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">CHANGELOG</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../API_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="aegis.html">aegis package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="aegis.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="aegis.acteval.html">aegis.acteval package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.datagenerator.html">aegis.datagenerator package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.oracle.html">aegis.oracle package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="aegis.acteval.html">aegis.acteval package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="aegis.acteval.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.controller.html">aegis.acteval.controller module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.data_processor.html">aegis.acteval.data_processor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.experiment.html">aegis.acteval.experiment module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.metrics.html">aegis.acteval.metrics module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.samplers.html">aegis.acteval.samplers module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.strata.html">aegis.acteval.strata module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.stratum.html">aegis.acteval.stratum module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aegis.acteval.summary_reporter.html">aegis.acteval.summary_reporter module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">aegis.acteval.system module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.controller.html">aegis.acteval.controller module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.data_processor.html">aegis.acteval.data_processor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.experiment.html">aegis.acteval.experiment module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.metrics.html">aegis.acteval.metrics module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.samplers.html">aegis.acteval.samplers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.strata.html">aegis.acteval.strata module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.stratum.html">aegis.acteval.stratum module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.acteval.summary_reporter.html">aegis.acteval.summary_reporter module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">aegis.acteval.system module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.datagenerator.html">aegis.datagenerator package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.datagenerator.data_generator.html">aegis.datagenerator.data_generator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.oracle.html">aegis.oracle package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aegis.oracle.oracle.html">aegis.oracle.oracle module</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aegis</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../API_reference.html">API Reference</a> &raquo;</li>
+        
+          <li><a href="aegis.html">aegis package</a> &raquo;</li>
+        
+          <li><a href="aegis.acteval.html">aegis.acteval package</a> &raquo;</li>
+        
+      <li>aegis.acteval.system module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/aegis.acteval.system.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-aegis.acteval.system">
+<span id="aegis-acteval-system-module"></span><h1>aegis.acteval.system module<a class="headerlink" href="#module-aegis.acteval.system" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="aegis.acteval.system.System">
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.system.</code><code class="sig-name descname">System</code><span class="sig-paren">(</span><em class="sig-param">system_id</em>, <em class="sig-param">system_df</em>, <em class="sig-param">sys_threshold_df</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/system.html#System"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.system.System" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to representing a system.</p>
+<p>system_id the name or id of the system as a string</p>
+<dl class="simple">
+<dt>system_df is a data frame that</dt><dd><p>has a column trial_id, followed by one column headed with field system_id.
+Each value is the score of that trial for that system.</p>
+</dd>
+<dt>threshold_df a three-column data-frame with columns (system_id, threshold, value) that</dt><dd><p>encodes threshold information. This supports multiple thresholds that can be named
+when necessary.</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="aegis.acteval.system.System.add_stratum_index_to_system_data">
+<code class="sig-name descname">add_stratum_index_to_system_data</code><span class="sig-paren">(</span><em class="sig-param">stratum_ind_df</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/system.html#System.add_stratum_index_to_system_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.system.System.add_stratum_index_to_system_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the stratum_index column to the data frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stratum_ind_df</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code>) – The data frame with columns
+“trial_id” and “stratum_index”</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>sys_df a reference to the modified systems data frame</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.core.frame.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.system.System.confidence_value">
+<code class="sig-name descname">confidence_value</code><em class="property"> = 0</em><a class="headerlink" href="#aegis.acteval.system.System.confidence_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="aegis.acteval.system.System.get_system_tuple">
+<code class="sig-name descname">get_system_tuple</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/system.html#System.get_system_tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.system.System.get_system_tuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a tuple of system information, useful to convert into a pandas data frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a tuple of system information that can be converted into a data frame.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.system.System.population">
+<code class="sig-name descname">population</code><em class="property"> = 0</em><a class="headerlink" href="#aegis.acteval.system.System.population" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.system.System.population_frac">
+<code class="sig-name descname">population_frac</code><em class="property"> = 0</em><a class="headerlink" href="#aegis.acteval.system.System.population_frac" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.system.System.population_frac_variance">
+<code class="sig-name descname">population_frac_variance</code><em class="property"> = 0</em><a class="headerlink" href="#aegis.acteval.system.System.population_frac_variance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.system.System.population_variance">
+<code class="sig-name descname">population_variance</code><em class="property"> = 0</em><a class="headerlink" href="#aegis.acteval.system.System.population_variance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.system.System.sampled_trials">
+<code class="sig-name descname">sampled_trials</code><em class="property"> = 0</em><a class="headerlink" href="#aegis.acteval.system.System.sampled_trials" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.system.System.score">
+<code class="sig-name descname">score</code><em class="property"> = 0</em><a class="headerlink" href="#aegis.acteval.system.System.score" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.system.System.score_lower">
+<code class="sig-name descname">score_lower</code><em class="property"> = 0</em><a class="headerlink" href="#aegis.acteval.system.System.score_lower" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.system.System.score_upper">
+<code class="sig-name descname">score_upper</code><em class="property"> = 0</em><a class="headerlink" href="#aegis.acteval.system.System.score_upper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.system.System.score_variance">
+<code class="sig-name descname">score_variance</code><em class="property"> = 0</em><a class="headerlink" href="#aegis.acteval.system.System.score_variance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="aegis.acteval.system.System.score_variance_upper">
+<code class="sig-name descname">score_variance_upper</code><em class="property"> = 0</em><a class="headerlink" href="#aegis.acteval.system.System.score_variance_upper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="aegis.datagenerator.html" class="btn btn-neutral float-right" title="aegis.datagenerator package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="aegis.acteval.summary_reporter.html" class="btn btn-neutral float-left" title="aegis.acteval.summary_reporter module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, NIST MIG
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,402 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>aegis.acteval.controller &mdash; aegis v2020.03.03 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> aegis
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2020.03.03
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Aegis Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#running-experiments-with-aegis-when-ground-truth-is-known">Running Experiments with Aegis when Ground Truth is Known</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#code-approach">Code Approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#running-continuous-integration-components-locally">Running Continuous Integration Components Locally</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#license">LICENSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API_reference.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">aegis</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>aegis.acteval.controller</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for aegis.acteval.controller</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">aegis.acteval.samplers</span>
+<span class="kn">import</span> <span class="nn">aegis.acteval.strata</span>
+<span class="kn">import</span> <span class="nn">aegis.acteval.metrics</span>
+<span class="kn">import</span> <span class="nn">aegis.acteval.data_processor</span>
+<span class="kn">import</span> <span class="nn">aegis.acteval.summary_reporter</span>
+<span class="kn">import</span> <span class="nn">aegis.acteval.experiment</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+
+<div class="viewcode-block" id="Controller"><a class="viewcode-back" href="../../../api/aegis.acteval.controller.html#aegis.acteval.controller.Controller">[docs]</a><span class="k">class</span> <span class="nc">Controller</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to represent the controller that handles the logic that runs the active evaluation.</span>
+<span class="sd">    It takes in experimental parameters and an oracle, and returns a summary report.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct a controller.</span>
+
+<span class="sd">        The controller can run different types of experiments, so the run() method takes the</span>
+<span class="sd">        experiment parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;paper_experiments_logger&#39;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Initiating Controller class&#39;</span><span class="p">)</span>
+
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="Controller.run"><a class="viewcode-back" href="../../../api/aegis.acteval.controller.html#aegis.acteval.controller.Controller.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_fpath</span><span class="p">,</span> <span class="n">trial_data_filepath</span><span class="p">,</span> <span class="n">system_fpaths</span><span class="p">,</span>
+            <span class="n">threshold_fpaths</span><span class="p">,</span> <span class="n">oracle_ref</span><span class="p">,</span>
+            <span class="n">my_experiment</span><span class="o">=</span><span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">experiment</span><span class="o">.</span><span class="n">ExperimentParams</span><span class="p">(),</span>
+            <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">total_runs</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">inf</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run the controller to simulate an experiment.</span>
+
+<span class="sd">        The controller will call the referred to Oracle when needed to get trial samples.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            init_fpath (str): the filepath to the pointed data frame of</span>
+<span class="sd">                initially sampled trials with ground truth. None if no initial samples exist</span>
+<span class="sd">            trial_data_filepath (str): the filepath to the trial metadata or features (the data)</span>
+<span class="sd">            system_fpaths (list of object): the list of filepaths to the system output files</span>
+<span class="sd">            threshold_fpaths (list of str):</span>
+<span class="sd">                the list of filepaths corresponding to the system thresholds for the metrics</span>
+<span class="sd">            oracle_ref (:obj:`aegis.oracle.oracle.Oracle`):</span>
+<span class="sd">                the Oracle object to call to get additional trials</span>
+<span class="sd">            my_experiment (:obj:`aegis.acteval.experiment.ExperimentParams`):</span>
+<span class="sd">                The Experiment Object with all of the experimental parameters.</span>
+<span class="sd">            rng (:obj:`numpy.random.RandomState`, optional): The random state that is used as the</span>
+<span class="sd">                random number generator. If none, we will generate one in the controller.</span>
+<span class="sd">                rng is generated or passed here so that randomization still works even</span>
+<span class="sd">                for parallel implementations. Defaults to None.</span>
+<span class="sd">            total_runs (int, optional): Integer to tell how many runs you want to do, defaults</span>
+<span class="sd">                to math.inf which means to run until we have my_experiment.num_successful_rounds</span>
+<span class="sd">                successful runs. Defaults to `math.inf`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            aegis.acteval.summary_reporter.SummaryReport: summary_report,</span>
+<span class="sd">            a summary report of the experiment that can be printed to the</span>
+<span class="sd">            screen or any output stream</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialization</span>
+        <span class="k">if</span> <span class="n">rng</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">()</span>
+
+        <span class="n">num_previous_successes</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">num_rounds</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># start up logger</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;paper_experiments_logger&quot;</span><span class="o">+</span><span class="s2">&quot;.&quot;</span> <span class="o">+</span>
+                                   <span class="nb">str</span><span class="p">(</span><span class="n">my_experiment</span><span class="o">.</span><span class="n">stratification_type</span><span class="p">)</span> <span class="o">+</span>
+                                   <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">my_experiment</span><span class="o">.</span><span class="n">sampler_type</span><span class="p">)</span> <span class="o">+</span>
+                                   <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">my_experiment</span><span class="o">.</span><span class="n">bin_style</span><span class="p">))</span>
+        <span class="c1"># logger.info(&quot;Run method of the controller class&quot;)</span>
+
+        <span class="c1"># get values from Experiment object</span>
+        <span class="n">num_step_samples</span> <span class="o">=</span> <span class="n">my_experiment</span><span class="o">.</span><span class="n">num_step_samples</span>
+        <span class="n">num_success_rounds_required</span> <span class="o">=</span> <span class="n">my_experiment</span><span class="o">.</span><span class="n">num_success_rounds_required</span>
+
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">my_experiment</span><span class="o">.</span><span class="n">delta</span>
+        <span class="n">num_strata</span> <span class="o">=</span> <span class="n">my_experiment</span><span class="o">.</span><span class="n">num_strata</span>
+        <span class="n">strata_type</span> <span class="o">=</span> <span class="n">my_experiment</span><span class="o">.</span><span class="n">stratification_type</span>
+        <span class="n">bin_style</span> <span class="o">=</span> <span class="n">my_experiment</span><span class="o">.</span><span class="n">bin_style</span>
+        <span class="n">metric_obj</span> <span class="o">=</span> <span class="n">my_experiment</span><span class="o">.</span><span class="n">metric_object</span>
+        <span class="n">sampler_type</span> <span class="o">=</span> <span class="n">my_experiment</span><span class="o">.</span><span class="n">sampler_type</span>
+
+        <span class="n">my_data_processor</span> <span class="o">=</span> <span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">DataProcessor</span><span class="p">()</span>
+        <span class="n">init_df</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">init_fpath</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">init_df</span> <span class="o">=</span> <span class="n">my_data_processor</span><span class="o">.</span><span class="n">process_init_data</span><span class="p">(</span><span class="n">init_fpath</span><span class="p">)</span>
+        <span class="c1"># trial_df = my_data_processor.process_trial_data(trial_data_filepath)</span>
+        <span class="n">system_list</span> <span class="o">=</span> <span class="n">my_data_processor</span><span class="o">.</span><span class="n">process_systems_with_thresholds</span><span class="p">(</span><span class="n">system_fpaths</span><span class="p">,</span>
+                                                                        <span class="n">threshold_fpaths</span><span class="p">)</span>
+
+        <span class="c1"># We must obtain decisions before we stratify for those methods that incorporate</span>
+        <span class="c1"># the decision into the stratification, as well as before we construct the strata</span>
+        <span class="p">[</span><span class="n">metric_obj</span><span class="o">.</span><span class="n">convert_thresholds_to_decisions</span><span class="p">(</span><span class="n">system</span><span class="p">)</span> <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="n">system_list</span><span class="p">]</span>
+
+        <span class="n">my_strata</span> <span class="o">=</span> <span class="n">strata_type</span><span class="p">(</span><span class="n">num_strata</span><span class="p">,</span> <span class="n">system_list</span><span class="p">)</span>
+        <span class="n">my_strata</span><span class="o">.</span><span class="n">dirty_strata_cache</span><span class="p">()</span>
+        <span class="c1"># Pick alpha based on stratification method to adjust for the proper number of Type I</span>
+        <span class="c1"># alpha</span>
+        <span class="n">strata_alpha</span> <span class="o">=</span> <span class="n">my_strata</span><span class="o">.</span><span class="n">get_strata_alpha</span><span class="p">(</span><span class="n">my_experiment</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+        <span class="c1"># Shrink alpha in computations to dialate confidence interval</span>
+        <span class="n">alpha_shrinkage</span> <span class="o">=</span> <span class="mf">0.9</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">strata_alpha</span> <span class="o">*</span> <span class="n">alpha_shrinkage</span>
+
+        <span class="n">my_strata</span><span class="o">.</span><span class="n">stratify</span><span class="p">(</span><span class="n">bin_style</span><span class="p">)</span>
+
+        <span class="n">num_total_samples</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">init_df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">num_total_samples</span> <span class="o">=</span> <span class="n">init_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c1"># In Initialization, Set first samples but do not do a successful round check</span>
+            <span class="n">my_strata</span><span class="o">.</span><span class="n">add_samples_to_strata</span><span class="p">(</span><span class="n">init_df</span><span class="p">)</span>
+
+        <span class="n">num_requested_init_samples</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># Supplement initial samples with additional samples if asked in experiment</span>
+        <span class="k">if</span> <span class="n">my_experiment</span><span class="o">.</span><span class="n">request_initial_samples</span><span class="p">:</span>
+            <span class="n">initial_samples</span> <span class="o">=</span> \
+                <span class="n">my_strata</span><span class="o">.</span><span class="n">find_needed_initial_samples</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">,</span>
+                                                      <span class="n">my_experiment</span><span class="o">.</span><span class="n">initial_samples</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
+            <span class="n">annotations_df</span> <span class="o">=</span> <span class="n">oracle_ref</span><span class="o">.</span><span class="n">get_annotations</span><span class="p">(</span><span class="n">initial_samples</span><span class="p">)</span>
+            <span class="n">my_strata</span><span class="o">.</span><span class="n">add_samples_to_strata</span><span class="p">(</span><span class="n">annotations_df</span><span class="p">)</span>
+            <span class="n">num_total_samples</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_samples</span><span class="p">)</span>
+            <span class="n">num_requested_init_samples</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_samples</span><span class="p">)</span>
+
+        <span class="c1"># We need to evaluate the score after the initial samples</span>
+        <span class="n">my_strata</span><span class="o">.</span><span class="n">estimate_samples_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">)</span>
+        <span class="n">my_strata</span><span class="o">.</span><span class="n">estimate_pop_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">)</span>
+        <span class="n">my_strata</span><span class="o">.</span><span class="n">estimate_score_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">)</span>
+        <span class="n">my_strata</span><span class="o">.</span><span class="n">estimate_score_variance_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">)</span>
+        <span class="n">my_strata</span><span class="o">.</span><span class="n">estimate_pop_variance_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">)</span>
+        <span class="n">my_strata</span><span class="o">.</span><span class="n">estimate_score_variance_upper_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+        <span class="n">metric_obj</span><span class="o">.</span><span class="n">estimate_population_intervals_all_systems_strata</span><span class="p">(</span><span class="n">my_strata</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+        <span class="n">my_strata</span><span class="o">.</span><span class="n">estimate_score_lower_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+        <span class="n">my_strata</span><span class="o">.</span><span class="n">estimate_score_upper_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+        <span class="n">my_strata</span><span class="o">.</span><span class="n">get_confidence_intervals_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+
+        <span class="n">trial_sampler</span> <span class="o">=</span> <span class="n">sampler_type</span><span class="p">(</span><span class="n">my_strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">trial_sampler</span><span class="o">.</span><span class="n">sample_next_round</span><span class="p">(</span><span class="n">num_previous_successes</span><span class="p">)</span> <span class="ow">and</span> <span class="n">num_rounds</span> <span class="o">&lt;</span> <span class="n">total_runs</span><span class="p">:</span>
+            <span class="c1"># samples here is a list of trial_id values</span>
+            <span class="n">samples</span> <span class="o">=</span> <span class="n">trial_sampler</span><span class="o">.</span><span class="n">draw_samples</span><span class="p">(</span>
+                <span class="n">num_step_samples</span><span class="p">,</span> <span class="n">metric_obj</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span>
+            <span class="p">)</span>
+            <span class="n">num_total_samples</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+            <span class="n">annotations_df</span> <span class="o">=</span> <span class="n">oracle_ref</span><span class="o">.</span><span class="n">get_annotations</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+            <span class="n">my_strata</span><span class="o">.</span><span class="n">add_samples_to_strata</span><span class="p">(</span><span class="n">annotations_df</span><span class="p">)</span>
+            <span class="c1"># Update stratum and system information; return values are not used and</span>
+            <span class="c1"># thus discarded</span>
+            <span class="c1"># By calling these methods now, we can refer to the stratum objects to get these</span>
+            <span class="c1"># lists rather than re-computing</span>
+            <span class="n">my_strata</span><span class="o">.</span><span class="n">estimate_samples_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">)</span>
+            <span class="n">my_strata</span><span class="o">.</span><span class="n">estimate_pop_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">)</span>
+            <span class="n">my_strata</span><span class="o">.</span><span class="n">estimate_score_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">)</span>
+            <span class="n">my_strata</span><span class="o">.</span><span class="n">estimate_score_variance_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">)</span>
+            <span class="n">my_strata</span><span class="o">.</span><span class="n">estimate_pop_variance_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">)</span>
+            <span class="n">my_strata</span><span class="o">.</span><span class="n">estimate_score_variance_upper_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+            <span class="n">metric_obj</span><span class="o">.</span><span class="n">estimate_population_intervals_all_systems_strata</span><span class="p">(</span><span class="n">my_strata</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+            <span class="n">my_strata</span><span class="o">.</span><span class="n">estimate_score_lower_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+            <span class="n">my_strata</span><span class="o">.</span><span class="n">estimate_score_upper_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+            <span class="n">my_strata</span><span class="o">.</span><span class="n">get_confidence_intervals_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+            <span class="n">succ_round</span> <span class="o">=</span> <span class="n">trial_sampler</span><span class="o">.</span><span class="n">meets_confidence_criteria</span><span class="p">(</span>
+                <span class="n">my_strata</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">metric_obj</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">succ_round</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">num_previous_successes</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Although a successful round, no new samples selected this round in round &quot;</span> <span class="o">+</span>
+                      <span class="nb">str</span><span class="p">(</span><span class="n">num_rounds</span><span class="p">))</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Although a successful round, no new samples selected this round in&quot;</span>
+                            <span class="s2">&quot; round &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">num_rounds</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">succ_round</span><span class="p">:</span>
+                <span class="n">num_previous_successes</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># If we have no new samples at all, mark the round as successful with a footnote</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No new samples selected this round in round &quot;</span> <span class="o">+</span>
+                      <span class="nb">str</span><span class="p">(</span><span class="n">num_rounds</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;: marking round as successful&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;No new samples selected this round in round &quot;</span> <span class="o">+</span>
+                            <span class="nb">str</span><span class="p">(</span><span class="n">num_rounds</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;: marking round as successful&quot;</span><span class="p">)</span>
+                <span class="n">num_previous_successes</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">num_previous_successes</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">num_rounds</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Post results</span>
+        <span class="n">num_samples_per_stratum</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="nb">sum</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">estimate_samples_all_systems</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">))</span> <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="n">my_strata</span><span class="o">.</span><span class="n">strata</span><span class="p">]</span>
+        <span class="c1"># num_samples_per_stratum = my_strata[0].estimate_samples</span>
+        <span class="n">init_trials</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">init_df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">init_trials</span> <span class="o">=</span> <span class="n">init_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">summary_report</span> <span class="o">=</span> <span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">summary_reporter</span><span class="o">.</span><span class="n">SummaryReport</span><span class="p">(</span><span class="n">my_experiment</span><span class="p">,</span>
+                                                                      <span class="n">my_strata</span><span class="o">.</span><span class="n">system_list</span><span class="p">,</span>
+                                                                      <span class="n">num_rounds</span><span class="p">,</span>
+                                                                      <span class="n">init_trials</span><span class="p">,</span>
+                                                                      <span class="n">num_total_samples</span><span class="p">,</span>
+                                                                      <span class="n">num_requested_init_samples</span><span class="p">,</span>
+                                                                      <span class="n">my_strata</span><span class="o">.</span><span class="n">num_strata</span><span class="p">,</span>
+                                                                      <span class="n">num_samples_per_stratum</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">summary_report</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, NIST MIG
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

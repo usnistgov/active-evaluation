@@ -1,0 +1,790 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>aegis.acteval.stratum &mdash; aegis v2020.03.03 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> aegis
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2020.03.03
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Aegis Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#running-experiments-with-aegis-when-ground-truth-is-known">Running Experiments with Aegis when Ground Truth is Known</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#code-approach">Code Approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#running-continuous-integration-components-locally">Running Continuous Integration Components Locally</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#license">LICENSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API_reference.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">aegis</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>aegis.acteval.stratum</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for aegis.acteval.stratum</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="str_dec"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.str_dec">[docs]</a><span class="k">def</span> <span class="nf">str_dec</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Utility function used by stratum method to avoid redefinition with lambda</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (object):  the object to make a string and to construct a string with</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: a string with &quot;_dec&quot; appended to it</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_dec&#39;</span></div>
+
+
+<div class="viewcode-block" id="Stratum"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum">[docs]</a><span class="k">class</span> <span class="nc">Stratum</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An object representing a stratum.</span>
+
+<span class="sd">    In the stratum, the population size</span>
+<span class="sd">    is the total number of trials in the stratum, not the total number of trials that have been</span>
+<span class="sd">    sampled. The number of samples (sampled_trials) is the total number of trials sampled.</span>
+<span class="sd">    For metrics such as recall where this cannot be computed directly, this will be</span>
+<span class="sd">    estimated by the total number of trials in the stratum and the proportion of sampled trials</span>
+<span class="sd">    that should be included in the population.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            system_list (list of :obj:`aegis.acteval.system.System`): The list of systems</span>
+<span class="sd">                with outputs to associate with this stratum.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_trials</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># field &#39;key&#39; is NA when there is no key, indicating that the trial was not sampled</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratum_key_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">system_list</span> <span class="o">=</span> <span class="n">system_list</span>
+        <span class="c1"># -1 means unassigned index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratum_index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">combined_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_cached_combined_df</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_cached_score_df</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="Stratum.dirty_stratum_cache"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.dirty_stratum_cache">[docs]</a>    <span class="k">def</span> <span class="nf">dirty_stratum_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Mark all cached variables as dirty for future computations within this stratum.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Nothing</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_cached_score_df</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_cached_combined_df</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="Stratum.get_combined_data_frames"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.get_combined_data_frames">[docs]</a>    <span class="k">def</span> <span class="nf">get_combined_data_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system_data_frames</span><span class="p">,</span> <span class="n">key_data_frame</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal implementation method to get combined data frames that can be used both</span>
+<span class="sd">        to get the entire combined data frame and to get the data frame with only the key values</span>
+<span class="sd">        that are not missing. Written so that the logic of combining data frames can be written</span>
+<span class="sd">        once and called smartly.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            system_data_frames (list of :obj:`pandas.core.frame.DataFrame`):</span>
+<span class="sd">                The list of system data frames, pre-filtered as appropriate</span>
+<span class="sd">            key_data_frame (:obj:`pandas.core.frame.DataFrame`):</span>
+<span class="sd">                The key data frame, filtered as approporiate. Has structure</span>
+<span class="sd">                with two columns (trial_id, key)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.core.frame.DataFrame: A combined data frame with all system scores,</span>
+<span class="sd">            stratum index, key, and decision when applicable.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">system_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">system_id</span> <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">]</span>
+
+        <span class="c1"># Convert to one data frame with same data, but different outputs of score_1 ... score_k</span>
+        <span class="n">comb_df</span> <span class="o">=</span> <span class="n">system_data_frames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">comb_df</span><span class="p">[</span><span class="s2">&quot;system_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">system_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Make sure comb_db isn&#39;t empty for appending, so filter each append and at the end</span>
+        <span class="c1"># but do not filter here</span>
+        <span class="n">have_stratum_indices</span> <span class="o">=</span> <span class="n">comb_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">&#39;stratum_index&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">system_data_frames</span><span class="p">)):</span>
+            <span class="n">temp_df</span> <span class="o">=</span> <span class="n">system_data_frames</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">temp_df</span><span class="p">[</span><span class="s2">&quot;system_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">system_ids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="c1"># Filter before merging for faster computation</span>
+            <span class="k">if</span> <span class="n">have_stratum_indices</span><span class="p">:</span>
+                <span class="n">temp_df</span> <span class="o">=</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">temp_df</span><span class="p">[</span><span class="s1">&#39;stratum_index&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">stratum_index</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">comb_df</span> <span class="o">=</span> <span class="n">comb_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_df</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Filter before merging for faster computation</span>
+        <span class="k">if</span> <span class="n">have_stratum_indices</span><span class="p">:</span>
+            <span class="n">comb_df</span> <span class="o">=</span> <span class="n">comb_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">comb_df</span><span class="p">[</span><span class="s1">&#39;stratum_index&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">stratum_index</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="n">output_score_df</span> <span class="o">=</span> <span class="n">comb_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;system_id&quot;</span><span class="p">,</span> <span class="s2">&quot;score&quot;</span><span class="p">]]</span>
+        <span class="n">output_df</span> <span class="o">=</span> <span class="n">output_score_df</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span>
+            <span class="n">index</span><span class="o">=</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;system_id&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">&quot;score&quot;</span>
+        <span class="p">)</span>
+        <span class="n">output_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Add decision column if it exists with &quot;&lt;system_id&gt;_dec&quot; as the columns</span>
+        <span class="k">if</span> <span class="s1">&#39;decision&#39;</span> <span class="ow">in</span> <span class="n">system_data_frames</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">output_dec_df</span> <span class="o">=</span> <span class="n">comb_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;system_id&quot;</span><span class="p">,</span> <span class="s2">&quot;decision&quot;</span><span class="p">]]</span>
+            <span class="n">output_dec_df</span><span class="p">[</span><span class="s2">&quot;system_id&quot;</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="n">output_dec_df</span><span class="p">[</span><span class="s2">&quot;system_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">str_dec</span><span class="p">)</span>
+            <span class="n">output_dec_df</span> <span class="o">=</span> <span class="n">output_dec_df</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span>
+                <span class="n">index</span><span class="o">=</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;system_id&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">&quot;decision&quot;</span>
+            <span class="p">)</span>
+            <span class="n">output_dec_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">output_df</span> <span class="o">=</span> <span class="n">output_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">output_dec_df</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">])</span>
+
+        <span class="c1"># merge with key data frame if not empty to get stratum indices and data</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">key_data_frame</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">output_df</span> <span class="o">=</span> <span class="n">output_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">key_data_frame</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;trial_id&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">output_df</span></div>
+
+<div class="viewcode-block" id="Stratum.get_combined_systems_df"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.get_combined_systems_df">[docs]</a>    <span class="k">def</span> <span class="nf">get_combined_systems_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes the system data frames with system scores and combines to get one data frame</span>
+<span class="sd">        that also includes the stratum indices, providing a combined data frame for this</span>
+<span class="sd">        stratum.</span>
+
+<span class="sd">        This method is cached in order to prevent redundant computations for performance</span>
+<span class="sd">        enhancements.</span>
+
+<span class="sd">        If the &quot;stratum_index&quot; field has already been added to the system data frames, then</span>
+<span class="sd">        that field will be in the returned data frame. Otherwise, if the field &quot;stratum_index&quot;</span>
+<span class="sd">        has not yet been added, then the &quot;stratum_index&quot; field will not appear in this combined</span>
+<span class="sd">        data frame.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.core.frame.DataFrame: output_df, a copy of the combined data frame,</span>
+<span class="sd">            where each system_id is a column whose value is the score.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_cached_combined_df</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">combined_df</span>
+
+        <span class="n">system_data_frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">system_df</span> <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">]</span>
+        <span class="n">key_data_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stratum_key_df</span>
+        <span class="n">output_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_combined_data_frames</span><span class="p">(</span><span class="n">system_data_frames</span><span class="p">,</span> <span class="n">key_data_frame</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">combined_df</span> <span class="o">=</span> <span class="n">output_df</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_cached_combined_df</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">output_df</span></div>
+
+<div class="viewcode-block" id="Stratum.get_combined_systems_score_df"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.get_combined_systems_score_df">[docs]</a>    <span class="k">def</span> <span class="nf">get_combined_systems_score_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes the system data frames with system scores and combines to get one data frame</span>
+<span class="sd">        that also includes the stratum indices, providing a combined data frame for this</span>
+<span class="sd">        stratum. Gets the dataframe only for values that has keys.</span>
+
+<span class="sd">        This allows for filtration before merging to save on computation.</span>
+
+<span class="sd">        This method is cached in order to prevent redundant computations for performance</span>
+<span class="sd">        enhancements.</span>
+
+<span class="sd">        If the &quot;stratum_index&quot; field has already been added to the system data frames, then</span>
+<span class="sd">        that field will be in the returned data frame. Otherwise, if the field &quot;stratum_index&quot;</span>
+<span class="sd">        has not yet been added, then the &quot;stratum_index&quot; field will not appear in this combined</span>
+<span class="sd">        data frame.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.core.frame.DataFrame: output_df a copy of the combined data frame, where each</span>
+<span class="sd">            system_id is a column whose value is the score.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_cached_score_df</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_df</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="c1"># need to figure out this case</span>
+            <span class="c1"># return self.stratum_key_df</span>
+            <span class="k">pass</span>
+
+        <span class="n">key_data_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">notna</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]),</span> <span class="p">:]</span>
+        <span class="k">if</span> <span class="n">key_data_frame</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">key_data_frame</span>
+
+        <span class="n">system_data_frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">system_df</span> <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">]</span>
+        <span class="c1"># Here, stratum_index values should match exactly</span>
+        <span class="n">system_key_frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">system_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">key_data_frame</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">,</span>
+                                             <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">])</span>
+                             <span class="k">for</span> <span class="n">system_df</span> <span class="ow">in</span> <span class="n">system_data_frames</span><span class="p">]</span>
+
+        <span class="n">output_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_combined_data_frames</span><span class="p">(</span><span class="n">system_key_frames</span><span class="p">,</span> <span class="n">key_data_frame</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score_df</span> <span class="o">=</span> <span class="n">output_df</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_cached_score_df</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">output_df</span></div>
+
+<div class="viewcode-block" id="Stratum.construct_stratum_from_trials"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.construct_stratum_from_trials">[docs]</a>    <span class="k">def</span> <span class="nf">construct_stratum_from_trials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stratum_key_df</span><span class="p">,</span> <span class="n">stratum_index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A method to pass the information from the data frame to the stratum with the desired trials.</span>
+
+<span class="sd">        Makes a deep copy so that the strata df is separated from the stratum df so that each can</span>
+<span class="sd">        be modified separately when samples are added.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            stratum_key_df (:obj:`pandas.core.frame.DataFrame`): The subset of trials from</span>
+<span class="sd">                trial_df that should be copied to be the df in</span>
+<span class="sd">                this strata</span>
+<span class="sd">            stratum_index (int): The index of this stratum</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Nothing, since this updates the stratum object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratum_index</span> <span class="o">=</span> <span class="n">stratum_index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratum_key_df</span> <span class="o">=</span> <span class="n">stratum_key_df</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_trials</span> <span class="o">=</span> <span class="n">stratum_key_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># may be incorrect if the metric differs, but use for now</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">population_size</span> <span class="o">=</span> <span class="n">stratum_key_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sampled_trials</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">notna</span><span class="p">(</span><span class="n">stratum_key_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]),</span> <span class="s2">&quot;trial_id&quot;</span>
+        <span class="p">]</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Stratum.find_needed_initial_samples"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.find_needed_initial_samples">[docs]</a>    <span class="k">def</span> <span class="nf">find_needed_initial_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">initial_samples_per_bin</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        In order to cover necessary edge cases from each stratum</span>
+<span class="sd">        (Such as when the metric is a combination of two components) and to ensure samples</span>
+<span class="sd">        from each stratum, this method will find such examples and will sample at random.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metric (:obj:`aegis.acteval.stratum.Stratum`): The metric to score systems</span>
+<span class="sd">            initial_samples_per_bin (int): The number of initial samples per bin</span>
+<span class="sd">            rng (:obj:`numpy.random.RandomState`): random state object with stored random state</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of object: A list of trial_id values to sample</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">metric</span><span class="o">.</span><span class="n">find_needed_initial_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_samples_per_bin</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Stratum.add_samples_to_stratum"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.add_samples_to_stratum">[docs]</a>    <span class="k">def</span> <span class="nf">add_samples_to_stratum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples_df</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds relevant scores to the trials in the current data frame that exist in the key field</span>
+<span class="sd">        from the samples_df data frame.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            samples_df (:obj:`pandas.core.frame.DataFrame`): the scored trials to add.</span>
+<span class="sd">                If trials in samples_df are not trials</span>
+<span class="sd">                already assigned to the stratum, they are ignored.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            aegis.acteval.stratum.Stratum: The updated stratum object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">samples_df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">samples_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Merge data frame to combined df.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratum_key_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">samples_df</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="p">[</span><span class="s2">&quot;key_x&quot;</span><span class="p">]),</span> <span class="s2">&quot;key_x&quot;</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="p">[</span><span class="s2">&quot;key_x&quot;</span><span class="p">]),</span> <span class="s2">&quot;key_y&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;key_y&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;key_x&quot;</span><span class="p">:</span> <span class="s2">&quot;key&quot;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Mark cached values as dirty when we add samples</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirty_stratum_cache</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="Stratum.draw_samples"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.draw_samples">[docs]</a>    <span class="k">def</span> <span class="nf">draw_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draws relevant samples in each stratum. Uses the metric to make sure that it only draws</span>
+<span class="sd">        relevant samples. (I.e. for precision, relevant samples or samples from the population are</span>
+<span class="sd">        all systems where some systems&#39; decision is 1).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_samples (int): The number of samples to draw from this stratum</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric object</span>
+<span class="sd">            rng (:obj:`numpy.random.RandomState`): the random state object from the sampler to</span>
+<span class="sd">                use for sampling</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of object: a list of trial ids to sample</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># sample_space = set(range(self.population_size)) - self.sampled_indxs</span>
+        <span class="c1"># Call metric population</span>
+        <span class="n">unsampled_trials</span> <span class="o">=</span> <span class="n">metric</span><span class="o">.</span><span class="n">get_trials_to_sample_from</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">num_samples</span> <span class="o">&gt;</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">num_samples</span> <span class="o">=</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Right now, this is unseeded. We may wish to have a seed either here or in the entire</span>
+        <span class="c1"># method</span>
+        <span class="n">new_sample</span> <span class="o">=</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">new_sample</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Stratum.estimate_samples_all_systems"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.estimate_samples_all_systems">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_samples_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Estimates the number of samples (that count towards the population) for each system.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): the metric estimating the</span>
+<span class="sd">                number of samples</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of int: A list with one entry per system of the number of samples in</span>
+<span class="sd">            this stratum for that system.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">metric</span><span class="o">.</span><span class="n">estimate_samples_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Stratum.estimate_pop_all_systems"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.estimate_pop_all_systems">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_pop_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Estimates the population for each system for this stratum.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): the metric estimating the population</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of float: A list with one entry per system of the population of this stratum for</span>
+<span class="sd">            that system. Whether the estimates are floats or ints depends on the metric.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">metric</span><span class="o">.</span><span class="n">estimate_pop_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Stratum.estimate_pop_upper_all_systems"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.estimate_pop_upper_all_systems">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_pop_upper_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Using the provided system aggregation strategy, estimates the upper bound of the population</span>
+<span class="sd">        of this stratum.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric.</span>
+<span class="sd">            alpha (float): the confidence value</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of float: A list with one entry per system of the upper bound of the</span>
+<span class="sd">            population of this stratum for that system.</span>
+<span class="sd">            Whether the estimates are floats or ints depends on the metric.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sys_pop_conf_lists</span> <span class="o">=</span> <span class="n">metric</span><span class="o">.</span><span class="n">estimate_population_intervals_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+        <span class="n">sys_upper_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">upper</span> <span class="k">for</span> <span class="p">[</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">,</span> <span class="n">delta</span><span class="p">]</span> <span class="ow">in</span> <span class="n">sys_pop_conf_lists</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">sys_upper_list</span></div>
+
+<div class="viewcode-block" id="Stratum.estimate_pop_lower_all_systems"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.estimate_pop_lower_all_systems">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_pop_lower_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Using the provided system aggregation strategy, estimates the lower bound of the population</span>
+<span class="sd">        of this stratum.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric.</span>
+<span class="sd">            alpha (float): the confidence value</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of float: A list with one entry per system of the lower bound of the</span>
+<span class="sd">            population of this stratum for that system.</span>
+<span class="sd">            Whether the estimates are floats or ints depends on the metric.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sys_pop_conf_lists</span> <span class="o">=</span> <span class="n">metric</span><span class="o">.</span><span class="n">estimate_population_intervals_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+        <span class="n">sys_lower_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">lower</span> <span class="k">for</span> <span class="p">[</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">,</span> <span class="n">delta</span><span class="p">]</span> <span class="ow">in</span> <span class="n">sys_pop_conf_lists</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">sys_lower_list</span></div>
+
+<div class="viewcode-block" id="Stratum.estimate_pop_frac_variance_all_systems"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.estimate_pop_frac_variance_all_systems">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_pop_frac_variance_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Estimates the population variance for each system for this stratum.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): the metric estimating the</span>
+<span class="sd">                population variance</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of float: A list with one entry per system of the population variance of this</span>
+<span class="sd">            stratum for that system.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">metric</span><span class="o">.</span><span class="n">estimate_pop_frac_variance_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Stratum.estimate_score_all_systems"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.estimate_score_all_systems">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_score_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Estimates the score for each system for this stratum.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): the metric estimating the score</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of float: A list with one entry per system of the score of this stratum for</span>
+<span class="sd">            that system.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">metric</span><span class="o">.</span><span class="n">estimate_score_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Stratum.estimate_variance_all_systems"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.estimate_variance_all_systems">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_variance_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Estimates the variance for each system for this stratum.</span>
+
+<span class="sd">        Among its uses is to compute the square of the standard error, or the score_variance</span>
+<span class="sd">        for the strata that contains this (and other) stratum.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): the metric estimating the variance</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of float: A list with one entry per system of the variance of this stratum for</span>
+<span class="sd">            that system.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">metric</span><span class="o">.</span><span class="n">estimate_variance_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Stratum.estimate_score_variance_all_systems"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.estimate_score_variance_all_systems">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_score_variance_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Estimates the score_variance for each system for this stratum.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): the metric estimating the score variance</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of float: A list with one entry per system of the score variance of this</span>
+<span class="sd">            stratum for that system.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">metric</span><span class="o">.</span><span class="n">estimate_score_variance_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Stratum.estimate_score_variance_upper_all_systems"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.estimate_score_variance_upper_all_systems">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_score_variance_upper_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Estimates the upper bound of the score_variance for each system for this stratum; this</span>
+<span class="sd">        upper bound is the score variance that accounts for upper and lower bound estimates</span>
+<span class="sd">        of the population of this stratum.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): the metric estimating the score variance</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of float: A list with one entry per system of the upper score variance of</span>
+<span class="sd">            this stratum for that system.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">metric</span><span class="o">.</span><span class="n">estimate_score_variance_upper_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Stratum.estimate_samples"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.estimate_samples">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">system_aggregation_strategy</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Using the provided system aggregation strategy, estimates the number of samples</span>
+<span class="sd">        of this stratum aggregating over all systems</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric.</span>
+<span class="sd">            system_aggregation_strategy (function, list of float -&gt; float):</span>
+<span class="sd">                The strategy to aggregate system values. It is a</span>
+<span class="sd">                function that takes in a list of values and returns a single value.</span>
+<span class="sd">                The function that aggregates floats will also aggregate integers</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of int: A single aggregated number of samples across all systems</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sys_samples_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimate_samples_all_systems</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">sys_samples_list</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">return</span> <span class="n">system_aggregation_strategy</span><span class="p">(</span><span class="n">sys_samples_list</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Stratum.estimate_pop"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.estimate_pop">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">system_aggregation_strategy</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Using the provided system aggregation strategy, estimates the population of this stratum</span>
+<span class="sd">        aggregating over all systems</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric.</span>
+<span class="sd">            system_aggregation_strategy (function, list of float -&gt; float):</span>
+<span class="sd">                The strategy to aggregate system values. It is a</span>
+<span class="sd">                function that takes in a list of values and returns a single value.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: A single aggregated population across all systems. Because some estimates</span>
+<span class="sd">            of population can be floats, this is sometimes a float and not an integer</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sys_pop_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimate_pop_all_systems</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">sys_pop_list</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">return</span> <span class="n">system_aggregation_strategy</span><span class="p">(</span><span class="n">sys_pop_list</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Stratum.estimate_pop_upper"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.estimate_pop_upper">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_pop_upper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">system_aggregation_strategy</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Using the provided system aggregation strategy, estimates the</span>
+<span class="sd">        upper bound of the population of this stratum</span>
+<span class="sd">        aggregating over all systems</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric.</span>
+<span class="sd">            system_aggregation_strategy (function, list of float -&gt; float):</span>
+<span class="sd">                The strategy to aggregate system values. It is a</span>
+<span class="sd">                function that takes in a list of values and returns a single value.</span>
+<span class="sd">            alpha (float): The (1 - confidence_level) specified</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: A single aggregated upper population across all systems.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sys_pop_conf_lists</span> <span class="o">=</span> <span class="n">metric</span><span class="o">.</span><span class="n">estimate_population_intervals_all_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+        <span class="n">sys_upper_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">upper</span> <span class="k">for</span> <span class="p">[</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">,</span> <span class="n">delta</span><span class="p">]</span> <span class="ow">in</span> <span class="n">sys_pop_conf_lists</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">sys_upper_list</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">return</span> <span class="n">system_aggregation_strategy</span><span class="p">(</span><span class="n">sys_upper_list</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Stratum.estimate_score"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.estimate_score">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">system_aggregation_strategy</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Using the provided system aggregation strategy, estimates the score of this stratum</span>
+<span class="sd">        aggregating over all systems</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric.</span>
+<span class="sd">            system_aggregation_strategy (function, list of float -&gt; float):</span>
+<span class="sd">                The strategy to aggregate system values. It is a</span>
+<span class="sd">                function that takes in a list of values and returns a single value.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: A single aggregated score across all systems.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sys_score_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimate_score_all_systems</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">sys_score_list</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">return</span> <span class="n">system_aggregation_strategy</span><span class="p">(</span><span class="n">sys_score_list</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Stratum.estimate_variance"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.estimate_variance">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_variance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">system_aggregation_strategy</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Using the provided system aggregation strategy, estimates the variance of this stratum</span>
+<span class="sd">        aggregating over all systems</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric.</span>
+<span class="sd">            system_aggregation_strategy (function, list of float -&gt; float):</span>
+<span class="sd">                The strategy to aggregate system values. It is a</span>
+<span class="sd">                function that takes in a list of values and returns a single value.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: A single aggregated variance across all systems.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sys_variance_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimate_variance_all_systems</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">sys_variance_list</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">return</span> <span class="n">system_aggregation_strategy</span><span class="p">(</span><span class="n">sys_variance_list</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Stratum.estimate_score_variance"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.estimate_score_variance">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_score_variance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">system_aggregation_strategy</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Using the provided system aggregation strategy, estimates the score variance of this</span>
+<span class="sd">        stratum aggregating over all systems</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric.</span>
+<span class="sd">            system_aggregation_strategy (function, list of float -&gt; float):</span>
+<span class="sd">                The strategy to aggregate system values. It is a</span>
+<span class="sd">                function that takes in a list of values and returns a single value.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: A single aggregated score_variance across all systems.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sys_score_variance_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimate_score_variance_all_systems</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">sys_score_variance_list</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">return</span> <span class="n">system_aggregation_strategy</span><span class="p">(</span><span class="n">sys_score_variance_list</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Stratum.estimate_score_variance_upper"><a class="viewcode-back" href="../../../api/aegis.acteval.stratum.html#aegis.acteval.stratum.Stratum.estimate_score_variance_upper">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_score_variance_upper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">system_aggregation_strategy</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Using the provided system aggregation strategy, estimates the upper score variance of this</span>
+<span class="sd">        stratum aggregating over all systems. The upper uses upper and lower estimates of the</span>
+<span class="sd">        population.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric.</span>
+<span class="sd">            system_aggregation_strategy (function, list of float -&gt; float):</span>
+<span class="sd">                The strategy to aggregate system values. It is a</span>
+<span class="sd">                function that takes in a list of values and returns a single value.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: A single aggregated upper score_variance across all systems.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sys_score_variance_upper_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimate_score_variance_upper_all_systems</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">sys_score_variance_upper_list</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">return</span> <span class="n">system_aggregation_strategy</span><span class="p">(</span><span class="n">sys_score_variance_upper_list</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, NIST MIG
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

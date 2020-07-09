@@ -1,0 +1,968 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>aegis.acteval.samplers &mdash; aegis v2020.03.03 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> aegis
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2020.03.03
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Aegis Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#running-experiments-with-aegis-when-ground-truth-is-known">Running Experiments with Aegis when Ground Truth is Known</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#code-approach">Code Approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#running-continuous-integration-components-locally">Running Continuous Integration Components Locally</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#license">LICENSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API_reference.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">aegis</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>aegis.acteval.samplers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for aegis.acteval.samplers</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">abc</span>
+
+
+<div class="viewcode-block" id="TrialSampler"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.TrialSampler">[docs]</a><span class="k">class</span> <span class="nc">TrialSampler</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Abstract class to support different sampling methods.&quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sampler constructor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            strata (:obj:`aegis.acteval.strata.Strata`): The strata object that the sampler is</span>
+<span class="sd">                sampling from</span>
+<span class="sd">            num_success_rounds_required (int): the number of consecutive rounds needed to sample</span>
+<span class="sd">                before stopping sampling</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strata</span> <span class="o">=</span> <span class="n">strata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_success_rounds_required</span> <span class="o">=</span> <span class="n">num_success_rounds_required</span>
+
+<div class="viewcode-block" id="TrialSampler.draw_samples"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.TrialSampler.draw_samples">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">draw_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method that provides the strategy of drawing samples. Will vary when needed for</span>
+<span class="sd">        comparative experiments.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_samples (int): The number of samples to draw at each step</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric object used for scoring</span>
+<span class="sd">            rng (:obj:`numpy.random.RandomState`, optional): The Random_number generator provided</span>
+<span class="sd">                from the controller. If set to None, it is</span>
+<span class="sd">                not provided and will be unique to this sampler. None is provided by default</span>
+<span class="sd">            alpha (float, optional): The desired confidence level. Used for sampling when</span>
+<span class="sd">                population estimates have variances</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of object: A list of trial_id values to sample.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="TrialSampler.sample_next_round"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.TrialSampler.sample_next_round">[docs]</a>    <span class="k">def</span> <span class="nf">sample_next_round</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_previous_successes</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method to determine if we should sample another round.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_previous_successes (int): The number of previous consecutive successful rounds</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if another round should be sampled, and False otherwise.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">num_previous_successes</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_success_rounds_required</span></div>
+
+<div class="viewcode-block" id="TrialSampler.meets_confidence_delta"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.TrialSampler.meets_confidence_delta">[docs]</a>    <span class="k">def</span> <span class="nf">meets_confidence_delta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conf_value</span><span class="p">,</span> <span class="n">delta</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Submethod useful for testing if we meet the confidence criteria from the Sampler</span>
+<span class="sd">        object rather than the Strata object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            conf_value (float): The previously computed confidence value</span>
+<span class="sd">            delta (float): The delta of uncertainty to be within.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if the confidence range is within the specified delta</span>
+<span class="sd">            False, otherwise</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">conf_value</span> <span class="o">&lt;=</span> <span class="n">delta</span></div>
+
+<div class="viewcode-block" id="TrialSampler.meets_confidence_criteria"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.TrialSampler.meets_confidence_criteria">[docs]</a>    <span class="k">def</span> <span class="nf">meets_confidence_criteria</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strata</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">metric</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes a strata, with its strategy to aggregate the confidence intervals of the different</span>
+<span class="sd">        systems in the strata, and a metric to compute confidence intervals, and returns if with</span>
+<span class="sd">        probability &gt;= 1-alpha the confidence interval width is bounded by delta.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            strata (:obj:`aegis.acteval.strata.Strata`): The strata object</span>
+<span class="sd">            delta (float): The delta to be within</span>
+<span class="sd">            alpha (float): The alpha parameter of the confidence interval (or the probability</span>
+<span class="sd">                level of the confidence interval)</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric according to which to</span>
+<span class="sd">                compute the confidence criteria</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: meets_criteria a boolean that determines if the sample meets the</span>
+<span class="sd">            confidence criteria within the specified parameters.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Compute confidence values here.</span>
+        <span class="n">strata</span><span class="o">.</span><span class="n">get_confidence_intervals_all_systems</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+        <span class="n">delta_pref_var</span> <span class="o">=</span> <span class="n">strata</span><span class="o">.</span><span class="n">aggregate_system_confidence_values</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meets_confidence_delta</span><span class="p">(</span><span class="n">delta_pref_var</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="UniformFixedTrialSampler"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.UniformFixedTrialSampler">[docs]</a><span class="k">class</span> <span class="nc">UniformFixedTrialSampler</span><span class="p">(</span><span class="n">TrialSampler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draws samples from the strata uniformly, drawing the same number of samples from each</span>
+<span class="sd">    stratum. This does not use a multinomial distribution but a deterministic</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;UniformFixedTrialSampler&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sampler constructor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            strata (:obj:`aegis.acteval.strata.Strata`): The strata object that the sampler is</span>
+<span class="sd">                sampling from</span>
+<span class="sd">            num_success_rounds_required (int): the number of consecutive rounds needed to sample</span>
+<span class="sd">                before stopping sampling</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">)</span>
+
+<div class="viewcode-block" id="UniformFixedTrialSampler.draw_samples"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.UniformFixedTrialSampler.draw_samples">[docs]</a>    <span class="k">def</span> <span class="nf">draw_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Samples uniformly from each strata, meaning that each strata will get</span>
+<span class="sd">        num_samples/self.strata.num_strata samples.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_samples (int): The number of samples to draw at each step</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric object used for scoring</span>
+<span class="sd">            rng (:obj:`numpy.random.RandomState`, optional): The Random_number generator provided</span>
+<span class="sd">                from the controller. If set to None, it is</span>
+<span class="sd">                not provided and will be unique to this sampler. None is provided by default</span>
+<span class="sd">            alpha (float, optional): The desired confidence level. Used for sampling when</span>
+<span class="sd">                population estimates have variances</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of object: A list of trial_id values to sample.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_strata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">num_strata</span>
+
+        <span class="c1"># Allocate samples uniformly over all of the strata</span>
+        <span class="n">pvals</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">num_strata</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_strata</span>
+        <span class="n">nk</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">pval</span> <span class="o">*</span> <span class="n">num_samples</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="k">for</span> <span class="n">pval</span> <span class="ow">in</span> <span class="n">pvals</span><span class="p">]</span>
+        <span class="c1"># Additional check added to make sure total number of samples are met</span>
+        <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">nk</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">num_samples</span><span class="p">:</span>
+            <span class="n">missing_samples</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_samples</span><span class="o">-</span><span class="nb">sum</span><span class="p">(</span><span class="n">nk</span><span class="p">))</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">full_nums</span> <span class="o">=</span> <span class="p">[</span><span class="n">pval</span> <span class="o">*</span> <span class="n">num_samples</span> <span class="k">for</span> <span class="n">pval</span> <span class="ow">in</span> <span class="n">pvals</span><span class="p">]</span>
+            <span class="n">frac_nums</span> <span class="o">=</span> <span class="p">[</span><span class="n">my_num</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">my_num</span><span class="p">)</span> <span class="k">for</span> <span class="n">my_num</span> <span class="ow">in</span> <span class="n">full_nums</span><span class="p">]</span>
+            <span class="n">sample_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">frac_nums</span><span class="p">)[</span><span class="n">missing_samples</span><span class="p">:]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sample_index</span><span class="p">:</span>
+                <span class="n">nk</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># Now that the number of samples per strata are computed, draw the samples</span>
+        <span class="n">new_samples</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># We use a for loop instead of a list comprehension to ensure that the rng is updated</span>
+        <span class="c1"># after each sampling</span>
+        <span class="k">for</span> <span class="n">stratum</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span><span class="p">,</span> <span class="n">nk</span><span class="p">):</span>
+            <span class="n">samples</span> <span class="o">=</span> <span class="n">stratum</span><span class="o">.</span><span class="n">draw_samples</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
+            <span class="c1"># This does not check for duplicates</span>
+            <span class="n">new_samples</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_samples</span></div></div>
+
+
+<div class="viewcode-block" id="UniformTrialSampler"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.UniformTrialSampler">[docs]</a><span class="k">class</span> <span class="nc">UniformTrialSampler</span><span class="p">(</span><span class="n">TrialSampler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draws samples from the strata uniformly, drawing from a uniform multinomial. This uniform</span>
+<span class="sd">    sampler draws a deterministic number of samples rather than using a multinomial distribution</span>
+<span class="sd">    with the uniform probabilities.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;UniformTrialSampler&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sampler constructor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            strata (:obj:`aegis.acteval.strata.Strata`): The strata object that the sampler is</span>
+<span class="sd">                sampling from</span>
+<span class="sd">            num_success_rounds_required (int): the number of consecutive rounds needed to sample</span>
+<span class="sd">                before stopping sampling</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">)</span>
+
+<div class="viewcode-block" id="UniformTrialSampler.draw_samples"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.UniformTrialSampler.draw_samples">[docs]</a>    <span class="k">def</span> <span class="nf">draw_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Samples uniformly from each strata, meaning that each strata will get</span>
+<span class="sd">        num_samples/self.strata.num_strata samples.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_samples (int): The number of samples to draw at each step</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric object used for scoring</span>
+<span class="sd">            rng (:obj:`numpy.random.RandomState`, optional): The Random_number generator provided</span>
+<span class="sd">                from the controller. If set to None, it is</span>
+<span class="sd">                not provided and will be unique to this sampler. None is provided by default</span>
+<span class="sd">            alpha (float, optional): The desired confidence level. Used for sampling when</span>
+<span class="sd">                population estimates have variances</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of object: A list of trial_id values to sample.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_strata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">num_strata</span>
+
+        <span class="c1"># Allocate samples uniformly over all of the strata</span>
+        <span class="n">pvals</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">num_strata</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_strata</span>
+        <span class="n">nk</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">multinomial</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">pvals</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># Now that the number of samples per strata are computed, draw the samples</span>
+        <span class="n">new_samples</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># We use a for loop instead of a list comprehension to ensure that the rng is updated</span>
+        <span class="c1"># after each sampling</span>
+        <span class="k">for</span> <span class="n">stratum</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span><span class="p">,</span> <span class="n">nk</span><span class="p">):</span>
+            <span class="n">samples</span> <span class="o">=</span> <span class="n">stratum</span><span class="o">.</span><span class="n">draw_samples</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
+            <span class="c1"># This does not check for duplicates</span>
+            <span class="n">new_samples</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_samples</span></div></div>
+
+
+<div class="viewcode-block" id="ProportionalFixedTrialSampler"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.ProportionalFixedTrialSampler">[docs]</a><span class="k">class</span> <span class="nc">ProportionalFixedTrialSampler</span><span class="p">(</span><span class="n">TrialSampler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draws samples from the strata, sampling proportionally to the population size of each stratum.</span>
+<span class="sd">    This uses the population estimates or the populations according to the metrics, which for</span>
+<span class="sd">    some metrics may not be the number of trials. This proportional sampler draws a deterministic</span>
+<span class="sd">    number of samples rather than using a multinomial distribution with the proportional</span>
+<span class="sd">    probabilities.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;ProportionalFixedTrialSampler&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sampler constructor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            strata (:obj:`aegis.acteval.strata.Strata`): The strata object that the sampler is</span>
+<span class="sd">                sampling from</span>
+<span class="sd">            num_success_rounds_required (int): the number of consecutive rounds needed to sample</span>
+<span class="sd">                before stopping sampling</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ProportionalFixedTrialSampler.draw_samples"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.ProportionalFixedTrialSampler.draw_samples">[docs]</a>    <span class="k">def</span> <span class="nf">draw_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sample proportional to the stratum population size. Population will be estimated for</span>
+<span class="sd">        metrics like precision where the population is not merely the number of trials in</span>
+<span class="sd">        the stratum.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_samples (int): The number of samples to draw at each step</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric object used for scoring</span>
+<span class="sd">            rng (:obj:`numpy.random.RandomState`, optional): The Random_number generator provided</span>
+<span class="sd">                from the controller. If set to None, it is</span>
+<span class="sd">                not provided and will be unique to this sampler. None is provided by default</span>
+<span class="sd">            alpha (float, optional): The desired confidence level. Used for sampling when</span>
+<span class="sd">                population estimates have variances</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of object: A list of trial_id values to sample.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_strata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">num_strata</span>
+
+        <span class="c1"># Use populations to sample proportional to strata populations</span>
+        <span class="n">normalizer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">i</span><span class="o">.</span><span class="n">estimate_pop_upper</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">aggregate_system_stats</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">normalizer</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">pvals</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">num_strata</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_strata</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">pvals</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">i</span><span class="o">.</span><span class="n">estimate_pop_upper</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">aggregate_system_stats</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+                    <span class="o">/</span> <span class="n">normalizer</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span>
+                <span class="p">]</span>
+                <span class="c1"># All nan&#39;s give a RuntimeWarning but not an error, so check for an Nan</span>
+                <span class="k">if</span> <span class="kc">True</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">pvals</span><span class="p">):</span>
+                    <span class="n">pvals</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">num_strata</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_strata</span>
+            <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+                <span class="n">pvals</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">num_strata</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_strata</span>
+
+        <span class="n">nk</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">pval</span> <span class="o">*</span> <span class="n">num_samples</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="k">for</span> <span class="n">pval</span> <span class="ow">in</span> <span class="n">pvals</span><span class="p">]</span>
+        <span class="c1"># Additional check added to make sure total number of samples are met</span>
+        <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">nk</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">num_samples</span><span class="p">:</span>
+            <span class="n">missing_samples</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_samples</span><span class="o">-</span><span class="nb">sum</span><span class="p">(</span><span class="n">nk</span><span class="p">))</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">full_nums</span> <span class="o">=</span> <span class="p">[</span><span class="n">pval</span> <span class="o">*</span> <span class="n">num_samples</span> <span class="k">for</span> <span class="n">pval</span> <span class="ow">in</span> <span class="n">pvals</span><span class="p">]</span>
+            <span class="n">frac_nums</span> <span class="o">=</span> <span class="p">[</span><span class="n">my_num</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">my_num</span><span class="p">)</span> <span class="k">for</span> <span class="n">my_num</span> <span class="ow">in</span> <span class="n">full_nums</span><span class="p">]</span>
+            <span class="n">sample_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">frac_nums</span><span class="p">)[</span><span class="n">missing_samples</span><span class="p">:]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sample_index</span><span class="p">:</span>
+                <span class="n">nk</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># Now that the number of samples per strata are computed, draw the samples</span>
+        <span class="n">new_samples</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># We use a for loop instead of a list comprehension to ensure that the rng is updated</span>
+        <span class="c1"># after each sampling</span>
+        <span class="k">for</span> <span class="n">stratum</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span><span class="p">,</span> <span class="n">nk</span><span class="p">):</span>
+            <span class="n">samples</span> <span class="o">=</span> <span class="n">stratum</span><span class="o">.</span><span class="n">draw_samples</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
+            <span class="c1"># This does not check for duplicates</span>
+            <span class="n">new_samples</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_samples</span></div></div>
+
+
+<div class="viewcode-block" id="ProportionalTrialSampler"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.ProportionalTrialSampler">[docs]</a><span class="k">class</span> <span class="nc">ProportionalTrialSampler</span><span class="p">(</span><span class="n">TrialSampler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draws samples from the strata, sampling proportionally to the population size of each stratum.</span>
+<span class="sd">    This uses the population estimates or the populations according to the metrics, which for</span>
+<span class="sd">    some metrics may not be the number of trials.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;ProportionalTrialSampler&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sampler constructor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            strata (:obj:`aegis.acteval.strata.Strata`): The strata object that the sampler is</span>
+<span class="sd">                sampling from</span>
+<span class="sd">            num_success_rounds_required (int): the number of consecutive rounds needed to sample</span>
+<span class="sd">                before stopping sampling</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ProportionalTrialSampler.draw_samples"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.ProportionalTrialSampler.draw_samples">[docs]</a>    <span class="k">def</span> <span class="nf">draw_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sample proportional to the stratum population size. Population will be estimated for</span>
+<span class="sd">        metrics like precision where the population is not merely the number of trials in</span>
+<span class="sd">        the stratum.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_samples (int): The number of samples to draw at each step</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric object used for scoring</span>
+<span class="sd">            rng (:obj:`numpy.random.RandomState`, optional): The Random_number generator provided</span>
+<span class="sd">                from the controller. If set to None, it is</span>
+<span class="sd">                not provided and will be unique to this sampler. None is provided by default</span>
+<span class="sd">            alpha (float, optional): The desired confidence level. Used for sampling when</span>
+<span class="sd">                population estimates have variances</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of object: A list of trial_id values to sample.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_strata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">num_strata</span>
+
+        <span class="c1"># Use populations to sample proportional to strata populations</span>
+        <span class="n">normalizer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">i</span><span class="o">.</span><span class="n">estimate_pop_upper</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">aggregate_system_stats</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">normalizer</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">pvals</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">num_strata</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_strata</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">pvals</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">i</span><span class="o">.</span><span class="n">estimate_pop_upper</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">aggregate_system_stats</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+                    <span class="o">/</span> <span class="n">normalizer</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span>
+                <span class="p">]</span>
+                <span class="c1"># All nan&#39;s give a RuntimeWarning but not an error, so check for an Nan</span>
+                <span class="k">if</span> <span class="kc">True</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">pvals</span><span class="p">):</span>
+                    <span class="n">pvals</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">num_strata</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_strata</span>
+            <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+                <span class="n">pvals</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">num_strata</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_strata</span>
+
+        <span class="n">nk</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">multinomial</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">pvals</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># Now that the number of samples per strata are computed, draw the samples</span>
+        <span class="n">new_samples</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># We use a for loop instead of a list comprehension to ensure that the rng is updated</span>
+        <span class="c1"># after each sampling</span>
+        <span class="k">for</span> <span class="n">stratum</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span><span class="p">,</span> <span class="n">nk</span><span class="p">):</span>
+            <span class="n">samples</span> <span class="o">=</span> <span class="n">stratum</span><span class="o">.</span><span class="n">draw_samples</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
+            <span class="c1"># This does not check for duplicates</span>
+            <span class="n">new_samples</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_samples</span></div></div>
+
+
+<div class="viewcode-block" id="AdaptiveFixedTrialSampler"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.AdaptiveFixedTrialSampler">[docs]</a><span class="k">class</span> <span class="nc">AdaptiveFixedTrialSampler</span><span class="p">(</span><span class="n">TrialSampler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draws samples from the strata, corresponding to the opt sampler that samples</span>
+<span class="sd">    proportionally according to the variance of each stratum. Draws proportional exactly</span>
+<span class="sd">    instead of using a multinomial.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;AdaptiveFixedTrialSampler&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sampler constructor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            strata (:obj:`aegis.acteval.strata.Strata`): The strata object that the sampler is</span>
+<span class="sd">                sampling from</span>
+<span class="sd">            num_success_rounds_required (int): the number of consecutive rounds needed to sample</span>
+<span class="sd">                before stopping sampling</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AdaptiveFixedTrialSampler.draw_samples"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.AdaptiveFixedTrialSampler.draw_samples">[docs]</a>    <span class="k">def</span> <span class="nf">draw_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sample adaptively according to an &quot;optimal&quot; sampling scheme, which is sampling</span>
+<span class="sd">        proportional to the score_variances of each stratum. This enables taking more samples</span>
+<span class="sd">        for a stratum with a higher variance.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_samples (int): The number of samples to draw at each step</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric object used for scoring</span>
+<span class="sd">            rng (:obj:`numpy.random.RandomState`, optional): The Random_number generator provided</span>
+<span class="sd">                from the controller. If set to None, it is</span>
+<span class="sd">                not provided and will be unique to this sampler. None is provided by default</span>
+<span class="sd">            alpha (float, optional): The desired confidence level. Used for sampling when</span>
+<span class="sd">                population estimates have variances</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of object: A list of trial_id values to sample.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_strata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">num_strata</span>
+        <span class="n">normalizer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">i</span><span class="o">.</span><span class="n">estimate_pop_upper</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">aggregate_system_stats</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+                <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+                    <span class="n">i</span><span class="o">.</span><span class="n">estimate_score_variance_upper</span><span class="p">(</span>
+                        <span class="n">metric</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">aggregate_system_stats</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="c1"># Handle case where normalizer is 0</span>
+        <span class="k">if</span> <span class="n">normalizer</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">pvals</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">num_strata</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_strata</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">pvals</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">i</span><span class="o">.</span><span class="n">estimate_pop_upper</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">aggregate_system_stats</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+                    <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+                        <span class="n">i</span><span class="o">.</span><span class="n">estimate_score_variance_upper</span><span class="p">(</span>
+                            <span class="n">metric</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">aggregate_system_stats</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="o">/</span> <span class="n">normalizer</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span>
+                <span class="p">]</span>
+                <span class="c1"># All nan&#39;s give a RuntimeWarning but not an error, so check for an Nan</span>
+                <span class="k">if</span> <span class="kc">True</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">pvals</span><span class="p">):</span>
+                    <span class="n">pvals</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">num_strata</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_strata</span>
+            <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+                <span class="n">pvals</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">num_strata</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_strata</span>
+
+        <span class="n">nk</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">pval</span> <span class="o">*</span> <span class="n">num_samples</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="k">for</span> <span class="n">pval</span> <span class="ow">in</span> <span class="n">pvals</span><span class="p">]</span>
+        <span class="c1"># Additional check added to make sure total number of samples are met</span>
+        <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">nk</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">num_samples</span><span class="p">:</span>
+            <span class="n">missing_samples</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_samples</span> <span class="o">-</span> <span class="nb">sum</span><span class="p">(</span><span class="n">nk</span><span class="p">))</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">full_nums</span> <span class="o">=</span> <span class="p">[</span><span class="n">pval</span> <span class="o">*</span> <span class="n">num_samples</span> <span class="k">for</span> <span class="n">pval</span> <span class="ow">in</span> <span class="n">pvals</span><span class="p">]</span>
+            <span class="n">frac_nums</span> <span class="o">=</span> <span class="p">[</span><span class="n">my_num</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">my_num</span><span class="p">)</span> <span class="k">for</span> <span class="n">my_num</span> <span class="ow">in</span> <span class="n">full_nums</span><span class="p">]</span>
+            <span class="n">sample_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">frac_nums</span><span class="p">)[</span><span class="n">missing_samples</span><span class="p">:]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sample_index</span><span class="p">:</span>
+                <span class="n">nk</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># Now that the number of samples per strata are computed, draw the samples</span>
+        <span class="n">new_samples</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># We use a for loop instead of a list comprehension to ensure that the rng is updated</span>
+        <span class="c1"># after each sampling</span>
+        <span class="k">for</span> <span class="n">stratum</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span><span class="p">,</span> <span class="n">nk</span><span class="p">):</span>
+            <span class="n">samples</span> <span class="o">=</span> <span class="n">stratum</span><span class="o">.</span><span class="n">draw_samples</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
+            <span class="c1"># This does not check for duplicates</span>
+            <span class="n">new_samples</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_samples</span></div></div>
+
+
+<div class="viewcode-block" id="AdaptiveTrialSampler"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.AdaptiveTrialSampler">[docs]</a><span class="k">class</span> <span class="nc">AdaptiveTrialSampler</span><span class="p">(</span><span class="n">TrialSampler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draws samples from the strata, corresponding to the opt sampler that samples</span>
+<span class="sd">    proportionally according to the variance of each stratum.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;AdaptiveTrialSampler&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sampler constructor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            strata (:obj:`aegis.acteval.strata.Strata`): The strata object that the sampler is</span>
+<span class="sd">                sampling from</span>
+<span class="sd">            num_success_rounds_required (int): the number of consecutive rounds needed to sample</span>
+<span class="sd">                before stopping sampling</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AdaptiveTrialSampler.draw_samples"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.AdaptiveTrialSampler.draw_samples">[docs]</a>    <span class="k">def</span> <span class="nf">draw_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sample adaptively according to an &quot;optimal&quot; sampling scheme, which is sampling</span>
+<span class="sd">        proportional to the score_variances of each stratum. This enables taking more samples</span>
+<span class="sd">        for a stratum with a higher variance.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_samples (int): The number of samples to draw at each step</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric object used for scoring</span>
+<span class="sd">            rng (:obj:`numpy.random.RandomState`, optional): The Random_number generator provided</span>
+<span class="sd">                from the controller. If set to None, it is</span>
+<span class="sd">                not provided and will be unique to this sampler. None is provided by default</span>
+<span class="sd">            alpha (float, optional): The desired confidence level. Used for sampling when</span>
+<span class="sd">                population estimates have variances</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of object: A list of trial_id values to sample.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_strata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">num_strata</span>
+        <span class="n">normalizer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">i</span><span class="o">.</span><span class="n">estimate_pop_upper</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">aggregate_system_stats</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+                <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+                    <span class="n">i</span><span class="o">.</span><span class="n">estimate_score_variance_upper</span><span class="p">(</span>
+                        <span class="n">metric</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">aggregate_system_stats</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="c1"># Handle case where normalizer is 0</span>
+        <span class="k">if</span> <span class="n">normalizer</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">pvals</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">num_strata</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_strata</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">pvals</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">i</span><span class="o">.</span><span class="n">estimate_pop_upper</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">aggregate_system_stats</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+                    <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+                        <span class="n">i</span><span class="o">.</span><span class="n">estimate_score_variance_upper</span><span class="p">(</span>
+                            <span class="n">metric</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">aggregate_system_stats</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="o">/</span> <span class="n">normalizer</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span>
+                <span class="p">]</span>
+                <span class="c1"># All nan&#39;s give a RuntimeWarning but not an error, so check for an Nan</span>
+                <span class="k">if</span> <span class="kc">True</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">pvals</span><span class="p">):</span>
+                    <span class="n">pvals</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">num_strata</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_strata</span>
+            <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+                <span class="n">pvals</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">num_strata</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_strata</span>
+
+        <span class="n">nk</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">multinomial</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">pvals</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># Now that the number of samples per strata are computed, draw the samples</span>
+        <span class="n">new_samples</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># We use a for loop instead of a list comprehension to ensure that the rng is updated</span>
+        <span class="c1"># after each sampling</span>
+        <span class="k">for</span> <span class="n">stratum</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span><span class="p">,</span> <span class="n">nk</span><span class="p">):</span>
+            <span class="n">samples</span> <span class="o">=</span> <span class="n">stratum</span><span class="o">.</span><span class="n">draw_samples</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
+            <span class="c1"># This does not check for duplicates</span>
+            <span class="n">new_samples</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_samples</span></div></div>
+
+
+<div class="viewcode-block" id="RandomFixedTrialSampler"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.RandomFixedTrialSampler">[docs]</a><span class="k">class</span> <span class="nc">RandomFixedTrialSampler</span><span class="p">(</span><span class="n">TrialSampler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draws samples randomly regardless of stratification. Calls</span>
+<span class="sd">    the metric get_trials_to_sample_from() in order to only sample relevant trials.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;RandomFixedTrialSampler&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sampler constructor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            strata (:obj:`aegis.acteval.strata.Strata`): The strata object that the sampler is</span>
+<span class="sd">                sampling from</span>
+<span class="sd">            num_success_rounds_required (int): the number of consecutive rounds needed to sample</span>
+<span class="sd">                before stopping sampling</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RandomFixedTrialSampler.draw_samples"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.RandomFixedTrialSampler.draw_samples">[docs]</a>    <span class="k">def</span> <span class="nf">draw_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Samples randomly regardless of stratification. However, it does call the metric</span>
+<span class="sd">        `get_trials_to_sample_from` for each stratum so that all sampled trials are relevant.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_samples (int): The number of samples to draw at each step</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric object used for scoring</span>
+<span class="sd">            rng (:obj:`numpy.random.RandomState`, optional): The Random_number generator provided</span>
+<span class="sd">                from the controller. If set to None, it is</span>
+<span class="sd">                not provided and will be unique to this sampler. None is provided by default</span>
+<span class="sd">            alpha (float, optional): The desired confidence level. Used for sampling when</span>
+<span class="sd">                population estimates have variances</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of object: A list of trial_id values to sample.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">unsampled_trials</span> <span class="o">=</span> <span class="n">metric</span><span class="o">.</span><span class="n">get_trials_to_sample_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">stratum</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">unsampled_temp</span> <span class="o">=</span> <span class="n">metric</span><span class="o">.</span><span class="n">get_trials_to_sample_from</span><span class="p">(</span><span class="n">stratum</span><span class="p">)</span>
+            <span class="n">unsampled_trials</span> <span class="o">=</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unsampled_temp</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">num_samples</span> <span class="o">&gt;</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">num_samples</span> <span class="o">=</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">samples</span></div></div>
+
+
+<div class="viewcode-block" id="RandomTrialSampler"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.RandomTrialSampler">[docs]</a><span class="k">class</span> <span class="nc">RandomTrialSampler</span><span class="p">(</span><span class="n">TrialSampler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draws samples randomly regardless of stratification. RandomTrialSampler calls</span>
+<span class="sd">    the metric get_trials_to_sample_from() in order to only sample relevant trials.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;RandomTrialSampler&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sampler constructor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            strata (:obj:`aegis.acteval.strata.Strata`): The strata object that the sampler is</span>
+<span class="sd">                sampling from</span>
+<span class="sd">            num_success_rounds_required (int): the number of consecutive rounds needed to sample</span>
+<span class="sd">                before stopping sampling</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RandomTrialSampler.draw_samples"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.RandomTrialSampler.draw_samples">[docs]</a>    <span class="k">def</span> <span class="nf">draw_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Samples randomly regardless of stratification. However, it does call the metric</span>
+<span class="sd">        `get_trials_to_sample_from` for each stratum so that all sampled trials are relevant.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_samples (int): The number of samples to draw at each step</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric object used for scoring</span>
+<span class="sd">            rng (:obj:`numpy.random.RandomState`, optional): The Random_number generator provided</span>
+<span class="sd">                from the controller. If set to None, it is</span>
+<span class="sd">                not provided and will be unique to this sampler. None is provided by default</span>
+<span class="sd">            alpha (float, optional): The desired confidence level. Used for sampling when</span>
+<span class="sd">                population estimates have variances</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of object: A list of trial_id values to sample.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get all of the samples</span>
+        <span class="n">unsampled_trials</span> <span class="o">=</span> <span class="n">metric</span><span class="o">.</span><span class="n">get_trials_to_sample_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">stratum</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">unsampled_temp</span> <span class="o">=</span> <span class="n">metric</span><span class="o">.</span><span class="n">get_trials_to_sample_from</span><span class="p">(</span><span class="n">stratum</span><span class="p">)</span>
+            <span class="n">unsampled_trials</span> <span class="o">=</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unsampled_temp</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">num_samples</span> <span class="o">&gt;</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">num_samples</span> <span class="o">=</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">samples</span></div></div>
+
+
+<div class="viewcode-block" id="TrueRandomFixedTrialSampler"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.TrueRandomFixedTrialSampler">[docs]</a><span class="k">class</span> <span class="nc">TrueRandomFixedTrialSampler</span><span class="p">(</span><span class="n">TrialSampler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draws samples randomly regardless of stratification. Samples from</span>
+<span class="sd">    all trials without consulting the metric. This means that in many iterations non-relevant</span>
+<span class="sd">    trials may be sampled for metrics such as precision where not all trials are relevant.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;TrueRandomFixedTrialSampler&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sampler constructor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            strata (:obj:`aegis.acteval.strata.Strata`): The strata object that the sampler is</span>
+<span class="sd">                sampling from</span>
+<span class="sd">            num_success_rounds_required (int): the number of consecutive rounds needed to sample</span>
+<span class="sd">                before stopping sampling</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TrueRandomFixedTrialSampler.draw_samples"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.TrueRandomFixedTrialSampler.draw_samples">[docs]</a>    <span class="k">def</span> <span class="nf">draw_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Samples from all stratum from all possible unsampled trials. This includes trials that</span>
+<span class="sd">        the metric may deem as not relevant.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_samples (int): The number of samples to draw at each step</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric object used for scoring</span>
+<span class="sd">            rng (:obj:`numpy.random.RandomState`, optional): The Random_number generator provided</span>
+<span class="sd">                from the controller. If set to None, it is</span>
+<span class="sd">                not provided and will be unique to this sampler. None is provided by default</span>
+<span class="sd">            alpha (float, optional): The desired confidence level. Used for sampling when</span>
+<span class="sd">                population estimates have variances</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of object: A list of trial_id values to sample.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">stratum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">unsampled_trials</span> <span class="o">=</span> <span class="n">stratum</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">stratum</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]),</span>
+                                                      <span class="s2">&quot;trial_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">stratum</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">unsampled_temp</span> <span class="o">=</span> <span class="n">stratum</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">stratum</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]),</span>
+                                                        <span class="s2">&quot;trial_id&quot;</span><span class="p">]</span>
+            <span class="n">unsampled_trials</span> <span class="o">=</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unsampled_temp</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">num_samples</span> <span class="o">&gt;</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">num_samples</span> <span class="o">=</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">samples</span></div></div>
+
+
+<div class="viewcode-block" id="TrueRandomTrialSampler"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.TrueRandomTrialSampler">[docs]</a><span class="k">class</span> <span class="nc">TrueRandomTrialSampler</span><span class="p">(</span><span class="n">TrialSampler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draws samples randomly regardless of stratification. Samples from all trials,</span>
+<span class="sd">    regardless of whether they are relevant or not.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;TrueRandomTrialSampler&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sampler constructor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            strata (:obj:`aegis.acteval.strata.Strata`): The strata object that the sampler is</span>
+<span class="sd">                sampling from</span>
+<span class="sd">            num_success_rounds_required (int): the number of consecutive rounds needed to sample</span>
+<span class="sd">                before stopping sampling</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">strata</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TrueRandomTrialSampler.draw_samples"><a class="viewcode-back" href="../../../api/aegis.acteval.samplers.html#aegis.acteval.samplers.TrueRandomTrialSampler.draw_samples">[docs]</a>    <span class="k">def</span> <span class="nf">draw_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Samples randomly regardless of stratification. Draws from all samples, including</span>
+<span class="sd">        some that may not be relevant.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_samples (int): The number of samples to draw at each step</span>
+<span class="sd">            metric (:obj:`aegis.acteval.metrics.Metric`): The metric object used for scoring</span>
+<span class="sd">            rng (:obj:`numpy.random.RandomState`, optional): The Random_number generator provided</span>
+<span class="sd">                from the controller. If set to None, it is</span>
+<span class="sd">                not provided and will be unique to this sampler. None is provided by default</span>
+<span class="sd">            alpha (float, optional): The desired confidence level. Used for sampling when</span>
+<span class="sd">                population estimates have variances</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of object: A list of trial_id values to sample.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get all of the samples</span>
+        <span class="n">stratum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">unsampled_trials</span> <span class="o">=</span> <span class="n">stratum</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">stratum</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]),</span>
+                                                      <span class="s2">&quot;trial_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">stratum</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">strata</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">unsampled_temp</span> <span class="o">=</span> <span class="n">stratum</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">stratum</span><span class="o">.</span><span class="n">stratum_key_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]),</span>
+                                                        <span class="s2">&quot;trial_id&quot;</span><span class="p">]</span>
+            <span class="n">unsampled_trials</span> <span class="o">=</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unsampled_temp</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">num_samples</span> <span class="o">&gt;</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">num_samples</span> <span class="o">=</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">unsampled_trials</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">samples</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, NIST MIG
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

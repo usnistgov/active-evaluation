@@ -1,0 +1,483 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>CHANGELOG &mdash; aegis v2020.03.03 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="API_reference.html" />
+    <link rel="prev" title="Aegis Package" href="readme.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> aegis
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2020.03.03
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Aegis Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#running-experiments-with-aegis-when-ground-truth-is-known">Running Experiments with Aegis when Ground Truth is Known</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#code-approach">Code Approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#running-continuous-integration-components-locally">Running Continuous Integration Components Locally</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#license">LICENSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CHANGELOG</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v-2020-03-03">v 2020.03.03</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-09-25">v 2019.09.25</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-08-30">v 2019.08.30</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-08-12">v 2019.08.12</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-07-10">v 2019.07.10</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-07-02">v 2019.07.02</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-06-10">v 2019.06.10</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-05-31">v 2019.05.31</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">v 2019.05.31</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-05-22">v 2019.05.22</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-05-20">v 2019.05.20</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-05-09">v 2019.05.09</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-05-06">v 2019.05.06</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-05-03">v 2019.05.03</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-04-29">v 2019.04.29</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-04-25">v 2019.04.25</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-04-23">v 2019.04.23</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-04-22">v 2019.04.22</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-04-18">v 2019.04.18</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-04-10">v 2019.04.10</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v-2019-03-22">v 2019.03.22</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="API_reference.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">aegis</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>CHANGELOG</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/changelog.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="changelog">
+<h1>CHANGELOG<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="v-2020-03-03">
+<h2>v 2020.03.03<a class="headerlink" href="#v-2020-03-03" title="Permalink to this headline">¶</a></h2>
+<p>Updated documentation and added first working Recall Metric. Also:</p>
+<ul class="simple">
+<li><p>added uncertainties for population measurements, including population variances,
+upper population estimates, population confidence intervals, and updated samplers and confidence estimates to leverage the upper population estimates when needed to compute more accurate confidence intervals.</p></li>
+<li><p>Upper population uncertainty set to 0 for all Accuracy and Precision Metrics</p></li>
+<li><p>Upper population uncertainty for recall is 0 if we have at least one relevant sample.
+Else, we estimate the uncertainty of the recall population</p></li>
+<li><p>Implemented Sampler Classes <code class="docutils literal notranslate"><span class="pre">TrueRandomTrialSampler</span></code> and <code class="docutils literal notranslate"><span class="pre">TrueRandomFixedTrialSampler</span></code> that sample
+from all trials, including potentially non-relevant ones. <code class="docutils literal notranslate"><span class="pre">RandomTrialSampler</span></code> and <code class="docutils literal notranslate"><span class="pre">RandomFixedTrialSampler</span></code>
+now sample only from relelvant trials for Precision.</p></li>
+<li><p>Updated the README</p></li>
+<li><p>Streamlined and Updated the Code Documentation, checking and updating all python docstrings
+of aegis.acteval and aegis.oracle</p></li>
+<li><p>Updated logging to work within the Oracle Class allowing for smoother experiments</p></li>
+<li><p>Removed obsolete and incomplete metric class <code class="docutils literal notranslate"><span class="pre">BinaryAccuracyTwoProportionMetric()</span></code></p></li>
+<li><p>Eliminated mutable default arguments of [] and replaced with None (assigning to []) within the
+methods to prevent possible bugs.</p></li>
+<li><p>Changed experiment scripts to be able to be run in subfolders
+rather than the root directory</p></li>
+<li><p>Organized experiment scripts into subfolders</p></li>
+<li><p>Updated setup.py for streamlined package installation
+that works with recent versions of pip</p></li>
+</ul>
+</div>
+<div class="section" id="v-2019-09-25">
+<h2>v 2019.09.25<a class="headerlink" href="#v-2019-09-25" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Changed the score tuning for Precision and Recall to now be adjusted (decreased) by multiplying it by the finite population correction.</p></li>
+<li><p>Changed Precision initialization to find different samples relevant for each specific system, rather than just a set of samples that is relevant for the combination of systems.</p></li>
+<li><p>Added logging capabilities to generate logs during experiments for error troubleshooting</p></li>
+</ul>
+</div>
+<div class="section" id="v-2019-08-30">
+<h2>v 2019.08.30<a class="headerlink" href="#v-2019-08-30" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Added specific classes <code class="docutils literal notranslate"><span class="pre">RandomTrialSampler</span></code> and <code class="docutils literal notranslate"><span class="pre">RandomFixedTrialSampler</span></code> to perform the random
+sampling rather than altering the stratification for UniformFixedTrialSampler. This allows us
+to see differences in the initial sampling and the stratification.</p></li>
+<li><p>Changed <code class="docutils literal notranslate"><span class="pre">initial_samples_per_bin</span></code> to <code class="docutils literal notranslate"><span class="pre">initial_samples</span></code> in order to make experiments more consistent</p></li>
+<li><p>Updated experiments to have more initial samples (since the initial samples are now a total and
+not just per bin or per stratum).</p></li>
+<li><p>Added First implementation of experiment logging</p></li>
+<li><p>Added Paper 1 experiment files covering Math1 and OpenML Datasets for Aegis experiment work.</p></li>
+<li><p>Fixed bugs with Precision sampling and marking rounds as successful when there are no additional
+samples drawn.</p></li>
+</ul>
+</div>
+<div class="section" id="v-2019-08-12">
+<h2>v 2019.08.12<a class="headerlink" href="#v-2019-08-12" title="Permalink to this headline">¶</a></h2>
+<p>Factor-of-10 speedup in code and bug fixes</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">get_combined_systems_df()</span></code> and <code class="docutils literal notranslate"><span class="pre">get_combined_systems_score_df()</span></code> methods cached to not redundantly compute.
+Caching occurs at the strata and stratum levels.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_combined_systems_df()</span></code>,<code class="docutils literal notranslate"><span class="pre">get_combined_systems_score_df()</span></code>, and <code class="docutils literal notranslate"><span class="pre">get_combined_data_frames()</span></code> optimized to further speed up performance. (A Profiler was run to check this)</p></li>
+<li><p>Adjusted Bugs in Random seeding</p></li>
+<li><p>Fixed bugs in <code class="docutils literal notranslate"><span class="pre">BinaryAccuracyTwoProportionMetric</span></code> score variance computation.</p></li>
+<li><p>Improved speed of computation in <code class="docutils literal notranslate"><span class="pre">BinaryAccuracyTwoProportionMetric</span></code> score computation.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">Math1</span></code> datasets and submissions with system outputs</p></li>
+<li><p>Added OpenML submissions for the <code class="docutils literal notranslate"><span class="pre">6_letter</span></code> and the <code class="docutils literal notranslate"><span class="pre">151_electricity</span></code> datasets. These include
+the outputs of 5 ML systems</p></li>
+<li><p>Added experimental scripts to run paper experiments.</p></li>
+<li><p>Fixed bug in <code class="docutils literal notranslate"><span class="pre">BinaryPrecisionMetric</span></code> to support positive labels other than <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+<li><p>Added factors and factor labels in experiment output data frames for ease of analysis and post-processing.</p></li>
+</ul>
+</div>
+<div class="section" id="v-2019-07-10">
+<h2>v 2019.07.10<a class="headerlink" href="#v-2019-07-10" title="Permalink to this headline">¶</a></h2>
+<p>Enhancements to the Precision metric implementation and bugfixes.</p>
+</div>
+<div class="section" id="v-2019-07-02">
+<h2>v 2019.07.02<a class="headerlink" href="#v-2019-07-02" title="Permalink to this headline">¶</a></h2>
+<p>Implementation of accuracy as two proportions and implemented support for the Precision Metric.</p>
+<ul class="simple">
+<li><p>Implemented Metric subclasses <code class="docutils literal notranslate"><span class="pre">BinaryAccuracyTwoProportionMetric</span></code> and <code class="docutils literal notranslate"><span class="pre">BinaryPrecisionMetric</span></code></p></li>
+<li><p>Fixed bugs with running experiments in <code class="docutils literal notranslate"><span class="pre">StrataFirstSystemDecision</span></code> so experiments finish without crashing.</p></li>
+<li><p>Fixed <code class="docutils literal notranslate"><span class="pre">draw_samples</span></code> to only draw from relevant random samples in Uniform, Proportional, and Adaptive Samplers. (Useful for precision)</p></li>
+</ul>
+</div>
+<div class="section" id="v-2019-06-10">
+<h2>v 2019.06.10<a class="headerlink" href="#v-2019-06-10" title="Permalink to this headline">¶</a></h2>
+<p>Implementation of Stratification that also accounts for the system decision.</p>
+<ul class="simple">
+<li><p>Implementation of Strata subclasses <code class="docutils literal notranslate"><span class="pre">StrataFirstSystemDecision</span></code> and <code class="docutils literal notranslate"><span class="pre">StrataMultiSystemIntersectDecision</span></code></p></li>
+<li><p>Deleted unused method <code class="docutils literal notranslate"><span class="pre">estimate_variance</span></code> from all Metric objects.</p></li>
+<li><p>Adjusted tuning for Accuracy Metrics to improve confidence intervals.</p></li>
+</ul>
+<p>Bugfixes and performance enhancements.</p>
+</div>
+<div class="section" id="v-2019-05-31">
+<h2>v 2019.05.31<a class="headerlink" href="#v-2019-05-31" title="Permalink to this headline">¶</a></h2>
+<p>Improved calling of random number generator to work with <code class="docutils literal notranslate"><span class="pre">joblib</span></code>. Additional changes:</p>
+<ul class="simple">
+<li><p>Added experimental_params.txt file that writes all of the experimental parameters to a text file
+for ease of reference.</p></li>
+<li><p>Fixed a division by 0 bug and added a test case</p></li>
+<li><p>Uses <code class="docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code> for seeds</p></li>
+</ul>
+</div>
+<div class="section" id="id1">
+<h2>v 2019.05.31<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Added corrections for estimates for single- and multi-system experiments.</p>
+<ul class="simple">
+<li><p>Multi-system experiments now correct for type-I error by using a union bound so that all systems
+are within the CI <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">alpha</span></code> of the time</p></li>
+<li><p>Added a correction to the score estimate to reduce bias</p></li>
+<li><p>Added finite population corrections to any estimate corrections (for the score estimate correction
+and the score variance estimate correction)</p></li>
+<li><p>Changed the width of score estimate corrections to be proportional to the square root of the
+number of samples (mimicking m-estimate smoothing)</p></li>
+<li><p>Changed run_experiment() to have <code class="docutils literal notranslate"><span class="pre">run_id</span></code> and <code class="docutils literal notranslate"><span class="pre">batch_id</span></code> parameters for streamlined organization and easier tracking of experiments.</p></li>
+</ul>
+</div>
+<div class="section" id="v-2019-05-22">
+<h2>v 2019.05.22<a class="headerlink" href="#v-2019-05-22" title="Permalink to this headline">¶</a></h2>
+<p>Added additional experiment features and changed float computations from <code class="docutils literal notranslate"><span class="pre">math</span></code> library
+to <code class="docutils literal notranslate"><span class="pre">numpy</span></code> library. This means that the version of numpy is important for replication.</p>
+<ul class="simple">
+<li><p>git_commit_hash.txt gives commit hash of aegis version used for experiment</p></li>
+<li><p>Response variable of (estimated score - actual score), <code class="docutils literal notranslate"><span class="pre">avg_score_diff</span></code> added to summary df.
+Variance of score difference also included.</p></li>
+<li><p>score difference computations added to individual runs data frame. Squared score difference
+also included.</p></li>
+</ul>
+</div>
+<div class="section" id="v-2019-05-20">
+<h2>v 2019.05.20<a class="headerlink" href="#v-2019-05-20" title="Permalink to this headline">¶</a></h2>
+<p>Changed computations by lowering internal prior_samples_correction to 0.2</p>
+<ul class="simple">
+<li><p>Enhanced data frame rows to contain additional information</p></li>
+<li><p>Enhanced data frame run rows splitting samplers to be categorized among three dimensions:
+sampler_category, bin_style, and uses_multinomial</p></li>
+<li><p>Changed StrataMultiSystemIntersect to use the max to aggregate stats instead of the mean;
+this results in sampling logic trying to sample to reduce maximum score variance.</p></li>
+</ul>
+</div>
+<div class="section" id="v-2019-05-09">
+<h2>v 2019.05.09<a class="headerlink" href="#v-2019-05-09" title="Permalink to this headline">¶</a></h2>
+<p>Added experiment running methods for ease of running experiments</p>
+<ul class="simple">
+<li><p>In addition to a summary table, now each run is given as a row in a data frame with fields of
+important information, for ease of plotting and anaysis</p></li>
+<li><p>Class OracleScript() has method run_experiment() that runs experiments and provides an easy API</p></li>
+<li><p>An executable script for running single-system experiments and multi-system experiments are
+updated.</p></li>
+</ul>
+</div>
+<div class="section" id="v-2019-05-06">
+<h2>v 2019.05.06<a class="headerlink" href="#v-2019-05-06" title="Permalink to this headline">¶</a></h2>
+<p>Adjusted confidence intervals for correctness</p>
+<ul class="simple">
+<li><p>Used Agresti Approximation for score variance that adds in 2 true positives and 2
+false positives to score variance to improve ci coverage</p></li>
+<li><p>Added new metric BinaryAccuracyTwoProportionMetric that models accuracy not as a
+single proportion but as two proportions: one over all examples where the system considers
+an example to be the low key value, and the other over the remaining examples, which are those
+that the system classifies as a high key value.</p></li>
+<li><p>added method find_initial_samples() in the strata object that allows the system to give
+an initialization that minimially covers all stratum in the strata. This method can be used
+to provide an init_df or supplement an init_df, with the hope of reducing the number of rounds
+needed for sampling.</p></li>
+</ul>
+</div>
+<div class="section" id="v-2019-05-03">
+<h2>v 2019.05.03<a class="headerlink" href="#v-2019-05-03" title="Permalink to this headline">¶</a></h2>
+<p>Test Cases for computational correctness and stratification correctness, and bugfixes to
+improve the math.</p>
+<p>Additional updates:</p>
+<ul class="simple">
+<li><p>Fixing of code to eliminate divisions by 0, no longer triggering numpy warning <code class="docutils literal notranslate"><span class="pre">RuntimeWarning:</span> <span class="pre">invalid</span> <span class="pre">value</span> <span class="pre">encountered</span> <span class="pre">in</span> <span class="pre">double_scalars</span> <span class="pre">for</span> <span class="pre">i</span> <span class="pre">in</span> <span class="pre">self.strata.strata</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="v-2019-04-29">
+<h2>v 2019.04.29<a class="headerlink" href="#v-2019-04-29" title="Permalink to this headline">¶</a></h2>
+<p>Per-iteration parallelization of experiment files to use multiple cores for faster computation.
+Uses the <code class="docutils literal notranslate"><span class="pre">joblib</span></code> package of python.</p>
+</div>
+<div class="section" id="v-2019-04-25">
+<h2>v 2019.04.25<a class="headerlink" href="#v-2019-04-25" title="Permalink to this headline">¶</a></h2>
+<p>Implementation of multi-system stratification that involves all systems.</p>
+<p>Additional Updates:</p>
+<ul class="simple">
+<li><p>Multi-system stratification implemented with the class StrataMultiSystemIntersect. This
+stratifies each system into so many bins, and then intersects these bins to form disjoint
+strata. This often produces some empty strata.</p></li>
+<li><p><strong>repr</strong> method converted to <strong>str</strong> methods since they were pretty-print methods</p></li>
+<li><p>aegis.acteval.experiment.ExperimentalParams object added. It functions as a struct for Experimental Parameters</p></li>
+<li><p>Summary report updated to take in experiment and System objects</p></li>
+<li><p><strong>str</strong> methods updated for System, ExperimentParam, and SummaryReport objects to give useful information when printing</p></li>
+<li><p>OracleScript updated to provide methods to compute system scores on the full key and to determine if the system’s score estimate confidence interval contains the true score.</p></li>
+<li><p>Added finite population correction in the strata computation of score variance. This is
+necessary to handle cases when we have exhausted a stratum</p></li>
+<li><p>Handled cases where we exhausted a stratum to sample what is left and then carry on. The finite
+population correction gives those stratum a contribution of 0 to the score variance, which
+ensures that our algorithm will terminate when we exhaust stratum.</p></li>
+</ul>
+</div>
+<div class="section" id="v-2019-04-23">
+<h2>v 2019.04.23<a class="headerlink" href="#v-2019-04-23" title="Permalink to this headline">¶</a></h2>
+<p>Improved Summary Report class. Introduction of experiment running.</p>
+</div>
+<div class="section" id="v-2019-04-22">
+<h2>v 2019.04.22<a class="headerlink" href="#v-2019-04-22" title="Permalink to this headline">¶</a></h2>
+<p>Improved Docstrings and Improved README</p>
+<p>Additional Updates:</p>
+<ul class="simple">
+<li><p>Abstract class aegis.oracle.oracle.Oracle provided as a way to extend for other oracles</p></li>
+<li><p>Some key Mathematical formulas included as Images from rendered LaTeX</p></li>
+<li><p>Quickstart included in README</p></li>
+</ul>
+</div>
+<div class="section" id="v-2019-04-18">
+<h2>v 2019.04.18<a class="headerlink" href="#v-2019-04-18" title="Permalink to this headline">¶</a></h2>
+<p>Refactoring complete. First prototype implementation working!</p>
+<p>Additional updates:</p>
+<ul class="simple">
+<li><p>uses method names of score_variance and variance to distinguish whether we are estimating the
+variance or the square of the standard error of the score</p></li>
+<li><p>updated computations of score_variance and variance to match stratified sampling formulas</p></li>
+<li><p>Improved documentation strings</p></li>
+<li><p>Controller is implemented</p></li>
+<li><p>Simple test cases add to test mathematics and execution of controller.</p></li>
+</ul>
+</div>
+<div class="section" id="v-2019-04-10">
+<h2>v 2019.04.10<a class="headerlink" href="#v-2019-04-10" title="Permalink to this headline">¶</a></h2>
+<p>Refactoring still in progress. However, some updates:</p>
+<ul class="simple">
+<li><p>System Class objects now designed</p></li>
+<li><p>Three Samplers implemented (not yet tested): uniform, proportional, and optional</p></li>
+<li><p>subclassing rather than functions used for stratification strategies</p></li>
+<li><p>Strata subclass StrataFirstSystem</p></li>
+<li><p>data_processor.extract_files_from_directory() now has an optional argument system_ordering, allowing users to specify which order the systems should appear. Very useful to configure which system is the first system for the
+StrataFirstSystem class</p></li>
+</ul>
+</div>
+<div class="section" id="v-2019-03-22">
+<h2>v 2019.03.22<a class="headerlink" href="#v-2019-03-22" title="Permalink to this headline">¶</a></h2>
+<p>First refactored version, refactoring in progress. Some changes:</p>
+<ul class="simple">
+<li><p>Metric classes used to specify metrics, with AccuracyMetric implemented</p></li>
+<li><p>Oracle class now provides samples. An implementation with a known key has been implemented.</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="API_reference.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="readme.html" class="btn btn-neutral float-left" title="Aegis Package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, NIST MIG
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

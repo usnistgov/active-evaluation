@@ -1,0 +1,357 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>aegis.acteval.experiment &mdash; aegis v2020.03.03 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> aegis
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2020.03.03
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Aegis Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#running-experiments-with-aegis-when-ground-truth-is-known">Running Experiments with Aegis when Ground Truth is Known</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#code-approach">Code Approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#running-continuous-integration-components-locally">Running Continuous Integration Components Locally</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#license">LICENSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API_reference.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">aegis</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>aegis.acteval.experiment</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for aegis.acteval.experiment</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">aegis.acteval.strata</span>
+<span class="kn">import</span> <span class="nn">aegis.acteval.metrics</span>
+<span class="kn">import</span> <span class="nn">aegis.acteval.samplers</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+
+<div class="viewcode-block" id="ExperimentParams"><a class="viewcode-back" href="../../../api/aegis.acteval.experiment.html#aegis.acteval.experiment.ExperimentParams">[docs]</a><span class="k">class</span> <span class="nc">ExperimentParams</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Python class to store experimental parameters, akin to a struct that stores variables. Here</span>
+<span class="sd">    are the variables that are stored:</span>
+
+<span class="sd">    self.num_step_samples (int):</span>
+<span class="sd">        the number of samples to take at each round</span>
+<span class="sd">    self.num_success_rounds_required (int):</span>
+<span class="sd">        the number of successful rounds</span>
+<span class="sd">    self.alpha (num):</span>
+<span class="sd">        the alpha (1 - probability) value</span>
+<span class="sd">    self.delta (num):</span>
+<span class="sd">        the delta number of the range of uncertainty</span>
+<span class="sd">    self.num_strata (int):</span>
+<span class="sd">        the number of strata</span>
+<span class="sd">    self.stratification_type (`aegis.acteval.strata.Strata`):</span>
+<span class="sd">        the strata class object specifying the stratification strategy</span>
+<span class="sd">    self.bin_style (str):</span>
+<span class="sd">        The style to stratify the bins. Default is &#39;equal&#39;. Values are:</span>
+
+<span class="sd">        &#39;equal&#39;</span>
+<span class="sd">            Stratify the bins so that the range of values is equal, or the bins</span>
+<span class="sd">            are of equal width.</span>
+<span class="sd">        &#39;perc&#39;</span>
+<span class="sd">            Stratify by percentile, or so that an equal number of</span>
+<span class="sd">            trials are in each bin.</span>
+<span class="sd">    self.metric_obj (`aegis.acteval.metrics.Metric`):</span>
+<span class="sd">        The reference to the metric object that specifies how the trials will be scored</span>
+<span class="sd">    sampler_type (`aegis.acteval.samplers.TrialSampler`):</span>
+<span class="sd">        The type of sampler specifying sampling strategy</span>
+<span class="sd">    request_initial_samples (bool):</span>
+<span class="sd">        A boolean that determines if the experiment (and hence) the</span>
+<span class="sd">        controller should request or supplement initial samples with initial samples to provide</span>
+<span class="sd">        for adequate stratum and metric coverage for initial estimates. True by default</span>
+<span class="sd">    initial_samples (int):</span>
+<span class="sd">        The number of samples total divided evenly between &quot;bins&quot; to</span>
+<span class="sd">        request initially. The default value is 50 samples per bin. It is set this high in order</span>
+<span class="sd">        that we have enough samples for approximate CI estimates to be reasonable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_step_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">num_strata</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                 <span class="n">stratification_type</span><span class="o">=</span><span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">StrataFirstSystem</span><span class="p">,</span>
+                 <span class="n">bin_style</span><span class="o">=</span><span class="s2">&quot;perc&quot;</span><span class="p">,</span> <span class="n">metric_object</span><span class="o">=</span><span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">BinaryAccuracyMetric</span><span class="p">(),</span>
+                 <span class="n">sampler_type</span><span class="o">=</span><span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">AdaptiveTrialSampler</span><span class="p">,</span>
+                 <span class="n">request_initial_samples</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">initial_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_step_samples (int, optional): the number of samples to ask for at each iteration;</span>
+<span class="sd">                defaults to 100</span>
+<span class="sd">            alpha (num, optional): The specified probability \\alpha. Defaults to 0.05.</span>
+<span class="sd">            delta (num, optional): The specified interval range \\delta. Defaults to 0.01</span>
+<span class="sd">            num_success_rounds_required (int, optional):</span>
+<span class="sd">                The number of rounds where the (1-\\alpha) confidence</span>
+<span class="sd">                interval&#39;s range is within +- $\\delta width. Defaults to 2</span>
+<span class="sd">            num_strata (int, optional): The number of strata to have. Defaults to 4</span>
+<span class="sd">            stratification_type (:obj:`aegis.acteval.strata.Strata`, optional):</span>
+<span class="sd">                Strata class that gives the stratification strategy and type of strata</span>
+<span class="sd">            metric_object (:obj:`aegis.acteval.metrics.Metric`, optional):</span>
+<span class="sd">                The reference to the metric object that specifies how the trials will be scored</span>
+<span class="sd">            sampler_type (:obj:`aegis.acteval.samplers.TrialSampler`, optional):</span>
+<span class="sd">                The type of sampler specifying sampling strategy</span>
+<span class="sd">            bin_style (str, optional):</span>
+<span class="sd">                The style to stratify the bins. Default is &#39;equal&#39;. Values are:</span>
+
+<span class="sd">                &#39;equal&#39;</span>
+<span class="sd">                    Stratify the bins so that the range of values is equal, or the bins</span>
+<span class="sd">                    are of equal width.</span>
+<span class="sd">                &#39;perc&#39;</span>
+<span class="sd">                    Stratify by percentile, or so that an equal number of</span>
+<span class="sd">                    trials are in each bin.</span>
+<span class="sd">            request_initial_samples (bool):</span>
+<span class="sd">                A boolean that determines if the experiment (and hence) the</span>
+<span class="sd">                controller should request or supplement initial samples with initial samples</span>
+<span class="sd">                to provide for adequate stratum and metric coverage for initial estimates.</span>
+<span class="sd">                True by default</span>
+<span class="sd">            initial_samples (int): The number of samples to request initially.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_step_samples</span> <span class="o">=</span> <span class="n">num_step_samples</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_success_rounds_required</span> <span class="o">=</span> <span class="n">num_success_rounds_required</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="n">num_strata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratification_type</span> <span class="o">=</span> <span class="n">stratification_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bin_style</span> <span class="o">=</span> <span class="n">bin_style</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metric_object</span> <span class="o">=</span> <span class="n">metric_object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sampler_type</span> <span class="o">=</span> <span class="n">sampler_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request_initial_samples</span> <span class="o">=</span> <span class="n">request_initial_samples</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initial_samples</span> <span class="o">=</span> <span class="n">initial_samples</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;paper_experiments_logger&quot;</span><span class="o">+</span><span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">stratification_type</span><span class="p">)</span> <span class="o">+</span>
+                                   <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sampler_type</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">bin_style</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">hdlr</span> <span class="ow">in</span> <span class="n">logger</span><span class="o">.</span><span class="n">handlers</span><span class="p">[:]:</span>  <span class="c1"># remove all old handlers</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">removeHandler</span><span class="p">(</span><span class="n">hdlr</span><span class="p">)</span>
+        <span class="n">logfile_fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">stratification_type</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sampler_type</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span>
+                                     <span class="nb">str</span><span class="p">(</span><span class="n">bin_style</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.tmp&#39;</span><span class="p">)</span>
+        <span class="n">fh</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">logfile_fpath</span><span class="p">)</span>
+        <span class="n">fh</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Experiment&quot;</span><span class="o">+</span><span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">stratification_type</span><span class="p">)</span> <span class="o">+</span>
+                    <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sampler_type</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">bin_style</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        __str__ method to Display experimental parameters.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: a printable string of experiment parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">request_initial_samples_str</span> <span class="o">=</span> <span class="s2">&quot;Did not request initial samples for initial coverage.&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_initial_samples</span><span class="p">:</span>
+            <span class="n">request_initial_samples_str</span> <span class="o">=</span> <span class="s2">&quot;Did request initial samples for initial coverage.&quot;</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;Experimental Parameters:</span><span class="se">\n\t</span><span class="s2">&quot;</span> <span class="o">+</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_step_samples</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; samples per round with &quot;</span> <span class="o">+</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_success_rounds_required</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; successful rounds required, alpha=&quot;</span> <span class="o">+</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;, delta=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.</span><span class="se">\n\t</span><span class="s2">Takes &quot;</span> <span class="o">+</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; strata with stratification type &quot;</span> <span class="o">+</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stratification_type</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; using bin style &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bin_style</span><span class="p">)</span> <span class="o">+</span>
+                <span class="s2">&quot;.</span><span class="se">\n\t</span><span class="s2">Uses metric object &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metric_object</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.</span><span class="se">\n\t</span><span class="s2">Uses sampler type &quot;</span> <span class="o">+</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sampler_type</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.</span><span class="se">\n\t</span><span class="s2">&quot;</span> <span class="o">+</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">request_initial_samples_str</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; Requested &quot;</span> <span class="o">+</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_samples</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; samples requested.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ExperimentParams.get_experiment_tuple"><a class="viewcode-back" href="../../../api/aegis.acteval.experiment.html#aegis.acteval.experiment.ExperimentParams.get_experiment_tuple">[docs]</a>    <span class="k">def</span> <span class="nf">get_experiment_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a tuple of experiment variables and return them. The ordering of the tuples is</span>
+<span class="sd">        important, since this tuple will be the basis for a data frame row</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: (int, int, num, num, aegis.acteval.strata.Strata, str,</span>
+<span class="sd">            aegis.acteval.metrics.Metric, aegis.acteval.samplers.TrialSampler,</span>
+<span class="sd">            bool, int): A tuple of all of the stored experimental value. See the class</span>
+<span class="sd">            documentation for a description of each of these variables.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_step_samples</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_success_rounds_required</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stratification_type</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bin_style</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metric_object</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sampler_type</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">request_initial_samples</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">initial_samples</span><span class="p">,)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, NIST MIG
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

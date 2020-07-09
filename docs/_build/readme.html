@@ -1,0 +1,582 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Aegis Package &mdash; aegis v2020.03.03 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CHANGELOG" href="changelog.html" />
+    <link rel="prev" title="Documentation placeholder index" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> aegis
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2020.03.03
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Aegis Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#contact">Contact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#quick-start">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installing-aegis">Installing aegis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-check">Installation check</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#description-of-above-example-data-test-sae-test-1">Description of above Example <code class="docutils literal notranslate"><span class="pre">data/test/sae_test_1</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#running-experiments-with-aegis-when-ground-truth-is-known">Running Experiments with Aegis when Ground Truth is Known</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submission-input">Submission Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#experiment-output">Experiment Output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#code-approach">Code Approach</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#stratification">Stratification</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#running-continuous-integration-components-locally">Running Continuous Integration Components Locally</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#code-formatting">Code Formatting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#license">LICENSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API_reference.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">aegis</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Aegis Package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/readme.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="aegis-package">
+<h1>Aegis Package<a class="headerlink" href="#aegis-package" title="Permalink to this headline">¶</a></h1>
+<p>Welcome to Aegis (Active Evaluator Germane Interactive Selector) package!</p>
+<p>Full documentation of <code class="docutils literal notranslate"><span class="pre">aegis</span></code>, including the rendered API docs from sphinx, are pre-built in this repository and are available at <a class="reference external" href="docs/_build/index.html">this file within the repository</a>.</p>
+<p>See <a class="reference external" href="CHANGELOG.md">CHANGELOG.md</a> for version release notes.</p>
+<p>A Quick Start is provided below, as well as instructions for how to run the testing, code
+formatting checks, and documentation rendering.</p>
+<div class="section" id="contact">
+<h2>Contact<a class="headerlink" href="#contact" title="Permalink to this headline">¶</a></h2>
+<p>Please contact <a class="reference external" href="mailto:aegis&#37;&#52;&#48;nist&#46;gov">aegis<span>&#64;</span>nist<span>&#46;</span>gov</a> with questions, comments, feedback, or issues.</p>
+</div>
+<div class="section" id="contributors">
+<h2>Contributors<a class="headerlink" href="#contributors" title="Permalink to this headline">¶</a></h2>
+<p>Contributors to this code repository:</p>
+<ul class="simple">
+<li><p>Peter Fontana (NIST)</p></li>
+<li><p>Jesse Zhang (NIST)</p></li>
+<li><p>Craig Greenberg (NIST)</p></li>
+<li><p>Hung-Kung Liu (NIST)</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="quick-start">
+<h1>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
+<p>Here is a quick start to get up and running with the aegis package. Right now, aegis is a python
+package with three subcomponents:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">acteval</span></code>: the active evaluation interactive script</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">oracle</span></code>: the implementation of an oracle that provides acteval the annotations</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">datagenerator</span></code> (To Be Implemented): the package that generates experimental data sets
+for simulation</p></li>
+</ul>
+<p>The quick start uses pre-generated data in the <code class="docutils literal notranslate"><span class="pre">data/test</span></code> directory with a few small files to
+show a full execution of the Controller.</p>
+<div class="section" id="installing-aegis">
+<h2>Installing aegis<a class="headerlink" href="#installing-aegis" title="Permalink to this headline">¶</a></h2>
+<p>The code is pip-installable as the python package <code class="docutils literal notranslate"><span class="pre">aegis</span></code>. To install it, run in this directory</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install .
+</pre></div>
+</div>
+<p>or to upgrade your installation with the package, run.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -U .
+</pre></div>
+</div>
+<p>It is important to use <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code> and not <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">aegis</span></code> because there
+is an <a class="reference external" href="https://pypi.org/project/aegis/">aegis</a> package available
+on pypi, resulting in a collision of names.</p>
+<p>Call AEGIS in python with</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">aegis</span>
+</pre></div>
+</div>
+<p>or importing its subfolders or specific classes as desired. The example below imports the file
+so that the controller can be called.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">aegis.acteval.controller</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="installation-check">
+<h2>Installation check<a class="headerlink" href="#installation-check" title="Permalink to this headline">¶</a></h2>
+<p>To check the installation we do an end-to-end run with a very simple example with 10,000 trials.
+This example is the test data directory <code class="docutils literal notranslate"><span class="pre">data/test/sae_test_1</span></code>. It has 10,000 trials, where
+5000 of those trials have key 0, and 5000 of those trials have key 1. There are two systems. The
+first system was generated by producing a score as a sample from a random normal distribution</p>
+<blockquote>
+<div><p>whose mean is the key value and the standard deviation of 0.3, and uses a threshold of 0.5.</p>
+</div></blockquote>
+<p>The second system is a no information system that returns 0 for every value.
+This example is examined in more detail in the various testing modules, as it is one of the
+examples used in the test module.</p>
+<p>First, import the various aegis modules in a python environment with</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">aegis.acteval.data_processor</span>
+<span class="kn">import</span> <span class="nn">aegis.acteval.strata</span>
+<span class="kn">import</span> <span class="nn">aegis.acteval.metrics</span>
+<span class="kn">import</span> <span class="nn">aegis.acteval.samplers</span>
+<span class="kn">import</span> <span class="nn">aegis.oracle.oracle</span>
+<span class="kn">import</span> <span class="nn">aegis.acteval.controller</span>
+<span class="kn">import</span> <span class="nn">aegis.acteval.experiment</span>
+</pre></div>
+</div>
+<p>Then run the code below in a python interpreter. If necessary, update the paths specified by
+<code class="docutils literal notranslate"><span class="pre">input_dir</span></code> and <code class="docutils literal notranslate"><span class="pre">key_fpath</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Aegis modules are imported in previous code block</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">desired_seed</span> <span class="o">=</span> <span class="mi">5314</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">desired_seed</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="n">desired_seed</span><span class="p">)</span>
+<span class="n">input_dir</span> <span class="o">=</span> <span class="s2">&quot;data/test/sae_test_1&quot;</span>
+<span class="n">key_fpath</span> <span class="o">=</span> <span class="s2">&quot;data/test/sae_test_1/key.csv&quot;</span>
+<span class="n">my_data_processor</span> <span class="o">=</span> <span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">DataProcessor</span><span class="p">()</span>
+<span class="n">my_ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;s1&quot;</span><span class="p">,</span> <span class="s2">&quot;s2&quot;</span><span class="p">]</span>
+<span class="n">init_fpath</span><span class="p">,</span> <span class="n">trial_data_fpath</span><span class="p">,</span> <span class="n">system_fpaths</span><span class="p">,</span> <span class="n">threshold_fpaths</span> <span class="o">=</span> \
+    <span class="n">my_data_processor</span><span class="o">.</span><span class="n">extract_files_from_directory</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">my_ordering</span><span class="p">)</span>
+<span class="n">num_strata</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">strata_type</span> <span class="o">=</span> <span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">StrataMultiSystemIntersectDecision</span>
+<span class="n">my_metric</span> <span class="o">=</span> <span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">BinaryAccuracyMetric</span><span class="p">()</span>
+<span class="n">num_success_rounds_required</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">num_step_samples</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">my_alpha</span> <span class="o">=</span> <span class="mf">0.10</span>
+<span class="n">my_delta</span> <span class="o">=</span> <span class="mf">0.20</span>
+<span class="n">my_oracle</span> <span class="o">=</span> <span class="n">aegis</span><span class="o">.</span><span class="n">oracle</span><span class="o">.</span><span class="n">oracle</span><span class="o">.</span><span class="n">OracleScript</span><span class="p">(</span><span class="n">key_fpath</span><span class="p">)</span>
+<span class="n">my_experiment</span> <span class="o">=</span> <span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">experiment</span><span class="o">.</span> \
+    <span class="n">ExperimentParams</span><span class="p">(</span><span class="n">num_step_samples</span><span class="o">=</span><span class="n">num_step_samples</span><span class="p">,</span>
+                     <span class="n">alpha</span><span class="o">=</span><span class="n">my_alpha</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">my_delta</span><span class="p">,</span>
+                     <span class="n">num_success_rounds_required</span><span class="o">=</span><span class="n">num_success_rounds_required</span><span class="p">,</span>
+                     <span class="n">num_strata</span><span class="o">=</span><span class="n">num_strata</span><span class="p">,</span> <span class="n">stratification_type</span><span class="o">=</span><span class="n">strata_type</span><span class="p">,</span>
+                     <span class="n">metric_object</span><span class="o">=</span><span class="n">my_metric</span><span class="p">,</span>
+                     <span class="n">sampler_type</span><span class="o">=</span><span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">AdaptiveTrialSampler</span><span class="p">,</span>
+                     <span class="n">bin_style</span><span class="o">=</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+<span class="n">my_controller</span> <span class="o">=</span> <span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">Controller</span><span class="p">()</span>
+<span class="n">my_report</span> <span class="o">=</span> <span class="n">my_controller</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">init_fpath</span><span class="p">,</span> <span class="n">trial_data_fpath</span><span class="p">,</span>
+                              <span class="n">system_fpaths</span><span class="p">,</span> <span class="n">threshold_fpaths</span><span class="p">,</span>
+                              <span class="n">my_oracle</span><span class="p">,</span> <span class="n">my_experiment</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Experiment Complete! My report:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">my_report</span><span class="p">)</span>
+<span class="n">system_accuracy_list</span> <span class="o">=</span> <span class="n">my_oracle</span><span class="o">.</span><span class="n">get_actual_score_all_systems</span><span class="p">(</span><span class="n">system_fpaths</span><span class="p">,</span> <span class="n">threshold_fpaths</span><span class="p">,</span>
+                                                              <span class="n">my_metric</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Actual System Scores on full key:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">system_accuracy_list</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The alpha and delta parameters are quite high so that the code terminates successfully after only
+a few rounds, which will take a few seconds to few minutes on a single desktop computer. We feed
+all of the parameters to the Experiment object, but every argument has a
+default value that can be used for convenience.</p>
+<p>When complete, we print the summary report. The current summary report obtained with <code class="docutils literal notranslate"><span class="pre">v2019.04.22</span></code>
+of aegis is:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Experimental Parameters:
+    100 samples per round with 3 successful rounds required, alpha=0.1, delta=0.2.
+    Takes 4 strata with stratification type &lt;class &#39;aegis.acteval.strata.StrataMultiSystemIntersectDecision&#39;&gt; using bin style equal.
+    Uses metric object &lt;aegis.acteval.metrics.BinaryAccuracyMetric object at 0x1242ea710&gt;.
+    Uses sampler type &lt;class &#39;aegis.acteval.samplers.AdaptiveTrialSampler&#39;&gt;.
+    Did request initial samples for initial coverage. Requested 200 samples requested.
+Total number of rounds: 3, requiring a total sample of 500 trials.
+Requested 128 additional initial trials, In addition to the 72 trials provided by init_df.
+Ended with 2 non-empty stratum.System s1
+    Score: 0.9579614895557186 +/- 0.017769905184605195
+    Score Variance (standard error squared): 7.944221230895364e-05
+    Number of counted sampled trials: 500 out of 10000 countable trials.
+System s2
+    Score: 0.5018832022423086 +/- 0.017769905184605195
+    Score Variance (standard error squared): 7.944221230895372e-05
+    Number of counted sampled trials: 500 out of 10000 countable trials.
+</pre></div>
+</div>
+<p>And the output of the actual system accuracies from the Oracle</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Actual System Scores on full key:
+[0.9521, 0.499]
+</pre></div>
+</div>
+</div>
+<div class="section" id="description-of-above-example-data-test-sae-test-1">
+<h2>Description of above Example <code class="docutils literal notranslate"><span class="pre">data/test/sae_test_1</span></code><a class="headerlink" href="#description-of-above-example-data-test-sae-test-1" title="Permalink to this headline">¶</a></h2>
+<p>This example is the test data directory <code class="docutils literal notranslate"><span class="pre">data/test/sae_test_1</span></code>.</p>
+<p>It has 10,000 trials, where
+5000 of those trials have key 0, and 5000 of those trials have key 1. There are two systems. The
+first system was generated by producing a score as a sample from a random normal distribution</p>
+<blockquote>
+<div><p>whose mean is the key value and the standard deviation of 0.3, and uses a threshold of 0.5.</p>
+</div></blockquote>
+<p>The second system is a no information system that returns 0 for every value.</p>
+<p>The stratification specified stratifies by the first system only, and uses only the first system’s
+scores as the benchmark for continuation or termination. The system ordering is specified so that
+the primary system is ‘s1’, which is the system that uses random normal samples to provide scores.</p>
+<p>The metric is accuracy for a binary classifier, and the metric thresholds according to the
+(different) thresholds for each system.</p>
+<p>We leverage the pre-built Oracle that if provided the entire key, handles the interaction for us
+with the acteval module to allow for an easily automated procedure.</p>
+</div>
+</div>
+<div class="section" id="running-experiments-with-aegis-when-ground-truth-is-known">
+<h1>Running Experiments with Aegis when Ground Truth is Known<a class="headerlink" href="#running-experiments-with-aegis-when-ground-truth-is-known" title="Permalink to this headline">¶</a></h1>
+<p>This section describes how to run experiments with aegis and points to examples within the code for
+the case when we have the ground truth. This is useful to simulate our software both as a check
+that the estimates are at the specified confidence levels and to see how many fewer labels are
+needed to evaluate systems.</p>
+<p>Sample experiment script files are in the <code class="docutils literal notranslate"><span class="pre">experiment_scripts</span></code> subdirectory or in subfolders.
+The main method to run experiments is the <code class="docutils literal notranslate"><span class="pre">aegis.oracle.OracleScript.run_experiment()</span></code> static method.
+This method requires experiment parameters, and paths (relative or absolute) to the
+data directory, the key, and the output directory to be provided. Additionally, there is a
+requirement for a <code class="docutils literal notranslate"><span class="pre">batch_id</span></code> and a <code class="docutils literal notranslate"><span class="pre">run_id</span></code>. The <code class="docutils literal notranslate"><span class="pre">batch_id</span></code> allows experiments to be grouped
+together for further additional anlysis. <code class="docutils literal notranslate"><span class="pre">run_id</span></code> should be unique to each run in the same batch,
+meaning that every experiment should be uniquely identified by <code class="docutils literal notranslate"><span class="pre">(batch_id,</span> <span class="pre">run_id)</span></code>.</p>
+<p>An example experiment is in <code class="docutils literal notranslate"><span class="pre">experiment_scripts/sample/sae_test_1_README_experiment.py</span></code> The file can be run
+purely with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> experiment_scripts/sample
+python sae_test_1_README_experiment.py
+</pre></div>
+</div>
+<p>It runs without parallelization three iterations of the Installation check above as well as a similar
+run involving only the single-system “s1”.</p>
+<p>If one wishes to profile the experiment to see how long it takes, one can do so using the
+<a class="reference external" href="https://docs.python.org/2/library/profile.html">cprofile</a> tool and then visualize it with the
+<a class="reference external" href="https://jiffyclub.github.io/snakeviz/">snakeviz</a> tool, after installing those
+optional packages, run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> experiment_scripts/sample
+python -m cProfile -o sae_test_1_README.prof sae_test_1_README_experiment.py
+</pre></div>
+</div>
+<p>to profile the code anbd output the profiler results to the command-specified file
+<code class="docutils literal notranslate"><span class="pre">sae_test_1_README.prof</span></code>, and</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> experiment_scripts/sample
+snakeviz sae_test_1_README.prof
+</pre></div>
+</div>
+<p>to visualize the results in a web browser.</p>
+<div class="section" id="submission-input">
+<h2>Submission Input<a class="headerlink" href="#submission-input" title="Permalink to this headline">¶</a></h2>
+<p>Each submission is specified as a filepath to the folder containing the submission.</p>
+<p>The required files are:</p>
+<ul class="simple">
+<li><p><strong>:raw-html-m2r:`&lt;system_id&gt;`_outputs.csv</strong>. A two-column csv of (trial_id, score) where each row is a trial
+labeled by id and that system’s belief value in the score column. There is one file per system,
+labelled with the system_id as <span class="raw-html-m2r"><system_id></span>. Each system must have a score for every trial_id,
+meaning that these files must be complete. A discrepancy in the trials for different systems
+will cause errors.</p></li>
+<li><p><strong>:raw-html-m2r:`&lt;system_id&gt;`_thresholds.csv</strong>. For Accuracy, Precision, Recall, and any other metrics that require a
+decision, it is a one-row csv with the threshold value, headed with the intended metric name. The
+header is ignored when reading in thresholds and can be any string. There is one file per system,
+labelled with the system_id as <span class="raw-html-m2r"><system_id></span>.</p></li>
+<li><p><strong>key.csv</strong>. A two column csv of (trial_id, key) that is a full file of (trial_id, key),
+where each trial specified by id has the key. Keys can be integers, or strings. When calling the
+metric, the key values will be specified as the <code class="docutils literal notranslate"><span class="pre">key_values</span></code> parameter in the construction as the
+<code class="docutils literal notranslate"><span class="pre">[low_key_value,</span> <span class="pre">high_key_value]</span></code> where the <code class="docutils literal notranslate"><span class="pre">low_key_value</span></code> is interpreted as the negative class
+and the <code class="docutils literal notranslate"><span class="pre">high_key_value</span> <span class="pre">is</span> <span class="pre">interpreted</span> <span class="pre">as</span> <span class="pre">the</span> <span class="pre">positive</span> <span class="pre">class.</span></code> Every trial, labelled by id must be
+in this file and likewise every trial must be in each <span class="raw-html-m2r"><system_id></span>_output.csv file.</p></li>
+</ul>
+<p>The optional files are:</p>
+<ul class="simple">
+<li><p><strong>init.csv</strong>. A two column csv of (trial_id, key) that is a full or partial file of (trial_id, key),
+where each trial specified by id has the key. Keys can be integers, or strings. When calling the
+metric, the key values will be specified as the <code class="docutils literal notranslate"><span class="pre">key_values</span></code> parameter in the construction as the
+<code class="docutils literal notranslate"><span class="pre">[low_key_value,</span> <span class="pre">high_key_value]</span></code> where the <code class="docutils literal notranslate"><span class="pre">low_key_value</span></code> is interpreted as the negative class
+and the <code class="docutils literal notranslate"><span class="pre">high_key_value</span> <span class="pre">is</span> <span class="pre">interpreted</span> <span class="pre">as</span> <span class="pre">the</span> <span class="pre">positive</span> <span class="pre">class.</span></code> The <code class="docutils literal notranslate"><span class="pre">key.csv</span></code> is
+required when using the <code class="docutils literal notranslate"><span class="pre">aegis.oracle.oracle.OracleScript</span></code> class, which
+requires a complete key file. It is optional for other classes.</p></li>
+</ul>
+<p>See <code class="docutils literal notranslate"><span class="pre">data/test/sae_test_1</span></code> as the example submission that we have been running experiments on.</p>
+</div>
+<div class="section" id="experiment-output">
+<h2>Experiment Output<a class="headerlink" href="#experiment-output" title="Permalink to this headline">¶</a></h2>
+<p>The experiments are grouped by <code class="docutils literal notranslate"><span class="pre">&lt;batch_id&gt;</span></code> in a folder, and there is a <code class="docutils literal notranslate"><span class="pre">&lt;batch_id&gt;.log</span></code> logfile
+in the root directory. Within the <code class="docutils literal notranslate"><span class="pre">&lt;batch_id&gt;</span></code> folder is one folder for each run, labeled by the
+<code class="docutils literal notranslate"><span class="pre">&lt;run_id&gt;</span></code>. Within each run currently is four files:</p>
+<ul class="simple">
+<li><p><strong>experimental_perams.txt</strong>. A text file with the copy of all experimental parameters.</p></li>
+<li><p><strong>git_commit_hash.txt</strong>. A text file providing the git commit hash of the git commit used to
+run the experiments, providing a version of the code according to the git repository.</p></li>
+<li><p><strong>summary_of_results.csv</strong> A summary csv file where each row is a different experimental
+setting of sampling strategies and stratification stratgies, and each value is aggregate results
+that include the average number of samples taken and the percentage of time the actual estimate
+was contained within both the confidence interval and within the specified uncertainty range delta.
+(These are
+sometimes not the same because the confidence interval when finished is sometimes smaller
+than the specified data)</p></li>
+<li><p><strong>individual_run_results.csv</strong> One row per run. Each run is identified by the iteration number
+and all of the experiment parameters. Results include the number of samples taken, whether the
+actual score of all systems were contained within the specified confidence intervals, and whether
+the actual score of all sytems were contained within the specified undertainty range delta.
+(These are
+sometimes not the same because the confidence interval when finished is sometimes smaller
+than the specified data)</p></li>
+</ul>
+<p>See <code class="docutils literal notranslate"><span class="pre">readme_experiment_outputs</span></code> as the example outputs from the experiments we ran. These
+experiments ran 3 iterations per setting to illustrate</p>
+</div>
+</div>
+<div class="section" id="code-approach">
+<h1>Code Approach<a class="headerlink" href="#code-approach" title="Permalink to this headline">¶</a></h1>
+<p>The code in this repo is meant to run experiments.</p>
+<ol class="arabic simple">
+<li><p>First, datasets are generated with the <code class="docutils literal notranslate"><span class="pre">aegis.datagenerator</span></code> module to produce data directories
+that conform to the deign specification. The data generator will generate complete keys for
+ease of automation</p></li>
+<li><p>Second, we use the <code class="docutils literal notranslate"><span class="pre">aegis.oracle.oracle.OracleScript</span></code> that takes in the key as well as the
+data directory, and feeds the relevant samples to <code class="docutils literal notranslate"><span class="pre">aegis.acteval</span></code> when the controller calls.</p></li>
+<li><p>We specify the experimental paramenters, which are the non-optional and optional arguments
+to the <code class="docutils literal notranslate"><span class="pre">aegis.controller.Controller.run()</span></code> method.</p></li>
+<li><p>We store the outputs.</p></li>
+</ol>
+<p>Parameters are specified both by specifying arguments and by providing different implementations
+of key abstract classes. The two abstract classes to implement are <code class="docutils literal notranslate"><span class="pre">aegis.acteval.strata.Strata</span></code>
+and <code class="docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code>. Although there are different samplers available, the desired
+sampler types have already been implemented and the desired sampler need only be chosen.</p>
+<p>Random sampling can be imitated by setting <code class="docutils literal notranslate"><span class="pre">num_strata</span> <span class="pre">=</span> <span class="pre">1</span></code></p>
+<p>Class parameters include:</p>
+<ul class="simple">
+<li><p>alpha</p></li>
+<li><p>delta</p></li>
+<li><p>num_strata</p></li>
+</ul>
+<div class="section" id="stratification">
+<h2>Stratification<a class="headerlink" href="#stratification" title="Permalink to this headline">¶</a></h2>
+<p>All stratification strategies support multiple systems. Even the stratification class
+<code class="docutils literal notranslate"><span class="pre">aegis.acteval.strata.StrataFirstSystem</span></code> and <code class="docutils literal notranslate"><span class="pre">aegis.acteval.strata.StrataFirstSystemDecision</span></code>
+will sample and evaluate multiple systems. These stratification classes stratifiy according
+to the first system in the <code class="docutils literal notranslate"><span class="pre">system_ordering</span></code> parameter but then sample and evaluate all systems
+specified in the <code class="docutils literal notranslate"><span class="pre">system_ordering</span></code>.</p>
+<p>To evaluate only some systems of a submission, specify the <code class="docutils literal notranslate"><span class="pre">system_ordering</span></code> list to contain
+only the system id’s of the desired systems to evaluate. Any system whose id is not in that
+parameter will not be evaluated during the run.</p>
+</div>
+</div>
+<div class="section" id="running-continuous-integration-components-locally">
+<h1>Running Continuous Integration Components Locally<a class="headerlink" href="#running-continuous-integration-components-locally" title="Permalink to this headline">¶</a></h1>
+<p>The Continuous Integration (CI) runs the test suite, generates rendered API documentation, and also checks the code for
+formatting using a lint code tool. These components can all be run locally, and instructions
+are below.</p>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>We have a test suite with the <code class="docutils literal notranslate"><span class="pre">pytest</span></code> package and code coverage with <code class="docutils literal notranslate"><span class="pre">coverage</span></code>. This requires the package <code class="docutils literal notranslate"><span class="pre">coverage</span></code> and <code class="docutils literal notranslate"><span class="pre">pytest</span></code>, both of which can be installed with <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p>
+<p>The following command runs all of the unit tests and outputs code coverage into <code class="docutils literal notranslate"><span class="pre">htmlcov/index.html</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>coverage run --branch --source<span class="o">=</span>./aegis -m pytest -s tests/ -v
+coverage report -m
+coverage html
+</pre></div>
+</div>
+</div>
+<div class="section" id="code-formatting">
+<h2>Code Formatting<a class="headerlink" href="#code-formatting" title="Permalink to this headline">¶</a></h2>
+<p>The CI uses <code class="docutils literal notranslate"><span class="pre">flake8</span></code> to check for the code formatting with the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flake8 aegis tests --max-line-length<span class="o">=</span><span class="m">100</span> --exclude<span class="o">=</span>docs,./.*
+</pre></div>
+</div>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<p>To build the documentation with <code class="docutils literal notranslate"><span class="pre">sphinx</span></code> and <code class="docutils literal notranslate"><span class="pre">autodoc</span></code>, run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -U -e .
+sphinx-apidoc -fMeT -o docs/api aegis
+sphinx-build -av --color -b html docs docs/_build
+</pre></div>
+</div>
+<p>to generate the docs. The first command is needed for sphinx to recognize the <code class="docutils literal notranslate"><span class="pre">aegis</span></code> module.</p>
+<p>See the <a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/installation.html">Sphinx Installation Documentation</a>
+for more information on how to install Sphinx. You will also need the <code class="docutils literal notranslate"><span class="pre">m2r</span></code> package which is a requirement
+of this package</p>
+</div>
+</div>
+<div class="section" id="license">
+<h1>LICENSE<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
+<p>The license is documented in the <a class="reference external" href="LICENSE.txt">LICENSE file</a> and on the <a class="reference external" href="https://www.nist.gov/topics/data/public-access-nist-research/copyright-fair-use-and-licensing-statements-srd-data-and">NIST website</a>.</p>
+</div>
+<div class="section" id="disclaimer">
+<h1>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this headline">¶</a></h1>
+<p>Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental
+procedure or concept adequately. Such identification is not intended to imply recommendation or endorsement by the National
+Institute of Standards and Technology, nor is it intended to imply that the entities, materials, or equipment mentioned are
+necessarily the best available for the purpose. All copyrights and trademarks are properties of their respective owners.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="changelog.html" class="btn btn-neutral float-right" title="CHANGELOG" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Documentation placeholder index" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, NIST MIG
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
