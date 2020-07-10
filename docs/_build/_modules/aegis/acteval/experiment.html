@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>aegis.acteval.experiment &mdash; aegis v2020.03.03 documentation</title>
+  <title>aegis.acteval.experiment &mdash; aegis v2020.04.03_dev documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                v2020.03.03
+                v2020.04.03_dev
               </div>
             
           
@@ -159,8 +159,8 @@
 <span></span><span class="kn">import</span> <span class="nn">aegis.acteval.strata</span>
 <span class="kn">import</span> <span class="nn">aegis.acteval.metrics</span>
 <span class="kn">import</span> <span class="nn">aegis.acteval.samplers</span>
-<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
 
 
 <div class="viewcode-block" id="ExperimentParams"><a class="viewcode-back" href="../../../api/aegis.acteval.experiment.html#aegis.acteval.experiment.ExperimentParams">[docs]</a><span class="k">class</span> <span class="nc">ExperimentParams</span><span class="p">:</span>
@@ -201,6 +201,11 @@
 <span class="sd">        The number of samples total divided evenly between &quot;bins&quot; to</span>
 <span class="sd">        request initially. The default value is 50 samples per bin. It is set this high in order</span>
 <span class="sd">        that we have enough samples for approximate CI estimates to be reasonable.</span>
+<span class="sd">    sample_first (bool, optional): Use initial sampling but do so before stratification, used for</span>
+<span class="sd">        certain stratification methods that may require initial sampling to decide on bins.</span>
+<span class="sd">    num_req_systems (int, optional): Give this value for when attempting to only startify by top</span>
+<span class="sd">        system.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_step_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">num_success_rounds_required</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
@@ -208,7 +213,8 @@
                  <span class="n">stratification_type</span><span class="o">=</span><span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">StrataFirstSystem</span><span class="p">,</span>
                  <span class="n">bin_style</span><span class="o">=</span><span class="s2">&quot;perc&quot;</span><span class="p">,</span> <span class="n">metric_object</span><span class="o">=</span><span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">BinaryAccuracyMetric</span><span class="p">(),</span>
                  <span class="n">sampler_type</span><span class="o">=</span><span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">AdaptiveTrialSampler</span><span class="p">,</span>
-                 <span class="n">request_initial_samples</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">initial_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
+                 <span class="n">request_initial_samples</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">initial_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">sample_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">num_req_systems</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor.</span>
 
@@ -242,6 +248,8 @@
 <span class="sd">                to provide for adequate stratum and metric coverage for initial estimates.</span>
 <span class="sd">                True by default</span>
 <span class="sd">            initial_samples (int): The number of samples to request initially.</span>
+<span class="sd">            sample_first (bool): A variable that tells the experiment to obtain samples before</span>
+<span class="sd">                stratification</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_step_samples</span> <span class="o">=</span> <span class="n">num_step_samples</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_success_rounds_required</span> <span class="o">=</span> <span class="n">num_success_rounds_required</span>
@@ -254,6 +262,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sampler_type</span> <span class="o">=</span> <span class="n">sampler_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">request_initial_samples</span> <span class="o">=</span> <span class="n">request_initial_samples</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">initial_samples</span> <span class="o">=</span> <span class="n">initial_samples</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_first</span> <span class="o">=</span> <span class="n">sample_first</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_req_systems</span> <span class="o">=</span> <span class="n">num_req_systems</span>
         <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;paper_experiments_logger&quot;</span><span class="o">+</span><span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">stratification_type</span><span class="p">)</span> <span class="o">+</span>
                                    <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sampler_type</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">bin_style</span><span class="p">))</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
@@ -288,7 +298,9 @@
                 <span class="s2">&quot;.</span><span class="se">\n\t</span><span class="s2">Uses metric object &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metric_object</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.</span><span class="se">\n\t</span><span class="s2">Uses sampler type &quot;</span> <span class="o">+</span>
                 <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sampler_type</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.</span><span class="se">\n\t</span><span class="s2">&quot;</span> <span class="o">+</span>
                 <span class="nb">str</span><span class="p">(</span><span class="n">request_initial_samples_str</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; Requested &quot;</span> <span class="o">+</span>
-                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_samples</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; samples requested.&quot;</span><span class="p">)</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_samples</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; samples requested.&quot;</span> <span class="o">+</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_first</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;sample first before stratify&quot;</span> <span class="o">+</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_req_systems</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;Number of requested systems&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ExperimentParams.get_experiment_tuple"><a class="viewcode-back" href="../../../api/aegis.acteval.experiment.html#aegis.acteval.experiment.ExperimentParams.get_experiment_tuple">[docs]</a>    <span class="k">def</span> <span class="nf">get_experiment_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -312,7 +324,9 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">metric_object</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sampler_type</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">request_initial_samples</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">initial_samples</span><span class="p">,)</span></div></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">initial_samples</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sample_first</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_req_systems</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

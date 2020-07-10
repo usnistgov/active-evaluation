@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>aegis.oracle.oracle module &mdash; aegis v2020.03.03 documentation</title>
+  <title>aegis.oracle.oracle module &mdash; aegis v2020.04.03_dev documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v2020.03.03
+                v2020.04.03_dev
               </div>
             
           
@@ -322,8 +322,10 @@ Resets the index so that the index does not inadvertently contain information.</
 
 <dl class="method">
 <dt id="aegis.oracle.oracle.OracleScript.get_experiment_result_data">
-<em class="property">static </em><code class="sig-name descname">get_experiment_result_data</code><span class="sig-paren">(</span><em class="sig-param">oracle_ref</em>, <em class="sig-param">input_dir</em>, <em class="sig-param">metric_object</em>, <em class="sig-param">stratification_type</em>, <em class="sig-param">num_strata</em>, <em class="sig-param">system_ordering=None</em>, <em class="sig-param">num_success_rounds_required=3</em>, <em class="sig-param">num_step_samples=100</em>, <em class="sig-param">alpha=0.05</em>, <em class="sig-param">delta=0.01</em>, <em class="sig-param">num_iterations=1000</em>, <em class="sig-param">use_initial_df=True</em>, <em class="sig-param">request_initial_samples=True</em>, <em class="sig-param">initial_samples=10</em>, <em class="sig-param">parallelize=True</em>, <em class="sig-param">random_seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/oracle/oracle.html#OracleScript.get_experiment_result_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.oracle.oracle.OracleScript.get_experiment_result_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>The component of “run_experiment” that runs the data frames and returns the data frames.</p>
+<em class="property">static </em><code class="sig-name descname">get_experiment_result_data</code><span class="sig-paren">(</span><em class="sig-param">oracle_ref</em>, <em class="sig-param">input_dir</em>, <em class="sig-param">metric_object</em>, <em class="sig-param">stratification_type</em>, <em class="sig-param">num_strata</em>, <em class="sig-param">sampler_types=None</em>, <em class="sig-param">sampler_categories=None</em>, <em class="sig-param">system_ordering=None</em>, <em class="sig-param">bin_style_types=None</em>, <em class="sig-param">use_multinomials=None</em>, <em class="sig-param">num_success_rounds_required=3</em>, <em class="sig-param">num_step_samples=100</em>, <em class="sig-param">alpha=0.05</em>, <em class="sig-param">delta=0.01</em>, <em class="sig-param">num_iterations=1000</em>, <em class="sig-param">use_initial_df=True</em>, <em class="sig-param">request_initial_samples=True</em>, <em class="sig-param">initial_samples=10</em>, <em class="sig-param">parallelize=True</em>, <em class="sig-param">random_seed=None</em>, <em class="sig-param">final_log_path=None</em>, <em class="sig-param">sample_first=False</em>, <em class="sig-param">num_req_systems=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/oracle/oracle.html#OracleScript.get_experiment_result_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.oracle.oracle.OracleScript.get_experiment_result_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>The component of “run_experiment” that runs the data frames and returns
+the data frames. By default, it runs an entire experiment but can
+be customized to run smaller experiments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -332,73 +334,20 @@ Resets the index so that the index does not inadvertently contain information.</
 <li><p><strong>metric_object</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The reference to the metric object that specifies how the trials will be scored</p></li>
 <li><p><strong>stratification_type</strong> (<a class="reference internal" href="aegis.acteval.strata.html#aegis.acteval.strata.Strata" title="aegis.acteval.strata.Strata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.strata.Strata</span></code></a>) – Strata class that gives the stratification strategy and type of strata</p></li>
 <li><p><strong>num_strata</strong> (<em>int</em>) – The number of strata to have.</p></li>
-<li><p><strong>system_ordering</strong> (<em>list of str</em><em>, </em><em>optional</em>) – The desired ordering of systems, if the order
-is important.
-One can also give an ordering of only some of the systems to run the
-experiment on a subset of systems in the submission. [] Runs all systems in an
-arbitrary ordering. Defaults to None, which resolves to [].</p></li>
-<li><p><strong>num_success_rounds_required</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of rounds where the (1-alpha) confidence
-interval’s range is within +- $delta width. Defaults to 2</p></li>
-<li><p><strong>num_step_samples</strong> (<em>int</em><em>, </em><em>optional</em>) – the number of samples to ask for at each iteration;
-defaults to 100</p></li>
-<li><p><strong>alpha</strong> (<em>num</em><em>, </em><em>optional</em>) – The specified probability alpha. Defaults to 0.05.</p></li>
-<li><p><strong>delta</strong> (<em>num</em><em>, </em><em>optional</em>) – The specified interval range delta. Defaults to 0.01</p></li>
-<li><p><strong>num_iterations</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of iterations to run each sampler for.
-Defaults to 1000</p></li>
-<li><p><strong>use_initial_df</strong> (<em>bool</em><em>, </em><em>optional</em>) – A variable that tells is to use an initial data frame if provided
-for initial samples.</p></li>
-<li><p><strong>request_initial_samples</strong> (<em>bool</em><em>, </em><em>optional</em>) – A boolean that determines if the experiment (and hence) the
-controller should request or supplement initial samples with initial samples
-to provide for adequate stratum and metric coverage for initial estimates.
-True by default</p></li>
-<li><p><strong>initial_samples</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of samples to request initially.
-Defaults to 10.</p></li>
-<li><p><strong>parallelize</strong> (<em>bool</em><em>, </em><em>optional</em>) – A boolean determining whether to parallelize. True
-parallelizes with joblib, False runs in serial. Defaults to True.</p></li>
-<li><p><strong>random_seed</strong> (<em>int</em><em>, </em><em>optional</em>) – The desired random seed. Set to None if it is desired
-for the experiment to not be seeded. Defaults to None.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The two data frames (summary_out_df, results_out_df) as a tuple so that they
-can be written to a file.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(pandas.core.frame.DataFrame, pandas.core.frame.DataFrame)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="aegis.oracle.oracle.OracleScript.get_key_df_copy">
-<code class="sig-name descname">get_key_df_copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/oracle/oracle.html#OracleScript.get_key_df_copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.oracle.oracle.OracleScript.get_key_df_copy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a deep copy of the data frame.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A copy of the key data frame.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>pandas.core.frame.DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="aegis.oracle.oracle.OracleScript.get_specific_experiment_result_data">
-<em class="property">static </em><code class="sig-name descname">get_specific_experiment_result_data</code><span class="sig-paren">(</span><em class="sig-param">oracle_ref</em>, <em class="sig-param">input_dir</em>, <em class="sig-param">metric_object</em>, <em class="sig-param">stratification_type</em>, <em class="sig-param">num_strata</em>, <em class="sig-param">sampler_types=None</em>, <em class="sig-param">sampler_categories=None</em>, <em class="sig-param">system_ordering=None</em>, <em class="sig-param">bin_style_types=None</em>, <em class="sig-param">use_multinomials=None</em>, <em class="sig-param">num_success_rounds_required=3</em>, <em class="sig-param">num_step_samples=100</em>, <em class="sig-param">alpha=0.05</em>, <em class="sig-param">delta=0.01</em>, <em class="sig-param">num_iterations=1000</em>, <em class="sig-param">use_initial_df=True</em>, <em class="sig-param">request_initial_samples=True</em>, <em class="sig-param">initial_samples=10</em>, <em class="sig-param">parallelize=True</em>, <em class="sig-param">random_seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/oracle/oracle.html#OracleScript.get_specific_experiment_result_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.oracle.oracle.OracleScript.get_specific_experiment_result_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>The component of “run_specific_experiment” that runs the data frames and returns
-the data frames.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>oracle_ref</strong> (<a class="reference internal" href="#aegis.oracle.oracle.Oracle" title="aegis.oracle.oracle.Oracle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.oracle.oracle.Oracle</span></code></a>) – the Oracle object to call to get additional trials</p></li>
-<li><p><strong>input_dir</strong> (<em>str</em>) – The path to the input directory of the submission</p></li>
-<li><p><strong>metric_object</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The reference to the metric object that specifies how the trials will be scored</p></li>
-<li><p><strong>stratification_type</strong> (<a class="reference internal" href="aegis.acteval.strata.html#aegis.acteval.strata.Strata" title="aegis.acteval.strata.Strata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.strata.Strata</span></code></a>) – Strata class that gives the stratification strategy and type of strata</p></li>
-<li><p><strong>num_strata</strong> (<em>int</em>) – The number of strata to have.</p></li>
-<li><p><strong>sampler_types</strong> (list of <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABCMeta</span></code>, optional) – List of samplers you wish to use in experiment</p></li>
+<li><p><strong>sampler_types</strong> (list of <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABCMeta</span></code>, optional) – List of samplers you wish to use in experiment. Defaults to None, which
+resolves to
+[aegis.acteval.samplers.UniformTrialSampler,
+aegis.acteval.samplers.UniformFixedTrialSampler,
+aegis.acteval.samplers.ProportionalTrialSampler,
+aegis.acteval.samplers.ProportionalFixedTrialSampler,
+aegis.acteval.samplers.AdaptiveTrialSampler,
+aegis.acteval.samplers.AdaptiveFixedTrialSampler,
+aegis.acteval.samplers.RandomTrialSampler,
+aegis.acteval.samplers.RandomFixedTrialSampler]</p></li>
 <li><p><strong>sampler_categories</strong> (<em>list of str</em><em>, </em><em>optional</em>) – List of sampler categories you
-want to use in experiment. Defaults to None, which resolves as [].</p></li>
+want to use in experiment. Defaults to None, which resolves as
+[“Uniform”, “Uniform”, “Proportional”, “Proportional”,
+“Adaptive”, “Adaptive”, “Random”, “Random”].</p></li>
 <li><p><strong>system_ordering</strong> (<em>list of str</em>) – The desired ordering of systems, if the order
 is important. Order is specified by system id.
 None, which resolves to [] By
@@ -406,9 +355,10 @@ default. One can also give an ordering of only some of the systems to run the
 experiment on a subset of systems in the submission. [] Runs all systems in an
 arbitrary ordering.</p></li>
 <li><p><strong>bin_style_types</strong> (<em>list of str</em><em>, </em><em>optional</em>) – List of bin style types you want to
-use in experiment. Defaults to None, which resolves as [].</p></li>
+use in experiment. Defaults to None, which resolves as [‘equal’, ‘perc’].</p></li>
 <li><p><strong>use_multinomials</strong> (<em>list of bool</em><em>, </em><em>optional</em>) – List of booleans for each sampler type
-Defaults to None, which resolves as [].</p></li>
+Defaults to None, which resolves as
+[True, False, True, False, True, False, True, False].</p></li>
 <li><p><strong>num_success_rounds_required</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of rounds where the (1-alpha) confidence
 interval’s range is within +- $delta width. Defaults to 2</p></li>
 <li><p><strong>num_step_samples</strong> (<em>int</em><em>, </em><em>optional</em>) – the number of samples to ask for at each iteration
@@ -430,6 +380,12 @@ Defaults to 100.</p></li>
 parallelizes with joblib, False runs in serial. Defaults to True</p></li>
 <li><p><strong>random_seed</strong> (<em>int</em><em>, </em><em>optional</em>) – The desired random seed. Set to None if it is desired
 for the experiment to not be seeded. Defaults to None.</p></li>
+<li><p><strong>final_log_path</strong> (<em>str</em><em>, </em><em>optional</em>) – A string which dictates the log file path
+that all tmp file logs will be written to. Defaults to None and will
+simply just not write to any logfile if no string is given.</p></li>
+<li><p><strong>sample_first</strong> (<em>bool</em><em>, </em><em>optional</em>) – Used to flag sample first for certain strata methods.</p></li>
+<li><p><strong>num_req_system</strong> (<em>int</em><em>, </em><em>optional</em>) – Used to request a certain number of systems,
+used for specific strata techniques.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -439,6 +395,20 @@ can be written to a file.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>(pandas.core.frame.DataFrame, pandas.core.frame.Dataframe)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aegis.oracle.oracle.OracleScript.get_key_df_copy">
+<code class="sig-name descname">get_key_df_copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/oracle/oracle.html#OracleScript.get_key_df_copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.oracle.oracle.OracleScript.get_key_df_copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a deep copy of the data frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A copy of the key data frame.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.core.frame.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -480,73 +450,12 @@ confidence interval for that system, and False otherwise.</p>
 
 <dl class="method">
 <dt id="aegis.oracle.oracle.OracleScript.run_experiment">
-<em class="property">static </em><code class="sig-name descname">run_experiment</code><span class="sig-paren">(</span><em class="sig-param">oracle_ref</em>, <em class="sig-param">input_dir</em>, <em class="sig-param">output_dir</em>, <em class="sig-param">metric_object</em>, <em class="sig-param">stratification_type</em>, <em class="sig-param">num_strata</em>, <em class="sig-param">system_ordering=None</em>, <em class="sig-param">num_success_rounds_required=3</em>, <em class="sig-param">num_step_samples=100</em>, <em class="sig-param">alpha=0.05</em>, <em class="sig-param">delta=0.01</em>, <em class="sig-param">num_iterations=1000</em>, <em class="sig-param">use_initial_df=True</em>, <em class="sig-param">request_initial_samples=True</em>, <em class="sig-param">initial_samples=40</em>, <em class="sig-param">parallelize=True</em>, <em class="sig-param">run_id='experiment_0'</em>, <em class="sig-param">batch_id='2020-07-08'</em>, <em class="sig-param">git_commit_hash='No Git Commit Hash Provided'</em>, <em class="sig-param">random_seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/oracle/oracle.html#OracleScript.run_experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.oracle.oracle.OracleScript.run_experiment" title="Permalink to this definition">¶</a></dt>
-<dd><p>Runs an “experiment”, which takes the submission with the specified metric, stratification
-type and experimental parameters, and runs on all samplers and with all strataficiation bin
-styles, running each experiment as specified. Calls
-<a class="reference internal" href="#aegis.oracle.oracle.OracleScript.get_experiment_result_data" title="aegis.oracle.oracle.OracleScript.get_experiment_result_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">aegis.oracle.oracle.OracleScript.get_experiment_result_data()</span></code></a></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>oracle_ref</strong> (<a class="reference internal" href="#aegis.oracle.oracle.Oracle" title="aegis.oracle.oracle.Oracle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.oracle.oracle.Oracle</span></code></a>) – the Oracle object to call to get additional trials</p></li>
-<li><p><strong>input_dir</strong> (<em>str</em>) – The path to the input directory of the submission</p></li>
-<li><p><strong>output_dir</strong> (<em>str</em>) – The path to the output directory to create the results in.</p></li>
-<li><p><strong>metric_object</strong> (<a class="reference internal" href="aegis.acteval.metrics.html#aegis.acteval.metrics.Metric" title="aegis.acteval.metrics.Metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.metrics.Metric</span></code></a>) – The reference to the metric object that specifies how the trials will be scored</p></li>
-<li><p><strong>stratification_type</strong> (<a class="reference internal" href="aegis.acteval.strata.html#aegis.acteval.strata.Strata" title="aegis.acteval.strata.Strata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aegis.acteval.strata.Strata</span></code></a>) – Strata class that gives the stratification strategy and type of strata</p></li>
-<li><p><strong>num_strata</strong> (<em>int</em>) – The number of strata to have.</p></li>
-<li><p><strong>system_ordering</strong> (<em>list of str</em>) – The desired ordering of systems, if the order
-is important. Order is specified by system id.
-None, which resolves to [] By
-default. One can also give an ordering of only some of the systems to run the
-experiment on a subset of systems in the submission. [] Runs all systems in an
-arbitrary ordering.</p></li>
-<li><p><strong>num_success_rounds_required</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of rounds where the (1-alpha) confidence
-interval’s range is within +- $delta width. Defaults to 2</p></li>
-<li><p><strong>num_step_samples</strong> (<em>int</em><em>, </em><em>optional</em>) – the number of samples to ask for at each iteration
-defaults to 100</p></li>
-<li><p><strong>alpha</strong> (<em>num</em><em>, </em><em>optional</em>) – The specified probability alpha. Defaults to 0.05.</p></li>
-<li><p><strong>delta</strong> (<em>num</em><em>, </em><em>optional</em>) – The specified interval range delta. Defaults to 0.01</p></li>
-<li><p><strong>num_iterations</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of iterations to run each sampler for.
-Defaults to 1000</p></li>
-<li><p><strong>use_initial_df</strong> (<em>bool</em><em>, </em><em>optional</em>) – A variable that tells is to use an initial
-data frame if provided
-for initial samples. Defaults to True.</p></li>
-<li><p><strong>request_initial_samples</strong> (<em>bool</em><em>, </em><em>optional</em>) – A boolean that determines if the experiment (and hence) the
-controller should request or supplement initial samples with initial samples
-to provide for adequate stratum and metric coverage for initial estimates.
-True by default.</p></li>
-<li><p><strong>initial_samples</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of samples to request initially.
-Defaults to 100.</p></li>
-<li><p><strong>parallelize</strong> (<em>bool</em><em>, </em><em>optional</em>) – A boolean determining whether to parallelize. True
-parallelizes with joblib, False runs in serial. Defaults to True.</p></li>
-<li><p><strong>run_id</strong> (<em>str</em><em>, </em><em>optional</em>) – An optional run_id value to add to the date.
-Default “experiment_0”, but recommended
-to be a combination of the submission name and the experiment parameters.</p></li>
-<li><p><strong>batch_id</strong> (<em>str</em><em>, </em><em>optional</em>) – An optional batch_id value to add, the date by default</p></li>
-<li><p><strong>git_commit_hash</strong> (<em>str</em><em>, </em><em>optional</em>) – The string of the git commit hash of this code.
-If provided, it will write it to a text file git_commit_hash.txt.
-Default value is “No Git Commit Hash Provided” so that we have something
-to a file.</p></li>
-<li><p><strong>random_seed</strong> (<em>int</em><em>, </em><em>optional</em>) – The desired random seed. Set to None if it is desired
-for the experiment to not be seeded. Defaults to None.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Nothing. Directory Output_dir is created if it does not exist and additional
-files from the experiment (including subfolders) are created. Files existing with the
-same name as created files are overwritten, but files of other names are not deleted.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="aegis.oracle.oracle.OracleScript.run_specific_experiment">
-<em class="property">static </em><code class="sig-name descname">run_specific_experiment</code><span class="sig-paren">(</span><em class="sig-param">oracle_ref</em>, <em class="sig-param">input_dir</em>, <em class="sig-param">output_dir</em>, <em class="sig-param">metric_object</em>, <em class="sig-param">stratification_type</em>, <em class="sig-param">num_strata</em>, <em class="sig-param">system_ordering=None</em>, <em class="sig-param">sampler_types=None</em>, <em class="sig-param">sampler_categories=None</em>, <em class="sig-param">bin_style_types=None</em>, <em class="sig-param">use_multinomials=None</em>, <em class="sig-param">num_success_rounds_required=3</em>, <em class="sig-param">num_step_samples=100</em>, <em class="sig-param">alpha=0.05</em>, <em class="sig-param">delta=0.01</em>, <em class="sig-param">num_iterations=1000</em>, <em class="sig-param">use_initial_df=True</em>, <em class="sig-param">request_initial_samples=True</em>, <em class="sig-param">initial_samples=40</em>, <em class="sig-param">parallelize=True</em>, <em class="sig-param">run_id='experiment_0'</em>, <em class="sig-param">batch_id='2020-07-08'</em>, <em class="sig-param">git_commit_hash='No Git Commit Hash Provided'</em>, <em class="sig-param">random_seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/oracle/oracle.html#OracleScript.run_specific_experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.oracle.oracle.OracleScript.run_specific_experiment" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">run_experiment</code><span class="sig-paren">(</span><em class="sig-param">oracle_ref</em>, <em class="sig-param">input_dir</em>, <em class="sig-param">output_dir</em>, <em class="sig-param">metric_object</em>, <em class="sig-param">stratification_type</em>, <em class="sig-param">num_strata</em>, <em class="sig-param">system_ordering=None</em>, <em class="sig-param">sampler_types=None</em>, <em class="sig-param">sampler_categories=None</em>, <em class="sig-param">bin_style_types=None</em>, <em class="sig-param">use_multinomials=None</em>, <em class="sig-param">num_success_rounds_required=3</em>, <em class="sig-param">num_step_samples=100</em>, <em class="sig-param">alpha=0.05</em>, <em class="sig-param">delta=0.01</em>, <em class="sig-param">num_iterations=1000</em>, <em class="sig-param">use_initial_df=True</em>, <em class="sig-param">request_initial_samples=True</em>, <em class="sig-param">initial_samples=40</em>, <em class="sig-param">parallelize=True</em>, <em class="sig-param">run_id='experiment_0'</em>, <em class="sig-param">batch_id='2020-07-09'</em>, <em class="sig-param">git_commit_hash='No Git Commit Hash Provided'</em>, <em class="sig-param">random_seed=None</em>, <em class="sig-param">sample_first=False</em>, <em class="sig-param">num_req_systems=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/oracle/oracle.html#OracleScript.run_experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.oracle.oracle.OracleScript.run_experiment" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs a specified “experiment”, which takes the submission with the specified metric,
 stratification
 type and experimental parameters, and runs on samplers and with strataficiation bin
 styles as specified, running each experiment as specified. Calls
-<a class="reference internal" href="#aegis.oracle.oracle.OracleScript.get_specific_experiment_result_data" title="aegis.oracle.oracle.OracleScript.get_specific_experiment_result_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">aegis.oracle.oracle.OracleScript.get_specific_experiment_result_data()</span></code></a></p>
+<code class="xref py py-func docutils literal notranslate"><span class="pre">aegis.oracle.oracle.OracleScript.get_specific_experiment_result_data()</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -597,7 +506,12 @@ If provided, it will write it to a text file git_commit_hash.txt.
 Default value is “No Git Commit Hash Provided” so that we have something
 to a file.</p></li>
 <li><p><strong>random_seed</strong> (<em>int</em><em>, </em><em>optional</em>) – The desired random seed. Set to None if it is desired
-for the experiment to not be seeded. Defaults to None.</p></li>
+for the experiment to not be seeded. Defaults to None.
+for the experiment to not be seeded.</p></li>
+<li><p><strong>sample_first</strong> (<em>bool</em>) – A variable that tells the experiment to obtain samples before
+stratification</p></li>
+<li><p><strong>num_req_system</strong> (<em>int</em><em>, </em><em>optional</em>) – Used to request a certain number of systems,
+used for specific strata techniques.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

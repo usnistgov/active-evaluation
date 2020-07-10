@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>aegis.acteval.strata &mdash; aegis v2020.03.03 documentation</title>
+  <title>aegis.acteval.strata &mdash; aegis v2020.04.03_dev documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                v2020.03.03
+                v2020.04.03_dev
               </div>
             
           
@@ -162,6 +162,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">abc</span>
 <span class="kn">import</span> <span class="nn">aegis.acteval.system</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span><span class="p">,</span> <span class="n">LogisticRegression</span>
 
 
 <div class="viewcode-block" id="Strata"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.Strata">[docs]</a><span class="k">class</span> <span class="nc">Strata</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
@@ -1863,6 +1864,1240 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            float: An aggregated value.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">([</span><span class="n">stat</span> <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">sys_stat_list</span><span class="p">])</span></div></div>
+
+
+<div class="viewcode-block" id="StrataMultiSystemAverage"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemAverage">[docs]</a><span class="k">class</span> <span class="nc">StrataMultiSystemAverage</span><span class="p">(</span><span class="n">Strata</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Stratification Style that stratifies according to all of the systems outputs. It averages</span>
+<span class="sd">    all systems outputs and stratifies into num_strata based on the average score.</span>
+
+<span class="sd">    The system aggregates such that all systems have to be within their confidence for</span>
+<span class="sd">    a successful round. Other stats are averaged.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_strata</span><span class="p">,</span> <span class="n">system_list</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor to initialize strata. System objects are stored (by reference) in the strata.</span>
+<span class="sd">        Calls superclass constructor and does nothing else. It creates</span>
+<span class="sd">        :math:`\sqrt[num\_systems]{num\_strata}` per system</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_strata: The number of strata to make</span>
+<span class="sd">            system_list: The list of system objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="n">num_strata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">num_strata</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">system_list</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">num_strata</span><span class="p">,</span> <span class="n">system_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">num_strata</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="StrataMultiSystemAverage.get_strata_alpha"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemAverage.get_strata_alpha">[docs]</a>    <span class="k">def</span> <span class="nf">get_strata_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        To avoid too many type one errors, get an alpha that is adjusted accordingly for</span>
+<span class="sd">        multiple systems. This class uses all systems, so find an alpha whose union bound</span>
+<span class="sd">        gives us the desired alpha.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alpha: The original desired alpha</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            new_alpha: The new desired alpha</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_alpha</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_alpha</span></div>
+
+<div class="viewcode-block" id="StrataMultiSystemAverage.stratify"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemAverage.stratify">[docs]</a>    <span class="k">def</span> <span class="nf">stratify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bin_style</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stratification method that stratifies by averaging the system output</span>
+
+<span class="sd">        Since this ignores the trial data, there is no trial_df argument.</span>
+
+<span class="sd">        Stratify by the average of all the system outputs.</span>
+
+<span class="sd">        In this strata of stratum, the population size</span>
+<span class="sd">        is the total number of trials in all of the stratum, not the total number of trials that</span>
+<span class="sd">        have been sampled. For metrics such as recall where this cannot be computed directly,</span>
+<span class="sd">        this will be estimated by by incorporating the estimates of each stratum in the</span>
+<span class="sd">        stratified sampling manner.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            bin_style: The style to stratify the bins. Default is &#39;equal&#39;.</span>
+<span class="sd">                &#39;equal&#39;: Stratify the bins so that the range of values is equal, or the bins</span>
+<span class="sd">                are of equal width</span>
+<span class="sd">                &#39;perc&#39;: Stratfiy by percentile, or so that an equal number of trials are in each bin</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            new_strata the changed strata object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># We obtain the combined data frame from the systems</span>
+        <span class="n">combined_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_combined_systems_df</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirty_strata_cache</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_trials</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">sys_ids</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">system_id</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span><span class="p">)]</span>
+        <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="n">sys_ids</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span><span class="p">:</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Cut by percentage or by width</span>
+            <span class="n">num_values</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">bin_style</span> <span class="o">==</span> <span class="s1">&#39;perc&#39;</span><span class="p">:</span>
+                <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">qcut</span><span class="p">(</span>
+                    <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">([</span><span class="n">num_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">]),</span>
+                    <span class="n">duplicates</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Default:  cut bins into equal widths</span>
+                <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span>
+                    <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">([</span><span class="n">num_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">]),</span>
+                    <span class="n">duplicates</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># This counts on the stratum_index mapping to be from 0 to (num_strata - 1)</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span>
+            <span class="n">combined_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="c1"># Check if we need to construct fewer strata then specified</span>
+        <span class="c1"># Rebuild stratum objects with fewer strata objects</span>
+        <span class="n">num_nonempty_strata</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;stratum_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
+        <span class="c1"># This covers any stratum differences</span>
+        <span class="k">if</span> <span class="n">num_nonempty_strata</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="n">num_nonempty_strata</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strata</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">stratum</span><span class="o">.</span><span class="n">Stratum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">)</span>
+            <span class="p">]</span>
+
+        <span class="c1"># We need the index number to filter the stratum, so we use a for loop</span>
+        <span class="n">non_empty_stratum_index_list</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;stratum_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+        <span class="n">non_empty_stratum_index_list</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">):</span>
+            <span class="n">curr_stratum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">stratum_ind</span> <span class="o">=</span> <span class="n">non_empty_stratum_index_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">stratum_key_df</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">stratum_ind</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="c1"># Stratum method makes a deep copy of this method</span>
+            <span class="n">curr_stratum</span><span class="o">.</span><span class="n">construct_stratum_from_trials</span><span class="p">(</span>
+                <span class="n">stratum_key_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">]],</span> <span class="n">stratum_ind</span><span class="p">)</span>
+
+        <span class="c1"># Now store the key df with the stratum index, and push that information to the system</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">]]</span>
+
+        <span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">add_stratum_index_to_system_data</span><span class="p">(</span><span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">]])</span>
+         <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirty_strata_cache</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="StrataMultiSystemAverage.aggregate_system_confidence_values"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemAverage.aggregate_system_confidence_values">[docs]</a>    <span class="k">def</span> <span class="nf">aggregate_system_confidence_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Produces an aggregated system confidence value by taking the max of all of the confidence</span>
+<span class="sd">        values, ensuring that if we stop that all systems are within the delta.</span>
+
+<span class="sd">        Returns: An aggregated confidence value</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">conf_vals</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_confidence_list</span><span class="p">:</span>
+            <span class="n">delta_temp</span> <span class="o">=</span> <span class="n">conf_vals</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">delta_temp</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="k">if</span> <span class="n">delta_temp</span> <span class="o">&gt;</span> <span class="n">delta</span><span class="p">:</span>
+                <span class="n">delta</span> <span class="o">=</span> <span class="n">delta_temp</span>
+        <span class="k">return</span> <span class="n">delta</span></div>
+
+<div class="viewcode-block" id="StrataMultiSystemAverage.aggregate_system_stats"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemAverage.aggregate_system_stats">[docs]</a>    <span class="k">def</span> <span class="nf">aggregate_system_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sys_stat_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Aggregates the system stats list by taking the average of all system stats to get an</span>
+<span class="sd">        average population, or an average score</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sys_stat_list: The list of values, one value per system, to aggregate.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            An aggregated value.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">([</span><span class="n">stat</span> <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">sys_stat_list</span><span class="p">])</span></div></div>
+
+
+<div class="viewcode-block" id="StrataMultiSystemStandardDeviation"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemStandardDeviation">[docs]</a><span class="k">class</span> <span class="nc">StrataMultiSystemStandardDeviation</span><span class="p">(</span><span class="n">Strata</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Stratification Style that stratifies according to all of the systems. It creates</span>
+<span class="sd">    a unified num_strata for all systems via standard deviation of the scores.</span>
+
+<span class="sd">    The system aggregates such that all systems have to be within their confidence for</span>
+<span class="sd">    a successful round. Other stats are averaged.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_strata</span><span class="p">,</span> <span class="n">system_list</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor to initialize strata. System objects are stored (by reference) in the strata.</span>
+<span class="sd">        Calls superclass constructor and does nothing else. It creates</span>
+<span class="sd">        :math:`\sqrt[num\_systems]{num\_strata}` per system</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_strata: The number of strata to make</span>
+<span class="sd">            system_list: The list of system objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="n">num_strata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">num_strata</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">system_list</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">num_strata</span><span class="p">,</span> <span class="n">system_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">num_strata</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="StrataMultiSystemStandardDeviation.get_strata_alpha"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemStandardDeviation.get_strata_alpha">[docs]</a>    <span class="k">def</span> <span class="nf">get_strata_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        To avoid too many type one errors, get an alpha that is adjusted accordingly for</span>
+<span class="sd">        multiple systems. This class uses all systems, so find an alpha whose union bound</span>
+<span class="sd">        gives us the desired alpha.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alpha: The original desired alpha</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            new_alpha: The new desired alpha</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_alpha</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_alpha</span></div>
+
+<div class="viewcode-block" id="StrataMultiSystemStandardDeviation.stratify"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemStandardDeviation.stratify">[docs]</a>    <span class="k">def</span> <span class="nf">stratify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bin_style</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stratification method that stratifies based on the standard deviation of system scores.</span>
+
+<span class="sd">        Since this ignores the trial data, there is no trial_df argument.</span>
+
+<span class="sd">        Strategy: get the standard deviation among the scores in the system and stratify based</span>
+<span class="sd">        on that.</span>
+
+<span class="sd">        In this strata of stratum, the population size</span>
+<span class="sd">        is the total number of trials in all of the stratum, not the total number of trials that</span>
+<span class="sd">        have been sampled. For metrics such as recall where this cannot be computed directly,</span>
+<span class="sd">        this will be estimated by by incorporating the estimates of each stratum in the</span>
+<span class="sd">        stratified sampling manner.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            bin_style: The style to stratify the bins. Default is &#39;equal&#39;.</span>
+<span class="sd">                &#39;equal&#39;: Stratify the bins so that the range of values is equal, or the bins</span>
+<span class="sd">                are of equal width</span>
+<span class="sd">                &#39;perc&#39;: Stratfiy by percentile, or so that an equal number of trials are in each bin</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            new_strata the changed strata object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># We obtain the combined data frame from the systems</span>
+        <span class="n">combined_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_combined_systems_df</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirty_strata_cache</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_trials</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">sys_ids</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">system_id</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span><span class="p">)]</span>
+        <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="n">sys_ids</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span><span class="p">:</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Cut by percentage or by width</span>
+            <span class="n">num_values</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;std&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">bin_style</span> <span class="o">==</span> <span class="s1">&#39;perc&#39;</span><span class="p">:</span>
+                <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">qcut</span><span class="p">(</span>
+                    <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">([</span><span class="n">num_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">]),</span>
+                    <span class="n">duplicates</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Default:  cut bins into equal widths</span>
+                <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span>
+                    <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">([</span><span class="n">num_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">]),</span>
+                    <span class="n">duplicates</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># This counts on the stratum_index mapping to be from 0 to (num_strata - 1)</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span>
+            <span class="n">combined_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="c1"># Check if we need to construct fewer strata then specified</span>
+        <span class="c1"># Rebuild stratum objects with fewer strata objects</span>
+        <span class="n">num_nonempty_strata</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;stratum_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
+        <span class="c1"># This covers any stratum differences</span>
+        <span class="k">if</span> <span class="n">num_nonempty_strata</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="n">num_nonempty_strata</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strata</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">stratum</span><span class="o">.</span><span class="n">Stratum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">)</span>
+            <span class="p">]</span>
+
+        <span class="c1"># We need the index number to filter the stratum, so we use a for loop</span>
+        <span class="n">non_empty_stratum_index_list</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;stratum_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+        <span class="n">non_empty_stratum_index_list</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">):</span>
+            <span class="n">curr_stratum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">stratum_ind</span> <span class="o">=</span> <span class="n">non_empty_stratum_index_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">stratum_key_df</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">stratum_ind</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="c1"># Stratum method makes a deep copy of this method</span>
+            <span class="n">curr_stratum</span><span class="o">.</span><span class="n">construct_stratum_from_trials</span><span class="p">(</span>
+                <span class="n">stratum_key_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">]],</span> <span class="n">stratum_ind</span><span class="p">)</span>
+
+        <span class="c1"># Now store the key df with the stratum index, and push that information to the system</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">]]</span>
+
+        <span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">add_stratum_index_to_system_data</span><span class="p">(</span><span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">]])</span>
+         <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirty_strata_cache</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="StrataMultiSystemStandardDeviation.aggregate_system_confidence_values"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemStandardDeviation.aggregate_system_confidence_values">[docs]</a>    <span class="k">def</span> <span class="nf">aggregate_system_confidence_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Produces an aggregated system confidence value by taking the max of all of the confidence</span>
+<span class="sd">        values, ensuring that if we stop that all systems are within the delta.</span>
+
+<span class="sd">        Returns: An aggregated confidence value</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">conf_vals</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_confidence_list</span><span class="p">:</span>
+            <span class="n">delta_temp</span> <span class="o">=</span> <span class="n">conf_vals</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">delta_temp</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="k">if</span> <span class="n">delta_temp</span> <span class="o">&gt;</span> <span class="n">delta</span><span class="p">:</span>
+                <span class="n">delta</span> <span class="o">=</span> <span class="n">delta_temp</span>
+        <span class="k">return</span> <span class="n">delta</span></div>
+
+<div class="viewcode-block" id="StrataMultiSystemStandardDeviation.aggregate_system_stats"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemStandardDeviation.aggregate_system_stats">[docs]</a>    <span class="k">def</span> <span class="nf">aggregate_system_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sys_stat_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Aggregates the system stats list by taking the average of all system stats to get an</span>
+<span class="sd">        average population, or an average score</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sys_stat_list: The list of values, one value per system, to aggregate.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            An aggregated value.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">([</span><span class="n">stat</span> <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">sys_stat_list</span><span class="p">])</span></div></div>
+
+
+<div class="viewcode-block" id="StrataMultiSystemZScore"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemZScore">[docs]</a><span class="k">class</span> <span class="nc">StrataMultiSystemZScore</span><span class="p">(</span><span class="n">Strata</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Stratification Style that stratifies according to all of the systems. It creates</span>
+<span class="sd">    num_strata by sorting them based on the z-score of the scores of the systems.</span>
+
+<span class="sd">    The system aggregates such that all systems have to be within their confidence for</span>
+<span class="sd">    a successful round. Other stats are averaged.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_strata</span><span class="p">,</span> <span class="n">system_list</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor to initialize strata. System objects are stored (by reference) in the strata.</span>
+<span class="sd">        Calls superclass constructor and does nothing else. It creates</span>
+<span class="sd">        :math:`\sqrt[num\_systems]{num\_strata}` per system</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_strata: The number of strata to make</span>
+<span class="sd">            system_list: The list of system objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="n">num_strata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">num_strata</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">system_list</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">num_strata</span><span class="p">,</span> <span class="n">system_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">num_strata</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="StrataMultiSystemZScore.get_strata_alpha"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemZScore.get_strata_alpha">[docs]</a>    <span class="k">def</span> <span class="nf">get_strata_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        To avoid too many type one errors, get an alpha that is adjusted accordingly for</span>
+<span class="sd">        multiple systems. This class uses all systems, so find an alpha whose union bound</span>
+<span class="sd">        gives us the desired alpha.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alpha: The original desired alpha</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            new_alpha: The new desired alpha</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_alpha</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_alpha</span></div>
+
+<div class="viewcode-block" id="StrataMultiSystemZScore.stratify"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemZScore.stratify">[docs]</a>    <span class="k">def</span> <span class="nf">stratify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bin_style</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stratification method that stratifies based on the z score of each systems score.</span>
+
+<span class="sd">        Since this ignores the trial data, there is no trial_df argument.</span>
+
+<span class="sd">        Strategy: Convert scores from each system into a z score then average that z score to</span>
+<span class="sd">        stratify.</span>
+
+<span class="sd">        In this strata of stratum, the population size</span>
+<span class="sd">        is the total number of trials in all of the stratum, not the total number of trials that</span>
+<span class="sd">        have been sampled. For metrics such as recall where this cannot be computed directly,</span>
+<span class="sd">        this will be estimated by by incorporating the estimates of each stratum in the</span>
+<span class="sd">        stratified sampling manner.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            bin_style: The style to stratify the bins. Default is &#39;equal&#39;.</span>
+<span class="sd">                &#39;equal&#39;: Stratify the bins so that the range of values is equal, or the bins</span>
+<span class="sd">                are of equal width</span>
+<span class="sd">                &#39;perc&#39;: Stratfiy by percentile, or so that an equal number of trials are in each bin</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            new_strata the changed strata object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># We obtain the combined data frame from the systems</span>
+        <span class="n">combined_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_combined_systems_df</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirty_strata_cache</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_trials</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># column 0 is &#39;trial_id&#39;, 1 is the first system</span>
+        <span class="n">first_sys_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">system_id</span>
+        <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="n">first_sys_id</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span><span class="p">):</span>
+
+            <span class="n">sys_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">system_id</span>
+            <span class="n">avg</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="n">sys_id</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="n">std</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="n">sys_id</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="n">sys_id</span><span class="p">]</span><span class="o">-</span><span class="n">avg</span><span class="p">)</span><span class="o">/</span><span class="n">std</span>
+        <span class="c1"># For now just stratify by the first system</span>
+
+        <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span><span class="p">:</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Cut by percentage or by width</span>
+            <span class="n">num_values</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">bin_style</span> <span class="o">==</span> <span class="s1">&#39;perc&#39;</span><span class="p">:</span>
+                <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">qcut</span><span class="p">(</span>
+                    <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">([</span><span class="n">num_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">]),</span>
+                    <span class="n">duplicates</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Default:  cut bins into equal widths</span>
+                <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span>
+                    <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">([</span><span class="n">num_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">]),</span>
+                    <span class="n">duplicates</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># This counts on the stratum_index mapping to be from 0 to (num_strata - 1)</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span>
+            <span class="n">combined_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="c1"># Check if we need to construct fewer strata then specified</span>
+        <span class="c1"># Rebuild stratum objects with fewer strata objects</span>
+        <span class="n">num_nonempty_strata</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;stratum_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
+        <span class="c1"># This covers any stratum differences</span>
+        <span class="k">if</span> <span class="n">num_nonempty_strata</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="n">num_nonempty_strata</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strata</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">stratum</span><span class="o">.</span><span class="n">Stratum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">)</span>
+            <span class="p">]</span>
+
+        <span class="c1"># We need the index number to filter the stratum, so we use a for loop</span>
+        <span class="n">non_empty_stratum_index_list</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;stratum_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+        <span class="n">non_empty_stratum_index_list</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">):</span>
+            <span class="n">curr_stratum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">stratum_ind</span> <span class="o">=</span> <span class="n">non_empty_stratum_index_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">stratum_key_df</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">stratum_ind</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="c1"># Stratum method makes a deep copy of this method</span>
+            <span class="n">curr_stratum</span><span class="o">.</span><span class="n">construct_stratum_from_trials</span><span class="p">(</span>
+                <span class="n">stratum_key_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">]],</span> <span class="n">stratum_ind</span><span class="p">)</span>
+
+        <span class="c1"># Now store the key df with the stratum index, and push that information to the system</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">]]</span>
+
+        <span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">add_stratum_index_to_system_data</span><span class="p">(</span><span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">]])</span>
+         <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirty_strata_cache</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="StrataMultiSystemZScore.aggregate_system_confidence_values"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemZScore.aggregate_system_confidence_values">[docs]</a>    <span class="k">def</span> <span class="nf">aggregate_system_confidence_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Produces an aggregated system confidence value by taking the max of all of the confidence</span>
+<span class="sd">        values, ensuring that if we stop that all systems are within the delta.</span>
+
+<span class="sd">        Returns: An aggregated confidence value</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">conf_vals</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_confidence_list</span><span class="p">:</span>
+            <span class="n">delta_temp</span> <span class="o">=</span> <span class="n">conf_vals</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">delta_temp</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="k">if</span> <span class="n">delta_temp</span> <span class="o">&gt;</span> <span class="n">delta</span><span class="p">:</span>
+                <span class="n">delta</span> <span class="o">=</span> <span class="n">delta_temp</span>
+        <span class="k">return</span> <span class="n">delta</span></div>
+
+<div class="viewcode-block" id="StrataMultiSystemZScore.aggregate_system_stats"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemZScore.aggregate_system_stats">[docs]</a>    <span class="k">def</span> <span class="nf">aggregate_system_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sys_stat_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Aggregates the system stats list by taking the average of all system stats to get an</span>
+<span class="sd">        average population, or an average score</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sys_stat_list: The list of values, one value per system, to aggregate.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            An aggregated value.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">([</span><span class="n">stat</span> <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">sys_stat_list</span><span class="p">])</span></div></div>
+
+
+<div class="viewcode-block" id="StrataMultiSystemThreshold"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemThreshold">[docs]</a><span class="k">class</span> <span class="nc">StrataMultiSystemThreshold</span><span class="p">(</span><span class="n">Strata</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Stratification Style that stratifies according to all of the systems scores. Takes the scores</span>
+<span class="sd">    normalizes it around each scores threshold and divides by its standard deviation.</span>
+
+<span class="sd">    The system aggregates such that all systems have to be within their confidence for</span>
+<span class="sd">    a successful round. Other stats are averaged.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_strata</span><span class="p">,</span> <span class="n">system_list</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor to initialize strata. System objects are stored (by reference) in the strata.</span>
+<span class="sd">        Calls superclass constructor and does nothing else. It creates</span>
+<span class="sd">        :math:`\sqrt[num\_systems]{num\_strata}` per system</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_strata: The number of strata to make</span>
+<span class="sd">            system_list: The list of system objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="n">num_strata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">num_strata</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">system_list</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">num_strata</span><span class="p">,</span> <span class="n">system_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">num_strata</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="StrataMultiSystemThreshold.get_strata_alpha"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemThreshold.get_strata_alpha">[docs]</a>    <span class="k">def</span> <span class="nf">get_strata_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        To avoid too many type one errors, get an alpha that is adjusted accordingly for</span>
+<span class="sd">        multiple systems. This class uses all systems, so find an alpha whose union bound</span>
+<span class="sd">        gives us the desired alpha.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alpha: The original desired alpha</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            new_alpha: The new desired alpha</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_alpha</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_alpha</span></div>
+
+<div class="viewcode-block" id="StrataMultiSystemThreshold.stratify"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemThreshold.stratify">[docs]</a>    <span class="k">def</span> <span class="nf">stratify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bin_style</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stratification method that stratifies based on the normalized scores centered around</span>
+<span class="sd">         threshold.</span>
+
+<span class="sd">        Since this ignores the trial data, there is no trial_df argument.</span>
+
+<span class="sd">        Strategy: Center around threshold instead of normalized around zero, accounts for different</span>
+<span class="sd">        thresholds compared to a traditional z score.</span>
+
+<span class="sd">        In this strata of stratum, the population size</span>
+<span class="sd">        is the total number of trials in all of the stratum, not the total number of trials that</span>
+<span class="sd">        have been sampled. For metrics such as recall where this cannot be computed directly,</span>
+<span class="sd">        this will be estimated by by incorporating the estimates of each stratum in the</span>
+<span class="sd">        stratified sampling manner.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            bin_style: The style to stratify the bins. Default is &#39;equal&#39;.</span>
+<span class="sd">                &#39;equal&#39;: Stratify the bins so that the range of values is equal, or the bins</span>
+<span class="sd">                are of equal width</span>
+<span class="sd">                &#39;perc&#39;: Stratfiy by percentile, or so that an equal number of trials are in each bin</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            new_strata the changed strata object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># We obtain the combined data frame from the systems</span>
+        <span class="n">combined_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_combined_systems_df</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirty_strata_cache</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_trials</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># column 0 is &#39;trial_id&#39;, 1 is the first system</span>
+        <span class="n">first_sys_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">system_id</span>
+        <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="n">first_sys_id</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span><span class="p">):</span>
+            <span class="n">threshold_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">threshold_df</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">sys_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">system_id</span>
+            <span class="c1"># avg = combined_df[sys_id].mean()</span>
+            <span class="n">std</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="n">sys_id</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">]</span> <span class="o">+</span>\
+                <span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="n">sys_id</span><span class="p">]</span> <span class="o">-</span> <span class="n">threshold_value</span><span class="p">)</span><span class="o">/</span><span class="n">std</span>
+        <span class="c1"># For now just stratify by the first system</span>
+
+        <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span><span class="p">:</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Cut by percentage or by width</span>
+            <span class="n">num_values</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">bin_style</span> <span class="o">==</span> <span class="s1">&#39;perc&#39;</span><span class="p">:</span>
+                <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">qcut</span><span class="p">(</span>
+                    <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">([</span><span class="n">num_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">]),</span>
+                    <span class="n">duplicates</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Default:  cut bins into equal widths</span>
+                <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span>
+                    <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;avg_scores&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">([</span><span class="n">num_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">]),</span>
+                    <span class="n">duplicates</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># This counts on the stratum_index mapping to be from 0 to (num_strata - 1)</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span>
+            <span class="n">combined_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="c1"># Check if we need to construct fewer strata then specified</span>
+        <span class="c1"># Rebuild stratum objects with fewer strata objects</span>
+        <span class="n">num_nonempty_strata</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;stratum_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
+        <span class="c1"># This covers any stratum differences</span>
+        <span class="k">if</span> <span class="n">num_nonempty_strata</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="n">num_nonempty_strata</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strata</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">stratum</span><span class="o">.</span><span class="n">Stratum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">)</span>
+            <span class="p">]</span>
+
+        <span class="c1"># We need the index number to filter the stratum, so we use a for loop</span>
+        <span class="n">non_empty_stratum_index_list</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;stratum_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+        <span class="n">non_empty_stratum_index_list</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">):</span>
+            <span class="n">curr_stratum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">stratum_ind</span> <span class="o">=</span> <span class="n">non_empty_stratum_index_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">stratum_key_df</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">stratum_ind</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="c1"># Stratum method makes a deep copy of this method</span>
+            <span class="n">curr_stratum</span><span class="o">.</span><span class="n">construct_stratum_from_trials</span><span class="p">(</span>
+                <span class="n">stratum_key_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">]],</span> <span class="n">stratum_ind</span><span class="p">)</span>
+
+        <span class="c1"># Now store the key df with the stratum index, and push that information to the system</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">]]</span>
+
+        <span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">add_stratum_index_to_system_data</span><span class="p">(</span><span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">]])</span>
+         <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirty_strata_cache</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="StrataMultiSystemThreshold.aggregate_system_confidence_values"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemThreshold.aggregate_system_confidence_values">[docs]</a>    <span class="k">def</span> <span class="nf">aggregate_system_confidence_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Produces an aggregated system confidence value by taking the max of all of the confidence</span>
+<span class="sd">        values, ensuring that if we stop that all systems are within the delta.</span>
+
+<span class="sd">        Returns: An aggregated confidence value</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">conf_vals</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_confidence_list</span><span class="p">:</span>
+            <span class="n">delta_temp</span> <span class="o">=</span> <span class="n">conf_vals</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">delta_temp</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="k">if</span> <span class="n">delta_temp</span> <span class="o">&gt;</span> <span class="n">delta</span><span class="p">:</span>
+                <span class="n">delta</span> <span class="o">=</span> <span class="n">delta_temp</span>
+        <span class="k">return</span> <span class="n">delta</span></div>
+
+<div class="viewcode-block" id="StrataMultiSystemThreshold.aggregate_system_stats"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataMultiSystemThreshold.aggregate_system_stats">[docs]</a>    <span class="k">def</span> <span class="nf">aggregate_system_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sys_stat_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Aggregates the system stats list by taking the average of all system stats to get an</span>
+<span class="sd">        average population, or an average score</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sys_stat_list: The list of values, one value per system, to aggregate.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            An aggregated value.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">([</span><span class="n">stat</span> <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">sys_stat_list</span><span class="p">])</span></div></div>
+
+
+<div class="viewcode-block" id="StrataCombinedLinearSystemThreshold"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataCombinedLinearSystemThreshold">[docs]</a><span class="k">class</span> <span class="nc">StrataCombinedLinearSystemThreshold</span><span class="p">(</span><span class="n">Strata</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default Stratification Style that stratifies according to all of the systems. It creates</span>
+<span class="sd">    a combined system by linear regression and stratifies based on its output.</span>
+
+<span class="sd">    The system aggregates such that all systems have to be within their confidence for</span>
+<span class="sd">    a successful round. Other stats are averaged.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_strata</span><span class="p">,</span> <span class="n">system_list</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor to initialize strata. System objects are stored (by reference) in the strata.</span>
+<span class="sd">        Calls superclass constructor and does nothing else. It creates</span>
+<span class="sd">        :math:`\sqrt[num\_systems]{num\_strata}` per system</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_strata: The number of strata to make</span>
+<span class="sd">            system_list: The list of system objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="n">num_strata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">num_strata</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">system_list</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">num_strata</span><span class="p">,</span> <span class="n">system_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">num_strata</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="StrataCombinedLinearSystemThreshold.get_strata_alpha"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataCombinedLinearSystemThreshold.get_strata_alpha">[docs]</a>    <span class="k">def</span> <span class="nf">get_strata_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        To avoid too many type one errors, get an alpha that is adjusted accordingly for</span>
+<span class="sd">        multiple systems. This class uses all systems, so find an alpha whose union bound</span>
+<span class="sd">        gives us the desired alpha.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alpha: The original desired alpha</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            new_alpha: The new desired alpha</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_alpha</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_alpha</span></div>
+
+<div class="viewcode-block" id="StrataCombinedLinearSystemThreshold.stratify"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataCombinedLinearSystemThreshold.stratify">[docs]</a>    <span class="k">def</span> <span class="nf">stratify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bin_style</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stratification method that stratifies based on the linear regression system output.</span>
+
+<span class="sd">        This method of stratification requires inital sampling which it obtains from a flag</span>
+<span class="sd">        set in the experiment file.</span>
+
+<span class="sd">        Strategy based on initial sampling train a new system with the available keys and</span>
+<span class="sd">        develop a new system and stratify based off its output.</span>
+
+<span class="sd">        In this strata of stratum, the population size</span>
+<span class="sd">        is the total number of trials in all of the stratum, not the total number of trials that</span>
+<span class="sd">        have been sampled. For metrics such as recall where this cannot be computed directly,</span>
+<span class="sd">        this will be estimated by by incorporating the estimates of each stratum in the</span>
+<span class="sd">        stratified sampling manner.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            bin_style: The style to stratify the bins. Default is &#39;equal&#39;.</span>
+<span class="sd">                &#39;equal&#39;: Stratify the bins so that the range of values is equal, or the bins</span>
+<span class="sd">                are of equal width</span>
+<span class="sd">                &#39;perc&#39;: Stratfiy by percentile, or so that an equal number of trials are in each bin</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            new_strata the changed strata object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># We obtain the combined data frame from the systems</span>
+        <span class="n">combined_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_combined_systems_df</span><span class="p">()</span>
+
+        <span class="c1"># Only grab where keys are not NaN</span>
+        <span class="n">combined_systems_score_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">combined_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;trial_id&#39;</span><span class="p">),</span>
+                                                     <span class="n">on</span><span class="o">=</span><span class="s1">&#39;trial_id&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+        <span class="n">combined_systems_score_df</span> <span class="o">=</span> \
+            <span class="n">combined_systems_score_df</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">combined_systems_score_df</span><span class="o">.</span><span class="n">key</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirty_strata_cache</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_trials</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># column 0 is &#39;trial_id&#39;, 1 is the first system</span>
+        <span class="n">sys_list</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">system_id</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">))]</span>
+        <span class="n">x_train</span> <span class="o">=</span> <span class="n">combined_systems_score_df</span><span class="p">[</span><span class="n">sys_list</span><span class="p">]</span>
+        <span class="n">y_train</span> <span class="o">=</span> <span class="n">combined_systems_score_df</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">]</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;predict_scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="n">sys_list</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span><span class="p">:</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Cut by percentage or by width</span>
+            <span class="n">num_values</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;predict_scores&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">bin_style</span> <span class="o">==</span> <span class="s1">&#39;perc&#39;</span><span class="p">:</span>
+                <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">qcut</span><span class="p">(</span>
+                    <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;predict_scores&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">([</span><span class="n">num_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">]),</span>
+                    <span class="n">duplicates</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Default:  cut bins into equal widths</span>
+                <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span>
+                    <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;predict_scores&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">([</span><span class="n">num_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">]),</span>
+                    <span class="n">duplicates</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># This counts on the stratum_index mapping to be from 0 to (num_strata - 1)</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span>
+            <span class="n">combined_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Check if we need to construct fewer strata then specified</span>
+        <span class="c1"># Rebuild stratum objects with fewer strata objects</span>
+        <span class="n">num_nonempty_strata</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;stratum_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
+        <span class="c1"># This covers any stratum differences</span>
+        <span class="k">if</span> <span class="n">num_nonempty_strata</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="n">num_nonempty_strata</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strata</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">stratum</span><span class="o">.</span><span class="n">Stratum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">)</span>
+            <span class="p">]</span>
+
+        <span class="c1"># We need the index number to filter the stratum, so we use a for loop</span>
+        <span class="n">non_empty_stratum_index_list</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;stratum_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+        <span class="n">non_empty_stratum_index_list</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">):</span>
+            <span class="n">curr_stratum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">stratum_ind</span> <span class="o">=</span> <span class="n">non_empty_stratum_index_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">stratum_key_df</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">stratum_ind</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="c1"># Stratum method makes a deep copy of this method</span>
+            <span class="n">curr_stratum</span><span class="o">.</span><span class="n">construct_stratum_from_trials</span><span class="p">(</span>
+                <span class="n">stratum_key_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">]],</span> <span class="n">stratum_ind</span><span class="p">)</span>
+
+        <span class="c1"># Now store the key df with the stratum index, and push that information to the system</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">]]</span>
+
+        <span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">add_stratum_index_to_system_data</span><span class="p">(</span><span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">]])</span>
+         <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirty_strata_cache</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="StrataCombinedLinearSystemThreshold.aggregate_system_confidence_values"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataCombinedLinearSystemThreshold.aggregate_system_confidence_values">[docs]</a>    <span class="k">def</span> <span class="nf">aggregate_system_confidence_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Produces an aggregated system confidence value by taking the max of all of the confidence</span>
+<span class="sd">        values, ensuring that if we stop that all systems are within the delta.</span>
+
+<span class="sd">        Returns: An aggregated confidence value</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">conf_vals</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_confidence_list</span><span class="p">:</span>
+            <span class="n">delta_temp</span> <span class="o">=</span> <span class="n">conf_vals</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">delta_temp</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="k">if</span> <span class="n">delta_temp</span> <span class="o">&gt;</span> <span class="n">delta</span><span class="p">:</span>
+                <span class="n">delta</span> <span class="o">=</span> <span class="n">delta_temp</span>
+        <span class="k">return</span> <span class="n">delta</span></div>
+
+<div class="viewcode-block" id="StrataCombinedLinearSystemThreshold.aggregate_system_stats"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataCombinedLinearSystemThreshold.aggregate_system_stats">[docs]</a>    <span class="k">def</span> <span class="nf">aggregate_system_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sys_stat_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Aggregates the system stats list by taking the average of all system stats to get an</span>
+<span class="sd">        average population, or an average score</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sys_stat_list: The list of values, one value per system, to aggregate.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            An aggregated value.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">([</span><span class="n">stat</span> <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">sys_stat_list</span><span class="p">])</span></div></div>
+
+
+<div class="viewcode-block" id="StrataCombinedLogisticSystemThreshold"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataCombinedLogisticSystemThreshold">[docs]</a><span class="k">class</span> <span class="nc">StrataCombinedLogisticSystemThreshold</span><span class="p">(</span><span class="n">Strata</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    DStratification Style that stratifies according to a system trained on all systems. It creates</span>
+<span class="sd">    num_strata.</span>
+
+<span class="sd">    The system aggregates such that all systems have to be within their confidence for</span>
+<span class="sd">    a successful round. Other stats are averaged.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_strata</span><span class="p">,</span> <span class="n">system_list</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor to initialize strata. System objects are stored (by reference) in the strata.</span>
+<span class="sd">        Calls superclass constructor and does nothing else. It creates</span>
+<span class="sd">        :math:`\sqrt[num\_systems]{num\_strata}` per system</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_strata: The number of strata to make</span>
+<span class="sd">            system_list: The list of system objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="n">num_strata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">num_strata</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">system_list</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">num_strata</span><span class="p">,</span> <span class="n">system_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">num_strata</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="StrataCombinedLogisticSystemThreshold.get_strata_alpha"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataCombinedLogisticSystemThreshold.get_strata_alpha">[docs]</a>    <span class="k">def</span> <span class="nf">get_strata_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        To avoid too many type one errors, get an alpha that is adjusted accordingly for</span>
+<span class="sd">        multiple systems. This class uses all systems, so find an alpha whose union bound</span>
+<span class="sd">        gives us the desired alpha.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alpha: The original desired alpha</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            new_alpha: The new desired alpha</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_alpha</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_alpha</span></div>
+
+<div class="viewcode-block" id="StrataCombinedLogisticSystemThreshold.stratify"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataCombinedLogisticSystemThreshold.stratify">[docs]</a>    <span class="k">def</span> <span class="nf">stratify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bin_style</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stratification method that first grabs initial samples and develops a</span>
+<span class="sd">        logistic model off and stratifies on its output.</span>
+
+<span class="sd">        Since this ignores the trial data, there is no trial_df argument.</span>
+
+<span class="sd">        Strategy requires initial sampling then training on that initial sampling.</span>
+
+<span class="sd">        In this strata of stratum, the population size</span>
+<span class="sd">        is the total number of trials in all of the stratum, not the total number of trials that</span>
+<span class="sd">        have been sampled. For metrics such as recall where this cannot be computed directly,</span>
+<span class="sd">        this will be estimated by by incorporating the estimates of each stratum in the</span>
+<span class="sd">        stratified sampling manner.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            bin_style: The style to stratify the bins. Default is &#39;equal&#39;.</span>
+<span class="sd">                &#39;equal&#39;: Stratify the bins so that the range of values is equal, or the bins</span>
+<span class="sd">                are of equal width</span>
+<span class="sd">                &#39;perc&#39;: Stratfiy by percentile, or so that an equal number of trials are in each bin</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            new_strata the changed strata object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># We obtain the combined data frame from the systems</span>
+        <span class="c1"># We obtain the combined data frame from the systems</span>
+        <span class="n">combined_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_combined_systems_df</span><span class="p">()</span>
+
+        <span class="c1"># Only grab where keys are not NaN</span>
+        <span class="n">combined_systems_score_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">combined_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;trial_id&#39;</span><span class="p">),</span>
+                                                     <span class="n">on</span><span class="o">=</span><span class="s1">&#39;trial_id&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+        <span class="n">combined_systems_score_df</span> <span class="o">=</span> \
+            <span class="n">combined_systems_score_df</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">combined_systems_score_df</span><span class="o">.</span><span class="n">key</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirty_strata_cache</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_trials</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># column 0 is &#39;trial_id&#39;, 1 is the first system</span>
+        <span class="n">sys_list</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">system_id</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">))]</span>
+        <span class="n">x_train</span> <span class="o">=</span> <span class="n">combined_systems_score_df</span><span class="p">[</span><span class="n">sys_list</span><span class="p">]</span>
+        <span class="n">y_train</span> <span class="o">=</span> <span class="n">combined_systems_score_df</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">]</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;predict_scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
+                                         <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="n">sys_list</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span><span class="p">:</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Cut by percentage or by width</span>
+            <span class="n">num_values</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;predict_scores&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">bin_style</span> <span class="o">==</span> <span class="s1">&#39;perc&#39;</span><span class="p">:</span>
+                <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">qcut</span><span class="p">(</span>
+                    <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;predict_scores&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">([</span><span class="n">num_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">]),</span>
+                    <span class="n">duplicates</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Default:  cut bins into equal widths</span>
+                <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span>
+                    <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;predict_scores&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">([</span><span class="n">num_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">]),</span>
+                    <span class="n">duplicates</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># This counts on the stratum_index mapping to be from 0 to (num_strata - 1)</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span>
+            <span class="n">combined_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stratum_bin&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Check if we need to construct fewer strata then specified</span>
+        <span class="c1"># Rebuild stratum objects with fewer strata objects</span>
+        <span class="n">num_nonempty_strata</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;stratum_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
+        <span class="c1"># This covers any stratum differences</span>
+        <span class="k">if</span> <span class="n">num_nonempty_strata</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="n">num_nonempty_strata</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strata</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">stratum</span><span class="o">.</span><span class="n">Stratum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">)</span>
+            <span class="p">]</span>
+
+        <span class="c1"># We need the index number to filter the stratum, so we use a for loop</span>
+        <span class="n">non_empty_stratum_index_list</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;stratum_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+        <span class="n">non_empty_stratum_index_list</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">):</span>
+            <span class="n">curr_stratum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">stratum_ind</span> <span class="o">=</span> <span class="n">non_empty_stratum_index_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">stratum_key_df</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">stratum_ind</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="c1"># Stratum method makes a deep copy of this method</span>
+            <span class="n">curr_stratum</span><span class="o">.</span><span class="n">construct_stratum_from_trials</span><span class="p">(</span>
+                <span class="n">stratum_key_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">]],</span> <span class="n">stratum_ind</span><span class="p">)</span>
+
+        <span class="c1"># Now store the key df with the stratum index, and push that information to the system</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">]]</span>
+
+        <span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">add_stratum_index_to_system_data</span><span class="p">(</span><span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">]])</span>
+         <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirty_strata_cache</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="StrataCombinedLogisticSystemThreshold.aggregate_system_confidence_values"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataCombinedLogisticSystemThreshold.aggregate_system_confidence_values">[docs]</a>    <span class="k">def</span> <span class="nf">aggregate_system_confidence_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Produces an aggregated system confidence value by taking the max of all of the confidence</span>
+<span class="sd">        values, ensuring that if we stop that all systems are within the delta.</span>
+
+<span class="sd">        Returns: An aggregated confidence value</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">conf_vals</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_confidence_list</span><span class="p">:</span>
+            <span class="n">delta_temp</span> <span class="o">=</span> <span class="n">conf_vals</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">delta_temp</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="k">if</span> <span class="n">delta_temp</span> <span class="o">&gt;</span> <span class="n">delta</span><span class="p">:</span>
+                <span class="n">delta</span> <span class="o">=</span> <span class="n">delta_temp</span>
+        <span class="k">return</span> <span class="n">delta</span></div>
+
+<div class="viewcode-block" id="StrataCombinedLogisticSystemThreshold.aggregate_system_stats"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataCombinedLogisticSystemThreshold.aggregate_system_stats">[docs]</a>    <span class="k">def</span> <span class="nf">aggregate_system_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sys_stat_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Aggregates the system stats list by taking the average of all system stats to get an</span>
+<span class="sd">        average population, or an average score</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sys_stat_list: The list of values, one value per system, to aggregate.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            An aggregated value.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">([</span><span class="n">stat</span> <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">sys_stat_list</span><span class="p">])</span></div></div>
+
+
+<div class="viewcode-block" id="StrataTopSystems"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataTopSystems">[docs]</a><span class="k">class</span> <span class="nc">StrataTopSystems</span><span class="p">(</span><span class="n">Strata</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default Stratification Style that stratifies according to all of the systems. It creates a</span>
+<span class="sd">    ranking from a set sample size and stratifies based off of top n systems.</span>
+
+<span class="sd">    The system aggregates such that all systems have to be within their confidence for</span>
+<span class="sd">    a successful round. Other stats are averaged.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_strata</span><span class="p">,</span> <span class="n">system_list</span><span class="p">,</span> <span class="n">num_req_systems</span><span class="p">,</span> <span class="n">metric</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor to initialize strata. System objects are stored (by reference) in the strata.</span>
+<span class="sd">        Calls superclass constructor and does nothing else. It creates</span>
+<span class="sd">        :math:`\sqrt[num\_systems]{num\_strata}` per system</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_strata: The number of strata to make</span>
+<span class="sd">            system_list: The list of system objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="n">num_strata</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">num_strata_per_system</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">num_strata_per_system</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">,</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">num_req_systems</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_strata_per_system</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">num_strata_per_system</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_req_systems</span> <span class="o">=</span> <span class="n">num_req_systems</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metric</span> <span class="o">=</span> <span class="n">metric</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">num_strata</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">system_list</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">num_strata</span><span class="p">,</span> <span class="n">system_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">num_strata</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="StrataTopSystems.get_strata_alpha"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataTopSystems.get_strata_alpha">[docs]</a>    <span class="k">def</span> <span class="nf">get_strata_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        To avoid too many type one errors, get an alpha that is adjusted accordingly for</span>
+<span class="sd">        multiple systems. This class uses all systems, so find an alpha whose union bound</span>
+<span class="sd">        gives us the desired alpha.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alpha: The original desired alpha</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            new_alpha: The new desired alpha</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_alpha</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_systems</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_alpha</span></div>
+
+<div class="viewcode-block" id="StrataTopSystems.stratify"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataTopSystems.stratify">[docs]</a>    <span class="k">def</span> <span class="nf">stratify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bin_style</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stratification method that stratifies purely by all of the systems. It creates</span>
+<span class="sd">        :math:`\sqrt[num\_systems]{num\_strata}` strata for each system that are binned according</span>
+<span class="sd">        to the specified bin style. Then it intersects the strata across each system to produce</span>
+<span class="sd">        disjoint strata for sampling.</span>
+
+<span class="sd">        Since this ignores the trial data, there is no trial_df argument.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            bin_style: The style to stratify the bins. Default is &#39;equal&#39;.</span>
+<span class="sd">                &#39;equal&#39;: Stratify the bins so that the range of values is equal, or the bins</span>
+<span class="sd">                are of equal width</span>
+<span class="sd">                &#39;perc&#39;: Stratfiy by percentile, or so that an equal number of trials are in each bin</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            new_strata the changed strata object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># We obtain the combined data frame from the systems</span>
+        <span class="n">combined_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_combined_systems_df</span><span class="p">()</span>
+
+        <span class="c1"># Only grab where keys are not NaN</span>
+        <span class="n">combined_systems_score_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">combined_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;trial_id&#39;</span><span class="p">),</span>
+                                                     <span class="n">on</span><span class="o">=</span><span class="s1">&#39;trial_id&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+        <span class="n">combined_systems_score_df</span> <span class="o">=</span> \
+            <span class="n">combined_systems_score_df</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">combined_systems_score_df</span><span class="o">.</span><span class="n">key</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirty_strata_cache</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_trials</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># column 0 is &#39;trial_id&#39;, 1 is the first system</span>
+        <span class="n">sys_list</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">system_id</span> <span class="o">+</span> <span class="s1">&#39;_dec&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">))]</span>
+
+        <span class="n">score_list</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys_list</span><span class="p">)):</span>
+            <span class="n">temp_score_df</span> <span class="o">=</span> <span class="n">combined_systems_score_df</span><span class="p">[[</span><span class="s1">&#39;trial_id&#39;</span><span class="p">,</span> <span class="n">sys_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]]</span>
+            <span class="n">temp_score_df</span> <span class="o">=</span> <span class="n">temp_score_df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="n">sys_list</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span> <span class="s2">&quot;decision&quot;</span><span class="p">})</span>
+            <span class="n">temp_key_df</span> <span class="o">=</span> <span class="n">combined_systems_score_df</span><span class="p">[[</span><span class="s1">&#39;trial_id&#39;</span><span class="p">,</span> <span class="s1">&#39;key&#39;</span><span class="p">]]</span>
+
+            <span class="n">score_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="o">.</span><span class="n">get_actual_score</span><span class="p">(</span><span class="n">temp_score_df</span><span class="p">,</span> <span class="n">temp_key_df</span><span class="p">)</span>
+
+        <span class="n">top_sys</span> <span class="o">=</span> \
+            <span class="nb">sorted</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">score_list</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">score_list</span><span class="p">[</span><span class="n">i</span><span class="p">])[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">num_req_systems</span><span class="p">:]</span>
+
+        <span class="c1"># preserve ordering provided to us</span>
+
+        <span class="n">sys_id_list</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">system_id</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">top_sys</span><span class="p">]</span>
+
+        <span class="c1"># First make a stratum_index for each system</span>
+
+        <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">stratify_for_pure_random</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">sys_id</span> <span class="ow">in</span> <span class="n">sys_id_list</span><span class="p">:</span>
+                <span class="n">sys_ind</span> <span class="o">=</span> <span class="n">sys_id_list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">sys_id</span><span class="p">)</span>
+                <span class="c1"># Cut by percentage or by width</span>
+                <span class="n">num_sys_values</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">sys_id</span><span class="p">)]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+                <span class="k">if</span> <span class="n">bin_style</span> <span class="o">==</span> <span class="s1">&#39;perc&#39;</span><span class="p">:</span>
+                    <span class="n">combined_df</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">sys_id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_stratum_bin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">qcut</span><span class="p">(</span>
+                        <span class="n">combined_df</span><span class="p">[</span><span class="n">sys_id</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">([</span><span class="n">num_sys_values</span><span class="p">,</span>
+                                                        <span class="bp">self</span><span class="o">.</span><span class="n">num_strata_per_system</span><span class="p">]),</span>
+                        <span class="n">duplicates</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Default:  cut bins into equal widths</span>
+                    <span class="n">combined_df</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">sys_id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_stratum_bin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span>
+                        <span class="n">combined_df</span><span class="p">[</span><span class="n">sys_id</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">([</span><span class="n">num_sys_values</span><span class="p">,</span>
+                                                        <span class="bp">self</span><span class="o">.</span><span class="n">num_strata_per_system</span><span class="p">]),</span>
+                        <span class="n">duplicates</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span>
+                    <span class="p">)</span>
+                <span class="c1"># This counts on the stratum_index mapping to be from 0 to (num_strata - 1)</span>
+                <span class="n">combined_df</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">sys_id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_stratum_index&quot;</span><span class="p">]</span> <span class="o">=</span> \
+                    <span class="n">combined_df</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">sys_id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_stratum_bin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span>
+                <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_strata_per_system</span> <span class="o">**</span> <span class="n">sys_ind</span><span class="p">)</span> <span class="o">*</span> \
+                                                <span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">sys_id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_stratum_index&quot;</span><span class="p">])</span>
+                <span class="n">combined_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">sys_id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_stratum_bin&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">combined_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">sys_id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_stratum_index&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Check if we need to construct fewer strata then specified</span>
+        <span class="c1"># Rebuild stratum objects with fewer strata objects</span>
+        <span class="n">num_nonempty_strata</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;stratum_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
+        <span class="c1"># This covers any stratum differences</span>
+        <span class="k">if</span> <span class="n">num_nonempty_strata</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span> <span class="o">=</span> <span class="n">num_nonempty_strata</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strata</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">stratum</span><span class="o">.</span><span class="n">Stratum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">)</span>
+            <span class="p">]</span>
+
+        <span class="c1"># We need the index number to filter the stratum, so we use a for loop</span>
+        <span class="n">non_empty_stratum_index_list</span> <span class="o">=</span> <span class="n">combined_df</span><span class="p">[</span><span class="s1">&#39;stratum_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+        <span class="n">non_empty_stratum_index_list</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_strata</span><span class="p">):</span>
+            <span class="n">curr_stratum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strata</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">stratum_ind</span> <span class="o">=</span> <span class="n">non_empty_stratum_index_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">stratum_key_df</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">combined_df</span><span class="p">[</span><span class="s2">&quot;stratum_index&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">stratum_ind</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="c1"># Stratum method makes a deep copy of this method</span>
+            <span class="n">curr_stratum</span><span class="o">.</span><span class="n">construct_stratum_from_trials</span><span class="p">(</span>
+                <span class="n">stratum_key_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">]],</span> <span class="n">stratum_ind</span><span class="p">)</span>
+
+        <span class="c1"># Now store the key df with the stratum index, and push that information to the system</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_df</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">]]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirty_strata_cache</span><span class="p">()</span>
+        <span class="p">[</span><span class="n">system</span><span class="o">.</span><span class="n">add_stratum_index_to_system_data</span><span class="p">(</span><span class="n">combined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;trial_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stratum_index&quot;</span><span class="p">]])</span>
+         <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_list</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirty_strata_cache</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="StrataTopSystems.aggregate_system_confidence_values"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataTopSystems.aggregate_system_confidence_values">[docs]</a>    <span class="k">def</span> <span class="nf">aggregate_system_confidence_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Produces an aggregated system confidence value by taking the max of all of the confidence</span>
+<span class="sd">        values, ensuring that if we stop that all systems are within the delta.</span>
+
+<span class="sd">        Returns: An aggregated confidence value</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">conf_vals</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_confidence_list</span><span class="p">:</span>
+            <span class="n">delta_temp</span> <span class="o">=</span> <span class="n">conf_vals</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">delta_temp</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="k">if</span> <span class="n">delta_temp</span> <span class="o">&gt;</span> <span class="n">delta</span><span class="p">:</span>
+                <span class="n">delta</span> <span class="o">=</span> <span class="n">delta_temp</span>
+        <span class="k">return</span> <span class="n">delta</span></div>
+
+<div class="viewcode-block" id="StrataTopSystems.aggregate_system_stats"><a class="viewcode-back" href="../../../api/aegis.acteval.strata.html#aegis.acteval.strata.StrataTopSystems.aggregate_system_stats">[docs]</a>    <span class="k">def</span> <span class="nf">aggregate_system_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sys_stat_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Aggregates the system stats list by taking the average of all system stats to get an</span>
+<span class="sd">        average population, or an average score</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sys_stat_list: The list of values, one value per system, to aggregate.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            An aggregated value.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">([</span><span class="n">stat</span> <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">sys_stat_list</span><span class="p">])</span></div></div>

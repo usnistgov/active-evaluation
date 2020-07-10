@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>aegis.acteval.controller &mdash; aegis v2020.03.03 documentation</title>
+  <title>aegis.acteval.controller &mdash; aegis v2020.04.03_dev documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                v2020.03.03
+                v2020.04.03_dev
               </div>
             
           
@@ -180,10 +180,6 @@
 <span class="sd">        The controller can run different types of experiments, so the run() method takes the</span>
 <span class="sd">        experiment parameters.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;paper_experiments_logger&#39;</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Initiating Controller class&#39;</span><span class="p">)</span>
-
         <span class="k">pass</span>
 
 <div class="viewcode-block" id="Controller.run"><a class="viewcode-back" href="../../../api/aegis.acteval.controller.html#aegis.acteval.controller.Controller.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_fpath</span><span class="p">,</span> <span class="n">trial_data_filepath</span><span class="p">,</span> <span class="n">system_fpaths</span><span class="p">,</span>
@@ -244,6 +240,8 @@
         <span class="n">bin_style</span> <span class="o">=</span> <span class="n">my_experiment</span><span class="o">.</span><span class="n">bin_style</span>
         <span class="n">metric_obj</span> <span class="o">=</span> <span class="n">my_experiment</span><span class="o">.</span><span class="n">metric_object</span>
         <span class="n">sampler_type</span> <span class="o">=</span> <span class="n">my_experiment</span><span class="o">.</span><span class="n">sampler_type</span>
+        <span class="n">sample_first</span> <span class="o">=</span> <span class="n">my_experiment</span><span class="o">.</span><span class="n">sample_first</span>
+        <span class="n">num_req_systems</span> <span class="o">=</span> <span class="n">my_experiment</span><span class="o">.</span><span class="n">num_req_systems</span>
 
         <span class="n">my_data_processor</span> <span class="o">=</span> <span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">DataProcessor</span><span class="p">()</span>
         <span class="n">init_df</span> <span class="o">=</span> <span class="kc">None</span>
@@ -252,12 +250,17 @@
         <span class="c1"># trial_df = my_data_processor.process_trial_data(trial_data_filepath)</span>
         <span class="n">system_list</span> <span class="o">=</span> <span class="n">my_data_processor</span><span class="o">.</span><span class="n">process_systems_with_thresholds</span><span class="p">(</span><span class="n">system_fpaths</span><span class="p">,</span>
                                                                         <span class="n">threshold_fpaths</span><span class="p">)</span>
+        <span class="n">temp_system_list</span> <span class="o">=</span> <span class="n">my_data_processor</span><span class="o">.</span><span class="n">process_systems_with_thresholds</span><span class="p">(</span><span class="n">system_fpaths</span><span class="p">,</span>
+                                                                             <span class="n">threshold_fpaths</span><span class="p">)</span>
 
         <span class="c1"># We must obtain decisions before we stratify for those methods that incorporate</span>
         <span class="c1"># the decision into the stratification, as well as before we construct the strata</span>
         <span class="p">[</span><span class="n">metric_obj</span><span class="o">.</span><span class="n">convert_thresholds_to_decisions</span><span class="p">(</span><span class="n">system</span><span class="p">)</span> <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="n">system_list</span><span class="p">]</span>
 
-        <span class="n">my_strata</span> <span class="o">=</span> <span class="n">strata_type</span><span class="p">(</span><span class="n">num_strata</span><span class="p">,</span> <span class="n">system_list</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">num_req_systems</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">my_strata</span> <span class="o">=</span> <span class="n">strata_type</span><span class="p">(</span><span class="n">num_strata</span><span class="p">,</span> <span class="n">system_list</span><span class="p">,</span> <span class="n">num_req_systems</span><span class="p">,</span> <span class="n">metric_obj</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">my_strata</span> <span class="o">=</span> <span class="n">strata_type</span><span class="p">(</span><span class="n">num_strata</span><span class="p">,</span> <span class="n">system_list</span><span class="p">)</span>
         <span class="n">my_strata</span><span class="o">.</span><span class="n">dirty_strata_cache</span><span class="p">()</span>
         <span class="c1"># Pick alpha based on stratification method to adjust for the proper number of Type I</span>
         <span class="c1"># alpha</span>
@@ -266,15 +269,31 @@
         <span class="n">alpha_shrinkage</span> <span class="o">=</span> <span class="mf">0.9</span>
         <span class="n">alpha</span> <span class="o">=</span> <span class="n">strata_alpha</span> <span class="o">*</span> <span class="n">alpha_shrinkage</span>
 
+        <span class="n">num_total_samples</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">num_requested_init_samples</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">sample_first</span><span class="p">:</span>
+            <span class="n">temp_strata_type</span> <span class="o">=</span> <span class="n">aegis</span><span class="o">.</span><span class="n">acteval</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">StrataFirstSystem</span>
+            <span class="n">temp_num_strata</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">temp_strata</span> <span class="o">=</span> <span class="n">temp_strata_type</span><span class="p">(</span><span class="n">temp_num_strata</span><span class="p">,</span> <span class="n">temp_system_list</span><span class="p">)</span>
+            <span class="n">temp_strata</span><span class="o">.</span><span class="n">dirty_strata_cache</span><span class="p">()</span>
+            <span class="n">temp_strata</span><span class="o">.</span><span class="n">stratify</span><span class="p">(</span><span class="n">bin_style</span><span class="p">)</span>
+            <span class="n">initial_samples</span> <span class="o">=</span> \
+                <span class="n">temp_strata</span><span class="o">.</span><span class="n">find_needed_initial_samples</span><span class="p">(</span><span class="n">metric_obj</span><span class="p">,</span>
+                                                        <span class="n">my_experiment</span><span class="o">.</span><span class="n">initial_samples</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
+            <span class="n">num_total_samples</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_samples</span><span class="p">)</span>
+            <span class="n">num_requested_init_samples</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_samples</span><span class="p">)</span>
+            <span class="n">annotations_df</span> <span class="o">=</span> <span class="n">oracle_ref</span><span class="o">.</span><span class="n">get_annotations</span><span class="p">(</span><span class="n">initial_samples</span><span class="p">)</span>
+            <span class="n">temp_strata</span><span class="o">.</span><span class="n">add_samples_to_strata</span><span class="p">(</span><span class="n">annotations_df</span><span class="p">)</span>
+            <span class="n">my_strata</span><span class="o">.</span><span class="n">key_df</span> <span class="o">=</span> <span class="n">temp_strata</span><span class="o">.</span><span class="n">key_df</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
         <span class="n">my_strata</span><span class="o">.</span><span class="n">stratify</span><span class="p">(</span><span class="n">bin_style</span><span class="p">)</span>
 
-        <span class="n">num_total_samples</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">init_df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
             <span class="n">num_total_samples</span> <span class="o">=</span> <span class="n">init_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="c1"># In Initialization, Set first samples but do not do a successful round check</span>
             <span class="n">my_strata</span><span class="o">.</span><span class="n">add_samples_to_strata</span><span class="p">(</span><span class="n">init_df</span><span class="p">)</span>
 
-        <span class="n">num_requested_init_samples</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1"># Supplement initial samples with additional samples if asked in experiment</span>
         <span class="k">if</span> <span class="n">my_experiment</span><span class="o">.</span><span class="n">request_initial_samples</span><span class="p">:</span>
             <span class="n">initial_samples</span> <span class="o">=</span> \

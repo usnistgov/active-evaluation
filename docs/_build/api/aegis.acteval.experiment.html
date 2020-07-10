@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>aegis.acteval.experiment module &mdash; aegis v2020.03.03 documentation</title>
+  <title>aegis.acteval.experiment module &mdash; aegis v2020.04.03_dev documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v2020.03.03
+                v2020.04.03_dev
               </div>
             
           
@@ -208,7 +208,7 @@
 <span id="aegis-acteval-experiment-module"></span><h1>aegis.acteval.experiment module<a class="headerlink" href="#module-aegis.acteval.experiment" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="aegis.acteval.experiment.ExperimentParams">
-<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.experiment.</code><code class="sig-name descname">ExperimentParams</code><span class="sig-paren">(</span><em class="sig-param">num_step_samples=100</em>, <em class="sig-param">num_success_rounds_required=2</em>, <em class="sig-param">alpha=0.05</em>, <em class="sig-param">delta=0.01</em>, <em class="sig-param">num_strata=4</em>, <em class="sig-param">stratification_type=&lt;class 'aegis.acteval.strata.StrataFirstSystem'&gt;</em>, <em class="sig-param">bin_style='perc'</em>, <em class="sig-param">metric_object=&lt;aegis.acteval.metrics.BinaryAccuracyMetric object&gt;</em>, <em class="sig-param">sampler_type=&lt;class 'aegis.acteval.samplers.AdaptiveTrialSampler'&gt;</em>, <em class="sig-param">request_initial_samples=True</em>, <em class="sig-param">initial_samples=200</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/experiment.html#ExperimentParams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.experiment.ExperimentParams" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">aegis.acteval.experiment.</code><code class="sig-name descname">ExperimentParams</code><span class="sig-paren">(</span><em class="sig-param">num_step_samples=100</em>, <em class="sig-param">num_success_rounds_required=2</em>, <em class="sig-param">alpha=0.05</em>, <em class="sig-param">delta=0.01</em>, <em class="sig-param">num_strata=4</em>, <em class="sig-param">stratification_type=&lt;class 'aegis.acteval.strata.StrataFirstSystem'&gt;</em>, <em class="sig-param">bin_style='perc'</em>, <em class="sig-param">metric_object=&lt;aegis.acteval.metrics.BinaryAccuracyMetric object&gt;</em>, <em class="sig-param">sampler_type=&lt;class 'aegis.acteval.samplers.AdaptiveTrialSampler'&gt;</em>, <em class="sig-param">request_initial_samples=True</em>, <em class="sig-param">initial_samples=200</em>, <em class="sig-param">sample_first=False</em>, <em class="sig-param">num_req_systems=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aegis/acteval/experiment.html#ExperimentParams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aegis.acteval.experiment.ExperimentParams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Python class to store experimental parameters, akin to a struct that stores variables. Here
 are the variables that are stored:</p>
@@ -246,6 +246,10 @@ for adequate stratum and metric coverage for initial estimates. True by default<
 <dt>initial_samples (int):</dt><dd><p>The number of samples total divided evenly between “bins” to
 request initially. The default value is 50 samples per bin. It is set this high in order
 that we have enough samples for approximate CI estimates to be reasonable.</p>
+</dd>
+<dt>sample_first (bool, optional): Use initial sampling but do so before stratification, used for</dt><dd><p>certain stratification methods that may require initial sampling to decide on bins.</p>
+</dd>
+<dt>num_req_systems (int, optional): Give this value for when attempting to only startify by top</dt><dd><p>system.</p>
 </dd>
 </dl>
 <dl class="method">
